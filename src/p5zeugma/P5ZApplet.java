@@ -41,13 +41,18 @@ public class P5ZApplet  extends PApplet
   public class UninvitedHost
     { public void pre ()
         { spaque . DrainReservoir ();
-          IronLung pulmo = IronLung.GlobalByName ("omni-lung");
+
           ratchet += 8;
           double t = momma_tee . CurTime ();
-          pulmo . Inhale (ratchet, t);
-          VelvetLung vl = ProtoZoftThingGuts.MassBreather ();
+          
+          VelvetLung vl = ProtoZoftThingGuts . MassBreather ();
           if (vl != null)
               vl . Inhale (ratchet, t);
+
+          //IronLung pulmo = IronLung.GlobalByName ("omni-lung");
+          for (IronLung pulmo  :  IronLung . GlobalLungs ())
+            if (pulmo != null  &&  pulmo != vl)
+              pulmo . Inhale (ratchet, t);
         }
 
       public void mouseEvent (MouseEvent e)
@@ -249,10 +254,8 @@ println(q + "th maes is thus: " + ma);
       if (ma != null)
     	curry.wall_pos = ma.loc.val;
     }
-  
-  public SinuVect diago;
-  
-  
+
+
 //  public void setup ()
 //    { diago = new SinuVect (Vect.onesv . Sub (new Vect (0.0, 2.0, 0.0)) . Mul (133.31), 0.3113);
 //    

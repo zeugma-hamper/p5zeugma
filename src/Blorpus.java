@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import p5zeugma.P5ZApplet;
 import p5zeugma.P5ZApplet.Cursoresque;
+
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PMatrix3D;
@@ -14,7 +15,8 @@ import zeugma.SinuVect;
 import zeugma.Vect;
 
 public class Blorpus  extends P5ZApplet
-{
+{ public SinuVect diago;
+
   public void setup ()
     { diago = new SinuVect (Vect.onesv . Sub (new Vect (0.0, 2.0, 0.0)) . Mul (133.31), 0.3113);
     
