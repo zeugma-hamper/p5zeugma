@@ -79,16 +79,9 @@ public class Blorpus  extends P5ZApplet
           Iterator <Cursoresque> cuit = crsrs . iterator ();
           while (cuit . hasNext ())
             { Cursoresque cur = cuit . next ();
-              Vect p = cur.wall_pos;
-              pushMatrix ();
-              translate ((float)p.x, (float)p.y, (float)p.z);
-              //box (100.0);
               cur . Draw (ogl);
-              popMatrix ();
             }
         }
-      //println ("Momma keeps on tickin': " + momma_tee . DeltaTime ());
-//      ++cnt;
     }
 
   public static void main (String av[])

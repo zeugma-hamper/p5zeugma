@@ -72,8 +72,8 @@ public class P5ZApplet  extends PApplet
         }
       
       public void oscEvent (OscMessage mess)
-        { String addr = mess . addrPattern ();
-          String ttag = mess . typetag ();
+        { //String addr = mess . addrPattern ();
+          //String ttag = mess . typetag ();
           //println ("IN: " + cnt + "th message; addrpatt: {" + addr + "} with typetag [" + ttag + "]");
 
           String wname = mess . get (0) . stringValue ();
@@ -100,14 +100,16 @@ public class P5ZApplet  extends PApplet
   static Random randolph = new Random ();
 
   public class Cursoresque  extends P5ZAlignifer  implements ZESpatialPhagy
-  { public Vect wall_pos;
+  { //public Vect wall_pos;
     public ArrayList <SinuVect> vs_lrg, vs_sml;
     public ZoftThing <ZeColor> iro;
+    public PlatonicMaes cur_maes;
 
     public Cursoresque (double sz, int nv)
       { vs_lrg = new ArrayList <SinuVect> ();
         vs_sml = new ArrayList <SinuVect> ();
         iro = new ZoftColor (1.0f, 0.6f);
+        cur_maes = null;
         for (int w = 0  ;  w < 2  ;  ++w)
           for (int q = 0  ;  q < nv  ;  ++q)
             { double theeta = 2.0 * Math.PI / (double)nv * (double)q + (double)w * Math.PI;
@@ -146,17 +148,15 @@ public class P5ZApplet  extends PApplet
   { public HashMap <String, Cursoresque> wand_to_wallpos = new HashMap <> ();
 
     public long ZESpatialMove (ZESpatialMoveEvent e)
-      { PlatonicMaes ma = maeses . get (0);
-        if (ma == null)
-          return -1;
-        Vect n = ma.ovr.val . Cross (ma.upp.val);
-        Vect hit = Geom.RayPlaneIntersection (e.loc, e.aim, ma.loc.val, n);
-        if (hit != null)
+      { PlatonicMaes.MaesAndHit mah = PlatonicMaes.ClosestAmong (maeses, e.loc, e.aim);
+        if (mah != null)
           { String prv = e . Provenance ();
-            Cursoresque cur = wand_to_wallpos . get (prv);
-            if (cur == null)
-              wand_to_wallpos . put (prv, cur = new Cursoresque (150.0, 6));
-            cur.wall_pos = hit;
+            Cursoresque crs = wand_to_wallpos . get (prv);
+            if (crs == null)
+              wand_to_wallpos . put (prv, crs = new Cursoresque (150.0, 6));
+            crs . LocZoft () . Set (mah.hit);
+            if (crs.cur_maes  !=  mah.maes)
+              crs . AlignToMaes (crs.cur_maes = mah.maes);
           }
         return 0;
       }
@@ -173,9 +173,9 @@ public class P5ZApplet  extends PApplet
 
   public static Matrix44 ConjureMatrix44 (JSONArray ja)
     { if (ja == null  ||  ja . size ()  !=  16)
-      return null;
+        return null;
       return new Matrix44
-          (ja . getFloat (0),  ja . getFloat (1),  ja . getFloat (2),  ja . getFloat (3), //<>//
+          (ja . getFloat (0),  ja . getFloat (1),  ja . getFloat (2),  ja . getFloat (3),
            ja . getFloat (4),  ja . getFloat (5),  ja . getFloat (6),  ja . getFloat (7),
            ja . getFloat (8),  ja . getFloat (9),  ja . getFloat (10), ja . getFloat (11),
            ja . getFloat (12), ja . getFloat (13), ja . getFloat (14), ja . getFloat (15));
@@ -252,85 +252,8 @@ println(q + "th maes is thus: " + ma);
       cherd.wand_to_wallpos . put ("stasis-weasel", curry);
       PlatonicMaes ma = maeses . get (0);
       if (ma != null)
-    	curry.wall_pos = ma.loc.val;
+    	  { curry . LocZoft () . Set (ma.loc.val);
+    	    curry . AlignToMaes (ma);
+    	  }
     }
-
-
-//  public void setup ()
-//    { diago = new SinuVect (Vect.onesv . Sub (new Vect (0.0, 2.0, 0.0)) . Mul (133.31), 0.3113);
-//    
-//      P5ZVivify ();
-////    IronLung pulmo = IronLung.GlobalByName ("omni-lung");
-////    Eructathan e1 = new Eructathan ("Blarvles");
-////    pulmo . AppendBreathee (e1);
-//    }
-//
-//  public void settings()
-//    { size (1920, 1080, P3D);
-//      // fullScreen (P3D, 3);
-//    }
-//
-//  public void draw ()
-//    { background (40);
-//
-//      PlatonicMaes ma = maeses . get (0);
-//      if (ma != null)
-//        { Vect c = ma.loc.val;
-//          Vect u = ma.upp.val;
-//          Vect n = ma.ovr.val . Cross (u);
-//          double w = ma.wid.val;
-//          double h = ma.hei.val;
-//          Vect e = c . Add (n . Mul (0.8 * w));
-//          
-//          camera ((float)e.x, (float)e.y, (float)e.z,
-//                  (float)c.x, (float)c.y, (float)c.z,
-//                  (float)u.x, (float)u.y, (float)u.z);
-//          
-//          float asp = 16.0f / 9.0f;
-//          float fvy = 2.0f * atan2 ((float)(0.5 * h), (float)(0.8 * w));
-//          perspective (fvy, asp, (float)(0.1 * w), (float)(5.0 * w));
-//
-//          PGraphics ics = getGraphics ();
-//          PGraphicsOpenGL ogl = (PGraphicsOpenGL)ics;
-//          ogl . applyProjection (1.0f,  0.0f,  0.0f,  0.0f,
-//                                 0.0f, -1.0f,  0.0f,  0.0f,
-//                                 0.0f,  0.0f,  1.0f,  0.0f,
-//                                 0.0f,  0.0f,  0.0f,  1.0f);
-//
-//          pushMatrix ();
-//          Matrix44 tranny = new Matrix44 () . LoadTranslation (c . Sub (Vect.yaxis . Mul (500.0))
-//                                                                . Add (diago.val));
-//          Matrix44 rotty = new Matrix44 () . LoadRotation (Vect.zaxis, 30.0 * Math.PI / 180.0);
-//          Matrix44 muh = rotty . Mul (tranny);
-//          PMatrix3D matty = Z2P (muh);
-//          // translate ((float)c.x, (float)c.y - 500.0f, (float)c.z);
-//          applyMatrix (matty);
-//          box (300.0f);
-//          textSize (100.0f);
-//          applyMatrix (1.0f,  0.0f,  0.0f,  0.0f,
-//                       0.0f, -1.0f,  0.0f,  0.0f,
-//                       0.0f,  0.0f,  1.0f,  0.0f,
-//                       0.0f,  0.0f,  0.0f,  1.0f);
-//          text ("peristaltic indications of incipient eversion", 0.0f, 0.0f);
-//          popMatrix ();
-//
-//          Collection <Cursoresque> crsrs = cherd.wand_to_wallpos . values ();
-//          Iterator <Cursoresque> cuit = crsrs . iterator ();
-//          while (cuit . hasNext ())
-//            { Cursoresque cur = cuit . next ();
-//              Vect p = cur.wall_pos;
-//              pushMatrix ();
-//              translate ((float)p.x, (float)p.y, (float)p.z);
-//              //box (100.0);
-//              cur . Draw (ogl);
-//              popMatrix ();
-//            }
-//        }
-//      //println ("Momma keeps on tickin': " + momma_tee . DeltaTime ());
-////      ++cnt;
-//    }
-
-
-//  public static void main (String av[])
-//    { PApplet.main ("p5zeugma.P5ZApplet"); }
 }
