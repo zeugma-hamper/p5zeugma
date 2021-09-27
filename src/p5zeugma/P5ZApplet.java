@@ -45,12 +45,12 @@ public class P5ZApplet  extends PApplet
           ratchet += 8;
           double t = momma_tee . CurTime ();
           
-          VelvetLung vl = ProtoZoftThingGuts . MassBreather ();
+          VelvetLung vl = ProtoZoftThingGuts.MassBreather ();
           if (vl != null)
               vl . Inhale (ratchet, t);
 
           //IronLung pulmo = IronLung.GlobalByName ("omni-lung");
-          for (IronLung pulmo  :  IronLung . GlobalLungs ())
+          for (IronLung pulmo  :  IronLung.GlobalLungs ())
             if (pulmo != null  &&  pulmo != vl)
               pulmo . Inhale (ratchet, t);
         }
