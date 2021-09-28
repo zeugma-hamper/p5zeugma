@@ -26,6 +26,7 @@ public class Flamv  extends P5ZApplet
 { public SinuVect diago;
   public ShimmyCrate topshim;
   public P5ZSpaceThing gaylord;
+  public P5ZSpaceThing wallifier;
 
   public void setup ()
     { P5ZVivify ();
@@ -53,6 +54,9 @@ public class Flamv  extends P5ZApplet
       gaylord = new P5ZSpaceThing ();
       gaylord . AppendChild (topshim);
       gaylord . AppendGrappler (new TrGrappler (Vect.yaxis . Mul (-ma.hei.val * 0.15)));
+      
+      wallifier = new P5ZSpaceThing ();
+      wallifier . AppendGrappler (new TrGrappler (ma.loc.val));
 //    IronLung pulmo = IronLung.GlobalByName ("omni-lung");
 //    Eructathan e1 = new Eructathan ("Blarvles");
 //    pulmo . AppendBreathee (e1);
@@ -93,24 +97,30 @@ public class Flamv  extends P5ZApplet
 
           gaylord . RecursivelyDraw (ogl);
           
-          int nx = 160;
-          int ny = 40;
+          int nx = 80;
+          int ny = 45;
           double gap_frac = 0.2;
-          double rx = w / (gap_frac + (1.0 + gap_frac) * nx);
-          double ry = h / (gap_frac + (1.0 + gap_frac) * ny);
-          Vect jogx = o . Mul (rx * (1.0 + gap_frac));
-          Vect jogy = u . Mul (ry * (1.0 + gap_frac));
+          double diamx = w / ((1.0 + gap_frac) * nx);
+          double diamy = h / ((1.0 + gap_frac) * ny);
+          Vect jogx = o . Mul (diamx * (1.0 + gap_frac));
+          Vect jogy = u . Mul (diamy * (1.0 + gap_frac));
           Vect crgrtrn = jogx . Mul ((double)nx);
-          Vect p = c . Sub (jogx . Mul (0.5 * (nx - 1)))
-        		     . Sub (jogy . Mul (0.5 * (ny - 1)));
+          Vect p = Vect.zerov . Sub (jogx . Mul (0.5 * (nx - 1)))
+                              . Sub (jogy . Mul (0.5 * (ny - 1)));
+          wallifier . BefoDraw (ogl);
+          ogl . pushStyle ();
+          noFill ();
+          stroke (255, 130);
           for (int ww = ny  ;  ww > 0  ;  --ww)
             { for (int qq = nx  ;  qq > 0  ;  --qq)
-                { ellipse ((float)p.x, (float)p.y, (float)rx, (float)ry);
+                { ellipse ((float)p.x, (float)p.y, (float)diamx, (float)diamy);
                   p . AddAcc (jogx);
                 }
               p . SubAcc (crgrtrn);
               p . AddAcc (jogy);
             }
+          ogl . popStyle ();
+          wallifier . AftaDraw (ogl);
           
           Iterator <Cursoresque> cuit = cherd.wand_to_wallpos . values () . iterator ();
           while (cuit . hasNext ())
