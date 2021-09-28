@@ -19,9 +19,10 @@ public class P5ZAlignifer  extends Alignifer  implements P5ZLimnable
 
       GrapplerPile gp = UnsecuredGrapplerPile ();
       if (gp != null)
-        { PMatrix3D mah = P5Z.ToP (gp . PntMat ());
-          g . applyMatrix (mah);
-        }
+        P5Z.ConcatModelView (g, gp . PntMat (), gp . InvPntMat ());
+//        { PMatrix3D mah = P5Z.ToP (gp . PntMat ());
+//          g . applyMatrix (mah);
+//        }
     }
 
   public void AftaDraw (PGraphicsOpenGL g)

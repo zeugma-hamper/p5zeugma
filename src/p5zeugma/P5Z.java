@@ -7,6 +7,7 @@ import zeugma.Matrix44;
 
 import processing.core.PMatrix;
 import processing.core.PMatrix3D;
+import processing.opengl.PGraphicsOpenGL;
 
 
 public class P5Z
@@ -20,4 +21,12 @@ public class P5Z
              (float)m.m03, (float)m.m13, (float)m.m23, (float)m.m33);
     }
 
+  public static void ConcatModelView (PGraphicsOpenGL g, Matrix44 fwd_mat, Matrix44 inv_mat)
+    { PMatrix3D p_fwd = ToP (fwd_mat);
+      PMatrix3D p_inv = ToP (inv_mat);
+      
+      g.modelview . apply (p_fwd);
+      g.modelviewInv . preApply (p_inv);
+      g.projmodelview . apply (p_fwd);
+    }
 }
