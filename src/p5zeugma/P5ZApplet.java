@@ -56,7 +56,13 @@ public class P5ZApplet  extends PApplet
         }
 
       public void mouseEvent (MouseEvent e)
-        { double xnrm = (double)(e . getX ()) / (double)width  -  0.5;  // ouch, to say the least.
+        { int tion = e . getAction ();
+          switch (tion)
+            { case MouseEvent.CLICK: case MouseEvent.ENTER:
+              case MouseEvent.EXIT: case MouseEvent.WHEEL:
+                return;
+            }
+          double xnrm = (double)(e . getX ()) / (double)width  -  0.5;  // ouch, to say the least.
           double ynrm = 0.5  -  (double)(e . getY ()) / (double)height;
           PlatonicMaes ma = maeses . get (0);  // plenty more oy.
           if (ma == null)
@@ -67,8 +73,21 @@ public class P5ZApplet  extends PApplet
           n . MulAcc (0.8 * ma.wid.val);
           Vect eye = hit . Add (n);
           Vect aim = ma.upp.val . Cross (ma.ovr.val) . Norm ();
-          //
-          spaque . InterpretRawWandish ("mouse-0", 0l, eye, aim, ma.ovr.val);
+          int b = e . getButton ();
+          long butt = 0;
+          if (b != 0)
+            butt |= ((b == PConstants.LEFT)  ?  (0x01 << 0)
+                     :  ((b == PConstants.CENTER)  ?  (0x01 << 1)
+                         :  ((b == PConstants.RIGHT)  ?  (0x01 << 2)  :  0)));
+          // next in the unending onslaught of oy:
+          // (this is because upstream the 'RELEASE' event has the 'button' var
+          // set to the button that's being released, but zeugma triggers on the
+          // change of a bit in the overall button bitfield.
+          if (tion == MouseEvent.RELEASE)
+            butt = 0;
+          // now, meanwhile: how bad is this really, making
+          // the mouse event masquerade as wand input?
+          spaque . InterpretRawWandish ("mouse-0", butt, eye, aim, ma.ovr.val);
         }
       
       public void oscEvent (OscMessage mess)
@@ -141,35 +160,42 @@ public class P5ZApplet  extends PApplet
           }
         g . endShape (CLOSE);
       }
-    }
-
-
-  public class CursorHerd  implements ZESpatialPhagy
-  { public HashMap <String, Cursoresque> wand_to_wallpos = new HashMap <> ();
 
     public long ZESpatialMove (ZESpatialMoveEvent e)
       { PlatonicMaes.MaesAndHit mah = PlatonicMaes.ClosestAmong (maeses, e.loc, e.aim);
         if (mah != null)
-          { String prv = e . Provenance ();
-            Cursoresque crs = wand_to_wallpos . get (prv);
-            if (crs == null)
-              wand_to_wallpos . put (prv, crs = new Cursoresque (150.0, 6));
-            crs . LocZoft () . Set (mah.hit);
-            if (crs.cur_maes  !=  mah.maes)
-              crs . AlignToMaes (crs.cur_maes = mah.maes);
+          { LocZoft () . Set (mah.hit);
+            if (cur_maes  !=  mah.maes)
+              AlignToMaes (cur_maes = mah.maes);
           }
+        return 0;
+      }
+    public long  ZESpatialHarden (ZESpatialHardenEvent e)
+      { // System.out.println ("HARDEN! er... from " + e.prov);
+        return 0;
+      }
+    public long  ZESpatialSoften (ZESpatialSoftenEvent e)
+      { // System.out.println ("your pal " + e.prov + " gives it the ol' SOFTEN");
         return 0;
       }
   }
 
-  public static PMatrix3D Z2P (Matrix44 m)
-    { // note -- please, won't you? -- the implicit transpose following:
-        return new PMatrix3D
-            ((float)m.m00, (float)m.m10, (float)m.m20, (float)m.m30,
-             (float)m.m01, (float)m.m11, (float)m.m21, (float)m.m31,
-             (float)m.m02, (float)m.m12, (float)m.m22, (float)m.m32,
-             (float)m.m03, (float)m.m13, (float)m.m23, (float)m.m33);
-    }
+
+  public class CursorHerd  implements ZESpatialPhagy
+  { public HashMap <String, Cursoresque> cursor_by_wand = new HashMap <> ();
+
+    public boolean PassTheBuckUpPhageHierarchy ()
+      { return true; }   // so that all the various ZESpatial* events end up in ZESpatial()
+
+    public long ZESpatial (ZESpatialEvent e)
+      { String prv = e . Provenance ();
+        Cursoresque crs = cursor_by_wand . get (prv);
+        if (crs == null)
+          cursor_by_wand . put (prv, crs = new Cursoresque (150.0, 6));
+        return e . ProfferAsQuaffTo (crs);
+      }
+  }
+
 
   public static Matrix44 ConjureMatrix44 (JSONArray ja)
     { if (ja == null  ||  ja . size ()  !=  16)
@@ -249,7 +275,7 @@ println(q + "th maes is thus: " + ma);
       spaque . AppendPhage (cherd);
 
       Cursoresque curry = new Cursoresque (450.0, 6);
-      cherd.wand_to_wallpos . put ("stasis-weasel", curry);
+      cherd.cursor_by_wand . put ("stasis-weasel", curry);
       PlatonicMaes ma = maeses . get (0);
       if (ma != null)
     	  { curry . LocZoft () . Set (ma.loc.val);

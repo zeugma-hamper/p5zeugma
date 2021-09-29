@@ -110,7 +110,7 @@ public class Flamv  extends P5ZApplet
           wallifier . BefoDraw (ogl);
           ogl . pushStyle ();
           noFill ();
-          stroke (255, 130);
+          stroke (255, 30);
           for (int ww = ny  ;  ww > 0  ;  --ww)
             { for (int qq = nx  ;  qq > 0  ;  --qq)
                 { ellipse ((float)p.x, (float)p.y, (float)diamx, (float)diamy);
@@ -122,7 +122,7 @@ public class Flamv  extends P5ZApplet
           ogl . popStyle ();
           wallifier . AftaDraw (ogl);
           
-          Iterator <Cursoresque> cuit = cherd.wand_to_wallpos . values () . iterator ();
+          Iterator <Cursoresque> cuit = cherd.cursor_by_wand . values () . iterator ();
           while (cuit . hasNext ())
             { Cursoresque cur = cuit . next ();
               cur . RecursivelyDraw (ogl);

@@ -116,7 +116,7 @@ public class Blorpus  extends P5ZApplet
 
           gaylord . RecursivelyDraw (ogl);
           
-          Iterator <Cursoresque> cuit = cherd.wand_to_wallpos . values () . iterator ();
+          Iterator <Cursoresque> cuit = cherd.cursor_by_wand . values () . iterator ();
           while (cuit . hasNext ())
             { Cursoresque cur = cuit . next ();
               cur . RecursivelyDraw (ogl);
