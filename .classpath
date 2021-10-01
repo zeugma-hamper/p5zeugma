@@ -6,10 +6,10 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="src/libs/core.jar"/>
 	<classpathentry kind="lib" path="src/libs/oscP5.jar"/>
 	<classpathentry kind="lib" path="src/libs/zeugma.jar"/>
 	<classpathentry kind="lib" path="src/libs/gluegen-rt.jar"/>
 	<classpathentry kind="lib" path="src/libs/jogl-all.jar"/>
+	<classpathentry kind="lib" path="src/libs/core.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -20,7 +20,7 @@ import processing.event.*;
 import processing.opengl.PGraphicsOpenGL;
 
 
-public class P5ZApplet  extends PApplet
+public class P5ZApplet  extends P5ZMaesBeast
 { MotherTime momma_tee;
   long ratchet = 0;
 
@@ -55,40 +55,40 @@ public class P5ZApplet  extends PApplet
               pulmo . Inhale (ratchet, t);
         }
 
-      public void mouseEvent (MouseEvent e)
-        { int tion = e . getAction ();
-          switch (tion)
-            { case MouseEvent.CLICK: case MouseEvent.ENTER:
-              case MouseEvent.EXIT: case MouseEvent.WHEEL:
-                return;
-            }
-          double xnrm = (double)(e . getX ()) / (double)width  -  0.5;  // ouch, to say the least.
-          double ynrm = 0.5  -  (double)(e . getY ()) / (double)height;
-          PlatonicMaes ma = maeses . get (0);  // plenty more oy.
-          if (ma == null)
-              return;
-          Vect hit = ma.loc.val . Add (ma.ovr.val . Mul (ma.wid.val * xnrm))
-                                . Add (ma.upp.val . Mul (ma.hei.val * ynrm));
-          Vect n = ma.ovr.val . Cross (ma.upp.val) . Norm ();
-          n . MulAcc (0.8 * ma.wid.val);
-          Vect eye = hit . Add (n);
-          Vect aim = ma.upp.val . Cross (ma.ovr.val) . Norm ();
-          int b = e . getButton ();
-          long butt = 0;
-          if (b != 0)
-            butt |= ((b == PConstants.LEFT)  ?  (0x01 << 0)
-                     :  ((b == PConstants.CENTER)  ?  (0x01 << 1)
-                         :  ((b == PConstants.RIGHT)  ?  (0x01 << 2)  :  0)));
-          // next in the unending onslaught of oy:
-          // (this is because upstream the 'RELEASE' event has the 'button' var
-          // set to the button that's being released, but zeugma triggers on the
-          // change of a bit in the overall button bitfield.
-          if (tion == MouseEvent.RELEASE)
-            butt = 0;
-          // now, meanwhile: how bad is this really, making
-          // the mouse event masquerade as wand input?
-          spaque . InterpretRawWandish ("mouse-0", butt, eye, aim, ma.ovr.val);
-        }
+//      public void mouseEvent (MouseEvent e)
+//        { int tion = e . getAction ();
+//          switch (tion)
+//            { case MouseEvent.CLICK: case MouseEvent.ENTER:
+//              case MouseEvent.EXIT: case MouseEvent.WHEEL:
+//                return;
+//            }
+//          double xnrm = (double)(e . getX ()) / (double)width  -  0.5;  // ouch, to say the least.
+//          double ynrm = 0.5  -  (double)(e . getY ()) / (double)height;
+//          PlatonicMaes ma = maeses . get (0);  // plenty more oy.
+//          if (ma == null)
+//              return;
+//          Vect hit = ma.loc.val . Add (ma.ovr.val . Mul (ma.wid.val * xnrm))
+//                                . Add (ma.upp.val . Mul (ma.hei.val * ynrm));
+//          Vect n = ma.ovr.val . Cross (ma.upp.val) . Norm ();
+//          n . MulAcc (0.8 * ma.wid.val);
+//          Vect eye = hit . Add (n);
+//          Vect aim = ma.upp.val . Cross (ma.ovr.val) . Norm ();
+//          int b = e . getButton ();
+//          long butt = 0;
+//          if (b != 0)
+//            butt |= ((b == PConstants.LEFT)  ?  (0x01 << 0)
+//                     :  ((b == PConstants.CENTER)  ?  (0x01 << 1)
+//                         :  ((b == PConstants.RIGHT)  ?  (0x01 << 2)  :  0)));
+//          // next in the unending onslaught of oy:
+//          // (this is because upstream the 'RELEASE' event has the 'button' var
+//          // set to the button that's being released, but zeugma triggers on the
+//          // change of a bit in the overall button bitfield.
+//          if (tion == MouseEvent.RELEASE)
+//            butt = 0;
+//          // now, meanwhile: how bad is this really, making
+//          // the mouse event masquerade as wand input?
+//          spaque . InterpretRawWandish ("mouse-0", butt, eye, aim, ma.ovr.val);
+//        }
       
       public void oscEvent (OscMessage mess)
         { //String addr = mess . addrPattern ();
@@ -264,12 +264,21 @@ println(q + "th maes is thus: " + ma);
       
       uniho = new UninvitedHost ();
       registerMethod ("pre", uniho);
-      registerMethod ("mouseEvent", uniho);
     
       osc_slurper = new OscP5 (uniho, 54345);
 
       HooverCoordTransforms ();
       HooverMaeses ();
+      beast_maes = maeses . get (0);
+      beast_cammy = PlatonicMaes.CameraFromMaes (beast_maes);
+      beast_fuehrer = this;
+      
+      int q = 1;
+      for (  ;  q < maeses . size ()  ;  ++q)
+        { P5ZMaesBeast bea = new P5ZMaesBeast (this);
+          bea.beast_maes = maeses . get (q);
+          bea.beast_cammy = PlatonicMaes.CameraFromMaes (bea.beast_maes);
+        }
  
       cherd = new CursorHerd ();
       spaque . AppendPhage (cherd);
@@ -282,4 +291,7 @@ println(q + "th maes is thus: " + ma);
     	    curry . AlignToMaes (ma);
     	  }
     }
+
+  public P5ZApplet ()
+    { super (null); }
 }

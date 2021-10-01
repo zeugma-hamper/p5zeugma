@@ -87,7 +87,7 @@ public class Blorpus  extends P5ZApplet
       //fullScreen (P3D, 3);
     }
 
-  public void draw ()
+  public void ActuallyDraw (PGraphics gics)
     { background (40);
 
       PlatonicMaes ma = maeses . get (0);
@@ -107,8 +107,8 @@ public class Blorpus  extends P5ZApplet
           float fvy = 2.0f * atan2 ((float)(0.5 * h), (float)(0.8 * w));
           perspective (fvy, asp, (float)(0.1 * w), (float)(5.0 * w));
 
-          PGraphics ics = getGraphics ();
-          PGraphicsOpenGL ogl = (PGraphicsOpenGL)ics;
+          //PGraphics ics = getGraphics ();
+          PGraphicsOpenGL ogl = (PGraphicsOpenGL)gics;
           ogl . applyProjection (1.0f,  0.0f,  0.0f,  0.0f,
                                  0.0f, -1.0f,  0.0f,  0.0f,
                                  0.0f,  0.0f,  1.0f,  0.0f,
