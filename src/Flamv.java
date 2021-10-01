@@ -61,8 +61,9 @@ public class Flamv  extends P5ZApplet
     }
 
   public void settings()
-    { size (1920, 1080, P3D);
-      //fullScreen (P3D, 3);
+    { FullscreenOnDisplay (1);
+      PleaseDoNotFullscreen ();
+      super . settings ();
     }
 
   public void ActuallyDraw (PGraphicsOpenGL ogl)

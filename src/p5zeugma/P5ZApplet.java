@@ -275,7 +275,8 @@ println(q + "th maes is thus: " + ma);
       
       int q = 1;
       for (  ;  q < maeses . size ()  ;  ++q)
-        { P5ZMaesBeast bea = new P5ZMaesBeast (this);
+        { int dspl = (display_if_fullscreen > 0)  ?  (q + 1)  :  -(q + 1);
+          P5ZMaesBeast bea = new P5ZMaesBeast (this, dspl);
           bea.beast_maes = maeses . get (q);
           bea.beast_cammy = PlatonicMaes.CameraFromMaes (bea.beast_maes);
         }
@@ -293,5 +294,7 @@ println(q + "th maes is thus: " + ma);
     }
 
   public P5ZApplet ()
-    { super (null); }
+    { super (null, 1);
+      display_if_fullscreen = 0;
+    }
 }

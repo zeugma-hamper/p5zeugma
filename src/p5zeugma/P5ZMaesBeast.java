@@ -16,6 +16,8 @@ public class P5ZMaesBeast  extends PApplet
   public Bolex beast_cammy;
   public P5ZApplet beast_fuehrer;
   public DialectCatcher beast_interpreter;
+  
+  public int display_if_fullscreen;
 
   public class DialectCatcher
   { public void mouseEvent (MouseEvent e)
@@ -55,12 +57,14 @@ public class P5ZMaesBeast  extends PApplet
       }
   }
 
-  public P5ZMaesBeast (P5ZApplet boese_fuehrer)
+  public P5ZMaesBeast (P5ZApplet boese_fuehrer, int dspl_no)
     { super ();
       beast_maes = null;
       beast_cammy = null;
       beast_fuehrer = boese_fuehrer;
       beast_interpreter = new DialectCatcher ();
+      
+      display_if_fullscreen = dspl_no;
 
       registerMethod ("mouseEvent", beast_interpreter);
 
@@ -68,14 +72,22 @@ public class P5ZMaesBeast  extends PApplet
         PApplet.runSketch (new String[] { this . getClass () . getName () },
     	                   this);
     }
+  
+  public void FullscreenOnDisplay (int d)
+    { display_if_fullscreen = d; }
+
+  public void PleaseDoNotFullscreen ()
+    { display_if_fullscreen *= (display_if_fullscreen > 0  ?  -1  :  1); }
 
   public void ActuallyDraw (PGraphicsOpenGL ogl)
     { ogl . background (40);}
 
 
   public void settings ()
-    { size (960, 540, P3D);
-      //fullScreen (P3D, 3);
+    { if (display_if_fullscreen  <  1)
+    	size (960, 540, P3D);
+      else
+    	fullScreen (P3D, display_if_fullscreen);
     }
 
   public void setup ()
