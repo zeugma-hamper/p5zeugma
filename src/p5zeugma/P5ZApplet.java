@@ -20,7 +20,7 @@ import processing.event.*;
 import processing.opengl.PGraphicsOpenGL;
 
 
-public class P5ZApplet  extends P5ZMaesBeast
+public class P5ZApplet  extends P5ZLivingMaes
 { MotherTime momma_tee;
   long ratchet = 0;
 
@@ -143,6 +143,8 @@ public class P5ZApplet  extends P5ZMaesBeast
       }
     public void DrawSelf (PGraphicsOpenGL g)
       { Vect v;
+        if (cur_maes  !=  P5ZLivingMaes.maes_by_gfx_handle . get (g))
+          return;
         g . noStroke ();
         ZeColor c = iro.val;
         g . fill ((int)(255 * c.r), (int)(255 * c.g), (int)(255 * c.b), (int)(255 * c.a));
@@ -269,16 +271,16 @@ println(q + "th maes is thus: " + ma);
 
       HooverCoordTransforms ();
       HooverMaeses ();
-      beast_maes = maeses . get (0);
-      beast_cammy = PlatonicMaes.CameraFromMaes (beast_maes);
-      beast_fuehrer = this;
+      vital_maes = maeses . get (0);
+      vital_cammy = PlatonicMaes.CameraFromMaes (vital_maes);
+      vital_fuehrer = this;
       
       int q = 1;
       for (  ;  q < maeses . size ()  ;  ++q)
         { int dspl = (display_if_fullscreen > 0)  ?  (q + 1)  :  -(q + 1);
-          P5ZMaesBeast bea = new P5ZMaesBeast (this, dspl);
-          bea.beast_maes = maeses . get (q);
-          bea.beast_cammy = PlatonicMaes.CameraFromMaes (bea.beast_maes);
+          P5ZLivingMaes lma = new P5ZLivingMaes (this, dspl);
+          lma.vital_maes = maeses . get (q);
+          lma.vital_cammy = PlatonicMaes.CameraFromMaes (lma.vital_maes);
         }
  
       cherd = new CursorHerd ();

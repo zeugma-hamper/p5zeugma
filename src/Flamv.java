@@ -34,18 +34,18 @@ public class Flamv  extends P5ZApplet
       PlatonicMaes ma = maeses . get (0);
 
       diago = new SinuVect (Vect.onesv . Sub (new Vect (0.0, 2.0, 0.0)) . Mul (133.31), 0.3113);
-      topshim = new ShimmyCrate ("  just one more reason that truculence is fine",
+      topshim = new ShimmyCrate ("      Mesopotamian hints of imminent eversion",
                                  200.0, ma.loc.val,
                                  Vect.onesv . Sub (new Vect (0.0, 2.0, 0.0)) . Mul (133.31),
                                  0.3113);
 
-      ShimmyCrate shic = new ShimmyCrate ("  who but Blavatsky?", 100.0, Vect.yaxis . Mul (-1250.0),
+      ShimmyCrate shic = new ShimmyCrate ("    who but Blavatsky?", 100.0, Vect.yaxis . Mul (-1250.0),
                                           Vect.yaxis . Mul (80.0), 0.7);
       shic . AssuredGrapplerPile ()
         . PrependGrappler (new RoGrappler (Vect.zaxis, -30.0 * Math.PI / 180.0));
       topshim . AppendChild (shic);
 
-      ShimmyCrate ycra = new ShimmyCrate ("  and then the loudest glance...", 150.0, Vect.yaxis . Mul (-850.0),
+      ShimmyCrate ycra = new ShimmyCrate ("     and then the loudest glance...", 150.0, Vect.yaxis . Mul (-850.0),
           Vect.xaxis . Mul (90.0), 0.57);
       shic . AppendChild (ycra);
     
@@ -73,10 +73,10 @@ public class Flamv  extends P5ZApplet
       
       int nx = 80;
       int ny = 45;
-      double w = beast_maes . Width ();
-      double h = beast_maes . Height ();
-      Vect o = beast_maes . Over ();
-      Vect u = beast_maes . Up ();
+      double w = vital_maes . Width ();
+      double h = vital_maes . Height ();
+      Vect o = vital_maes . Over ();
+      Vect u = vital_maes . Up ();
       double gap_frac = 0.2;
       double diamx = w / ((1.0 + gap_frac) * nx);
       double diamy = h / ((1.0 + gap_frac) * ny);

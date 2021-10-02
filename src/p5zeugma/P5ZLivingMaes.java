@@ -10,14 +10,19 @@ import processing.core.PGraphics;
 import processing.event.MouseEvent;
 import processing.opengl.PGraphicsOpenGL;
 
+import java.util.HashMap;
 
-public class P5ZMaesBeast  extends PApplet
-{ public PlatonicMaes beast_maes;
-  public Bolex beast_cammy;
-  public P5ZApplet beast_fuehrer;
-  public DialectCatcher beast_interpreter;
+
+public class P5ZLivingMaes  extends PApplet
+{ public PlatonicMaes vital_maes;
+  public Bolex vital_cammy;
+  public P5ZApplet vital_fuehrer;
+  public DialectCatcher vital_interpreter;
   
   public int display_if_fullscreen;
+  
+  public static HashMap <PGraphicsOpenGL, PlatonicMaes> maes_by_gfx_handle
+    = new HashMap <> ();
 
   public class DialectCatcher
   { public void mouseEvent (MouseEvent e)
@@ -29,7 +34,7 @@ public class P5ZMaesBeast  extends PApplet
           }
         double xnrm = (double)(e . getX ()) / (double)width  -  0.5;  // ouch, to say the least.
         double ynrm = 0.5  -  (double)(e . getY ()) / (double)height;
-        PlatonicMaes ma = beast_maes;
+        PlatonicMaes ma = vital_maes;
         if (ma == null)
             return;
         Vect hit = ma.loc.val . Add (ma.ovr.val . Mul (ma.wid.val * xnrm))
@@ -52,21 +57,21 @@ public class P5ZMaesBeast  extends PApplet
           butt = 0;
         // now, meanwhile: how bad is this really, making
         // the mouse event masquerade as wand input?
-        beast_fuehrer.spaque . InterpretRawWandish ("mouse-0", butt, eye,
+        vital_fuehrer.spaque . InterpretRawWandish ("mouse-0", butt, eye,
         											aim, ma.ovr.val);
       }
   }
 
-  public P5ZMaesBeast (P5ZApplet boese_fuehrer, int dspl_no)
+  public P5ZLivingMaes (P5ZApplet boese_fuehrer, int dspl_no)
     { super ();
-      beast_maes = null;
-      beast_cammy = null;
-      beast_fuehrer = boese_fuehrer;
-      beast_interpreter = new DialectCatcher ();
+      vital_maes = null;
+      vital_cammy = null;
+      vital_fuehrer = boese_fuehrer;
+      vital_interpreter = new DialectCatcher ();
       
       display_if_fullscreen = dspl_no;
 
-      registerMethod ("mouseEvent", beast_interpreter);
+      registerMethod ("mouseEvent", vital_interpreter);
 
       if (boese_fuehrer != null)
         PApplet.runSketch (new String[] { this . getClass () . getName () },
@@ -80,7 +85,11 @@ public class P5ZMaesBeast  extends PApplet
     { display_if_fullscreen *= (display_if_fullscreen > 0  ?  -1  :  1); }
 
   public void ActuallyDraw (PGraphicsOpenGL ogl)
-    { ogl . background (40);}
+    { ogl . background (160, 20, 20); }
+  // the angry red foregoing is one that we should never see: sumpin'd be wrong.
+  // that's because every direct instance of this class should be calling the
+  // overridden ActuallyDraw() method belonging to a subclass instance; see
+  // the last line of draw(), below.
 
 
   public void settings ()
@@ -98,12 +107,12 @@ public class P5ZMaesBeast  extends PApplet
   public void draw ()
     { PGraphics g = getGraphics ();
       if (! (g instanceof PGraphicsOpenGL)
-    	  ||  beast_maes == null
-    	  ||  beast_cammy == null)
+    	  ||  vital_maes == null
+    	  ||  vital_cammy == null)
     	return;
 
-      PlatonicMaes ma = beast_maes;
-      Bolex cam = beast_cammy;
+      PlatonicMaes ma = vital_maes;
+      Bolex cam = vital_cammy;
 
       PGraphicsOpenGL ogl = (PGraphicsOpenGL)g;
       Vect e = cam . ViewLoc ();
@@ -125,24 +134,26 @@ public class P5ZMaesBeast  extends PApplet
         }
       else if (cam . ProjectionType ()  ==  Bolex.ProjType.ORTHOGRAPHIC)
         { double hlf_w = cam . ViewDist ()
-    	  		* Math.tan (0.5 * cam . ViewHorizAngle ());
+    	  		               * Math.tan (0.5 * cam . ViewHorizAngle ());
           double hlf_h = cam . ViewDist ()
-            	* Math.tan (0.5 * cam . ViewVertAngle ());
+                           * Math.tan (0.5 * cam . ViewVertAngle ());
           ogl . ortho (-(float)hlf_w, (float)hlf_w,
-        		  	   -(float)hlf_h, (float)hlf_h);
+        		  	       -(float)hlf_h, (float)hlf_h);
         }
       else
         { // well... what?
         }
 
+      // perhaps the following should be switched via some global flag...
       ogl . applyProjection (1.0f,  0.0f,  0.0f,  0.0f,
                              0.0f, -1.0f,  0.0f,  0.0f,
                              0.0f,  0.0f,  1.0f,  0.0f,
                              0.0f,  0.0f,  0.0f,  1.0f);
-      
-      if (beast_fuehrer == null)
-    	this . ActuallyDraw (ogl);
+
+      maes_by_gfx_handle . put (ogl, ma);
+      if (vital_fuehrer == null)
+        this . ActuallyDraw (ogl);
       else
-    	beast_fuehrer . ActuallyDraw (ogl);
+        vital_fuehrer . ActuallyDraw (ogl);
     }
 }
