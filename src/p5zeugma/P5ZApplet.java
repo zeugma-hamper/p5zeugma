@@ -28,10 +28,10 @@ public class P5ZApplet  extends P5ZLivingMaes
   
   UninvitedHost uniho;
 
-  SpatialAqueduct spaque;
+  protected SpatialAqueduct spaque;
 
-  Matrix44 raw_to_room_direc_mat;
-  Matrix44 raw_to_room_point_mat;
+  protected Matrix44 raw_to_room_direc_mat;
+  protected Matrix44 raw_to_room_point_mat;
 
   protected ArrayList <PlatonicMaes> maeses = new ArrayList <> ();
   

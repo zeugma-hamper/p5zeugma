@@ -10,6 +10,7 @@ import processing.core.PGraphics;
 import processing.event.MouseEvent;
 import processing.opengl.PGraphicsOpenGL;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -20,6 +21,9 @@ public class P5ZLivingMaes  extends PApplet
   public DialectCatcher vital_interpreter;
   
   public int display_if_fullscreen;
+  
+  public static ArrayList <P5ZLivingMaes> all_living_maeses
+    = new ArrayList <> ();
   
   public static HashMap <PGraphicsOpenGL, PlatonicMaes> maes_by_gfx_handle
     = new HashMap <> ();
@@ -58,7 +62,7 @@ public class P5ZLivingMaes  extends PApplet
         // now, meanwhile: how bad is this really, making
         // the mouse event masquerade as wand input?
         vital_fuehrer.spaque . InterpretRawWandish ("mouse-0", butt, eye,
-        											aim, ma.ovr.val);
+        											                      aim, ma.ovr.val);
       }
   }
 
@@ -76,6 +80,8 @@ public class P5ZLivingMaes  extends PApplet
       if (boese_fuehrer != null)
         PApplet.runSketch (new String[] { this . getClass () . getName () },
     	                   this);
+
+      all_living_maeses . add (this);
     }
   
   public void FullscreenOnDisplay (int d)
@@ -156,4 +162,27 @@ public class P5ZLivingMaes  extends PApplet
       else
         vital_fuehrer . ActuallyDraw (ogl);
     }
+
+  public static PlatonicMaes.MaesAndHit ClosestAmongLiving (Vect frm, Vect aim)
+    { Vect cls_hit = null;
+      PlatonicMaes ma, cls_maes = null;
+      double cls_dst = -1.0;
+      for (P5ZLivingMaes lm  :  all_living_maeses)
+        if ((ma = lm.vital_maes) != null)
+          { Vect hit = Geom.RayRectIntersection (frm, aim, ma.loc.val,
+                                                 ma.ovr.val, ma.upp.val,
+                                                 ma.wid.val, ma.hei.val);
+            if (hit != null)
+              { double d = hit . Sub (frm) . AutoDot ();
+                if (cls_dst < 0.0  ||  d < cls_dst)
+                  { cls_dst = d;
+                    cls_hit = hit;
+                    cls_maes = ma;
+                  }
+              }
+          }
+      return (cls_maes == null)  ?  null
+          :  new PlatonicMaes.MaesAndHit (cls_maes, cls_hit);
+    }
+
 }

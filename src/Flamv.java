@@ -8,6 +8,7 @@ import p5zeugma.P5ZApplet.Cursoresque;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PImage;
 import processing.core.PMatrix3D;
 import processing.opengl.PGraphicsOpenGL;
 
@@ -20,6 +21,31 @@ import zeugma.Vect;
 
 
 
+class ShimmyCrate  extends P5ZSpaceThing
+{ String mess;
+  double sc;
+  
+  ShimmyCrate (String wrds, double sca, Vect offset, Vect shimax, double freq)
+    { mess = wrds;
+      sc = sca;
+      SinuVect iago = new SinuVect (shimax, freq);
+      TrGrappler trg = new TrGrappler (iago);
+      AppendGrappler (trg);
+      trg = new TrGrappler (offset);
+      AppendGrappler (trg);
+    }
+  public void DrawSelf (PGraphicsOpenGL g)
+    { g . box ((float)sc);
+      g . textSize (100.0f);
+      g . pushMatrix ();
+      g . applyMatrix (1.0f,  0.0f,  0.0f,  0.0f,
+                       0.0f, -1.0f,  0.0f,  0.0f,
+                       0.0f,  0.0f,  1.0f,  0.0f,
+                       0.0f,  0.0f,  0.0f,  1.0f);
+      g . text (mess, 0.0f, 0.0f);
+      g . popMatrix ();
+    }
+}
 
 
 public class Flamv  extends P5ZApplet
@@ -27,6 +53,8 @@ public class Flamv  extends P5ZApplet
   public ShimmyCrate topshim;
   public P5ZSpaceThing gaylord;
   public P5ZSpaceThing wallifier;
+  public ImageSplatter stein, forster;
+  public boolean well_and_truly_ready = false;
 
   public void setup ()
     { P5ZVivify ();
@@ -45,8 +73,9 @@ public class Flamv  extends P5ZApplet
         . PrependGrappler (new RoGrappler (Vect.zaxis, -30.0 * Math.PI / 180.0));
       topshim . AppendChild (shic);
 
-      ShimmyCrate ycra = new ShimmyCrate ("     and then the loudest glance...", 150.0, Vect.yaxis . Mul (-850.0),
-          Vect.xaxis . Mul (90.0), 0.57);
+      ShimmyCrate ycra = new ShimmyCrate ("     and then the loudest glance...",
+                                          150.0, Vect.yaxis . Mul (-850.0),
+                                          Vect.xaxis . Mul (90.0), 0.57);
       shic . AppendChild (ycra);
     
       gaylord = new P5ZSpaceThing ();
@@ -55,9 +84,22 @@ public class Flamv  extends P5ZApplet
       
       wallifier = new P5ZSpaceThing ();
       wallifier . AppendGrappler (new TrGrappler (ma.loc.val));
+      
+      PImage st = loadImage ("snacks/stein-picabia-smaller.png");
+      PImage fo = loadImage ("snacks/forster-fry-smaller.png");
+      stein = new ImageSplatter (st);
+      forster = new ImageSplatter (fo);
+      stein . ScaleZoft () . Set (Vect.onesv . Mul (1500.0));
+      stein . LocZoft () . Set (ma.loc.val . Add (Vect.xaxis . Mul (1000.0)));
+      forster . ScaleZoft () . Set (Vect.onesv . Mul (1500.0));
+      forster . LocZoft () . Set (ma.loc.val . Sub (Vect.xaxis . Mul (1000.0)));
+
+      this.spaque . AppendPhage (stein);
+      this.spaque . AppendPhage (forster);
 //    IronLung pulmo = IronLung.GlobalByName ("omni-lung");
 //    Eructathan e1 = new Eructathan ("Blarvles");
 //    pulmo . AppendBreathee (e1);
+      well_and_truly_ready = true;
     }
 
   public void settings()
@@ -68,7 +110,9 @@ public class Flamv  extends P5ZApplet
 
   public void ActuallyDraw (PGraphicsOpenGL ogl)
     { ogl . background (40);
-
+      if (! well_and_truly_ready)
+        return;
+      
       gaylord . RecursivelyDraw (ogl);
       
       int nx = 80;
@@ -99,6 +143,9 @@ public class Flamv  extends P5ZApplet
         }
       ogl . popStyle ();
       wallifier . AftaDraw (ogl);
+      
+      stein . RecursivelyDraw (ogl);
+      forster . RecursivelyDraw (ogl);
       
       Iterator <Cursoresque> cuit = cherd.cursor_by_wand . values () . iterator ();
       while (cuit . hasNext ())
