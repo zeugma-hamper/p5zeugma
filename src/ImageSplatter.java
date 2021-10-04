@@ -23,6 +23,7 @@ public class ImageSplatter  extends P5ZAlignifer  implements ZESpatialPhagy
   double im_wid, im_hei;
   PlatonicMaes cur_maes;
   String grab_prov;
+  double grab_off_h, grab_off_v;
 
   public ImageSplatter (PImage im)
     { super ();
@@ -53,6 +54,9 @@ public class ImageSplatter  extends P5ZAlignifer  implements ZESpatialPhagy
       if (hit == null)
         return 0;
       grab_prov = e . Provenance ();
+      Vect offset = hit . Sub (CurLoc ());
+      grab_off_h = offset . Dot (o);
+      grab_off_v = offset . Dot (u);
       return 0;
     }
 
@@ -70,7 +74,13 @@ public class ImageSplatter  extends P5ZAlignifer  implements ZESpatialPhagy
         return 0;
       if (mah.maes != cur_maes)
         AlignToMaes (cur_maes = mah.maes);
+      GrapplerPile gp = AssuredGrapplerPile ();
+      Vect o = gp.nrm_mat . TransformVect (Vect.xaxis);
+      Vect u = gp.nrm_mat . TransformVect (Vect.yaxis);
+      mah.hit = mah.hit . Sub (o . Mul (grab_off_h))
+                        . Sub (u . Mul (grab_off_v));
       LocZoft () . Set (mah.hit);
+      
       return 0;
     }
 
