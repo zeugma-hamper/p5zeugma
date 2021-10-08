@@ -7,6 +7,10 @@ import zeugma.ZESpatialMoveEvent;
 import zeugma.ZESpatialHardenEvent;
 import zeugma.ZESpatialSoftenEvent;
 import zeugma.ZESpatialPhagy;
+import zeugma.ZEYowlAppearEvent;
+import zeugma.ZEYowlRepeatEvent;
+import zeugma.ZEYowlVanishEvent;
+import zeugma.ZEYowlPhagy;
 import zeugma.Geom;
 import zeugma.GrapplerPile;
 import zeugma.PlatonicMaes;
@@ -18,7 +22,7 @@ import processing.core.PImage;
 import processing.opengl.PGraphicsOpenGL;
 
 
-public class ImageSplatter  extends P5ZAlignifer  implements ZESpatialPhagy
+public class ImageSplatter  extends P5ZAlignifer  implements ZESpatialPhagy, ZEYowlPhagy
 { PImage immy;
   double im_wid, im_hei;
   PlatonicMaes cur_maes;
@@ -84,6 +88,13 @@ public class ImageSplatter  extends P5ZAlignifer  implements ZESpatialPhagy
       return 0;
     }
 
+
+  public long ZEYowlAppear (ZEYowlAppearEvent e)
+    { System.out.print ("APPEAR: " + e . Utterance () + "  ");  return 0; }
+  public long ZEYowlRepeat (ZEYowlRepeatEvent e)
+    { System.out.print ("(rept!) : " + e . Utterance () + "  ");  return 0; }
+  public long ZEYowlVanish (ZEYowlVanishEvent e)
+    { System.out.println ("VANISH (g'bye): " + e . Utterance ());  return 0; }
 
   public void DrawSelf (PGraphicsOpenGL g)
     { g . imageMode (PConstants.CENTER);

@@ -7,6 +7,7 @@ import zeugma.*;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
+import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 import processing.opengl.PGraphicsOpenGL;
 
@@ -32,8 +33,10 @@ public class P5ZLivingMaes  extends PApplet
   { public void mouseEvent (MouseEvent e)
       { int tion = e . getAction ();
         switch (tion)
-          { case MouseEvent.CLICK: case MouseEvent.ENTER:
-            case MouseEvent.EXIT: case MouseEvent.WHEEL:
+          { case MouseEvent.CLICK:
+            case MouseEvent.ENTER:
+            case MouseEvent.EXIT:
+            case MouseEvent.WHEEL:
               return;
           }
         double xnrm = (double)(e . getX ()) / (double)width  -  0.5;  // ouch, to say the least.
@@ -64,6 +67,21 @@ public class P5ZLivingMaes  extends PApplet
         vital_fuehrer.spaque . InterpretRawWandish ("mouse-0", butt, eye,
         											                      aim, ma.ovr.val);
       }
+
+    public void keyEvent (KeyEvent e)
+      { int tion = e . getAction ();
+        if (tion  ==  KeyEvent.TYPE)
+          return;
+        long mods = 0;
+        int ms = e . getModifiers ();
+        if ((ms & KeyEvent.SHIFT)  >  0)  mods |= ZEYowlEvent.MODK_SHIFT;
+        if ((ms & KeyEvent.CTRL)   >  0)  mods |= ZEYowlEvent.MODK_CTRL;
+        if ((ms & KeyEvent.ALT)    >  0)  mods |= ZEYowlEvent.MODK_ALT;
+        if ((ms & KeyEvent.META)   >  0)  mods |= ZEYowlEvent.MODK_META;
+        vital_fuehrer.yowque
+          . InterpretRawKeyfulness ("keyboard-0", tion != KeyEvent.RELEASE,
+                                    e . getKey (), e . getKeyCode (), mods);
+      }
   }
 
   public P5ZLivingMaes (P5ZApplet boese_fuehrer, int dspl_no)
@@ -76,6 +94,7 @@ public class P5ZLivingMaes  extends PApplet
       display_if_fullscreen = dspl_no;
 
       registerMethod ("mouseEvent", vital_interpreter);
+      registerMethod ("keyEvent", vital_interpreter);
 
       if (boese_fuehrer != null)
         PApplet.runSketch (new String[] { this . getClass () . getName () },
@@ -113,8 +132,8 @@ public class P5ZLivingMaes  extends PApplet
   public void draw ()
     { PGraphics g = getGraphics ();
       if (! (g instanceof PGraphicsOpenGL)
-    	  ||  vital_maes == null
-    	  ||  vital_cammy == null)
+    	    ||  vital_maes == null
+    	    ||  vital_cammy == null)
     	return;
 
       PlatonicMaes ma = vital_maes;

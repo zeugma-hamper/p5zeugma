@@ -29,6 +29,7 @@ public class P5ZApplet  extends P5ZLivingMaes
   UninvitedHost uniho;
 
   protected SpatialAqueduct spaque;
+  protected YowlAqueduct yowque;
 
   protected Matrix44 raw_to_room_direc_mat;
   protected Matrix44 raw_to_room_point_mat;
@@ -41,6 +42,7 @@ public class P5ZApplet  extends P5ZLivingMaes
   public class UninvitedHost
     { public void pre ()
         { spaque . DrainReservoir ();
+          yowque . DrainReservoir ();
 
           ratchet += 8;
           double t = momma_tee . CurTime ();
@@ -263,6 +265,7 @@ println(q + "th maes is thus: " + ma);
       momma_tee . ZeroTime ();
 
       spaque = new SpatialAqueduct ();
+      yowque = new YowlAqueduct ();
       
       uniho = new UninvitedHost ();
       registerMethod ("pre", uniho);

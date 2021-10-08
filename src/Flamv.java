@@ -96,6 +96,9 @@ public class Flamv  extends P5ZApplet
 
       this.spaque . AppendPhage (stein);
       this.spaque . AppendPhage (forster);
+
+      this.yowque . AppendPhage (stein);
+      this.yowque . AppendPhage (forster);
 //    IronLung pulmo = IronLung.GlobalByName ("omni-lung");
 //    Eructathan e1 = new Eructathan ("Blarvles");
 //    pulmo . AppendBreathee (e1);
