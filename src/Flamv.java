@@ -1,8 +1,8 @@
 
-import java.util.Collection;
 import java.util.Iterator;
 
 import p5zeugma.P5ZApplet;
+import p5zeugma.P5ZLimnable;
 import p5zeugma.P5ZSpaceThing;
 import p5zeugma.P5ZApplet.Cursoresque;
 
@@ -16,12 +16,13 @@ import zeugma.Matrix44;
 import zeugma.TrGrappler;
 import zeugma.RoGrappler;
 import zeugma.PlatonicMaes;
+import zeugma.SpaceThing;
 import zeugma.SinuVect;
 import zeugma.Vect;
 
 
 
-class ShimmyCrate  extends P5ZSpaceThing
+class ShimmyCrate  extends SpaceThing  implements P5ZLimnable
 { String mess;
   double sc;
   

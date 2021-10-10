@@ -143,7 +143,7 @@ public class P5ZLivingMaes  extends PApplet
       Vect e = cam . ViewLoc ();
       Vect n = cam . ViewAim ();
       Vect u = cam . ViewUp ();
-      Vect o = n . Cross (u . Norm ()) . Norm () ;
+      // Vect o = n . Cross (u . Norm ()) . Norm () ;
       Vect c = e . Add (n . Mul (cam . ViewDist ()));
         
       ogl . camera ((float)e.x, (float)e.y, (float)e.z,

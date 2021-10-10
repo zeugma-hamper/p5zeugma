@@ -4,6 +4,7 @@ package p5zeugma;
 
 import zeugma.Zeubject;
 import zeugma.Limnable;
+import zeugma.GrapplerPile;
 import zeugma.IContainMultitudes;
 import processing.opengl.PGraphicsOpenGL;
 
@@ -11,11 +12,16 @@ import processing.opengl.PGraphicsOpenGL;
 public interface P5ZLimnable  extends Limnable, IContainMultitudes
 {
   default void BefoDraw (PGraphicsOpenGL g)
-    { }
+    { g . pushMatrix ();
+
+      GrapplerPile gp = UnsecuredGrapplerPile ();
+      if (gp != null)
+        P5Z.ConcatModelView (g, gp . PntMat (), gp . InvPntMat ());
+    }
 
   default void AftaDraw (PGraphicsOpenGL g)
-    { }
-  
+    { g . popMatrix (); }
+
   default void DrawSelf (PGraphicsOpenGL g)
     { }
 

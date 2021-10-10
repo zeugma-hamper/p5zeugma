@@ -2,27 +2,17 @@
 
 import p5zeugma.P5ZAlignifer;
 import p5zeugma.P5ZLivingMaes;
+import p5zeugma.P5ZLimnable;
 
-import zeugma.ZESpatialMoveEvent;
-import zeugma.ZESpatialHardenEvent;
-import zeugma.ZESpatialSoftenEvent;
-import zeugma.ZESpatialPhagy;
-import zeugma.ZEYowlAppearEvent;
-import zeugma.ZEYowlRepeatEvent;
-import zeugma.ZEYowlVanishEvent;
-import zeugma.ZEYowlPhagy;
-import zeugma.Geom;
-import zeugma.GrapplerPile;
-import zeugma.PlatonicMaes;
-import zeugma.ScGrappler;
-import zeugma.Vect;
+import zeugma.*;
 
 import processing.core.PConstants;
 import processing.core.PImage;
 import processing.opengl.PGraphicsOpenGL;
 
 
-public class ImageSplatter  extends P5ZAlignifer  implements ZESpatialPhagy, ZEYowlPhagy
+public class ImageSplatter  extends Alignifer
+							implements P5ZLimnable, ZESpatialPhagy, ZEYowlPhagy
 { PImage immy;
   double im_wid, im_hei;
   PlatonicMaes cur_maes;

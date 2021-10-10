@@ -8,7 +8,6 @@ import oscP5.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Collection;
 import java.util.Iterator;
 
 import java.util.Random;
@@ -120,7 +119,7 @@ public class P5ZApplet  extends P5ZLivingMaes
 
   static Random randolph = new Random ();
 
-  public class Cursoresque  extends P5ZAlignifer  implements ZESpatialPhagy
+  public class Cursoresque  extends Alignifer  implements P5ZLimnable, ZESpatialPhagy
   { //public Vect wall_pos;
     public ArrayList <SinuVect> vs_lrg, vs_sml;
     public ZoftThing <ZeColor> iro;

@@ -13,18 +13,4 @@ import processing.opengl.PGraphicsOpenGL;
 
 
 public class P5ZAlignifer  extends Alignifer  implements P5ZLimnable
-{
-  public void BefoDraw (PGraphicsOpenGL g)
-    { g . pushMatrix ();
-
-      GrapplerPile gp = UnsecuredGrapplerPile ();
-      if (gp != null)
-        P5Z.ConcatModelView (g, gp . PntMat (), gp . InvPntMat ());
-//        { PMatrix3D mah = P5Z.ToP (gp . PntMat ());
-//          g . applyMatrix (mah);
-//        }
-    }
-
-  public void AftaDraw (PGraphicsOpenGL g)
-    { g . popMatrix (); }
-}
+{ }
