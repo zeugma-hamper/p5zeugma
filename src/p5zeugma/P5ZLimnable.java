@@ -31,7 +31,7 @@ public interface P5ZLimnable  extends Limnable, IContainMultitudes
       AftaDraw (g);
     }
 
-  default void RecursivelyDraw (PGraphicsOpenGL g)
+  default void RecursivelyDraw (PGraphicsOpenGL g, long ratch, Limnable.CumuMats cm)
     { boolean dr = QueryShouldDraw ();
       boolean cdr = QueryShouldDrawChildrenEvenIfNotSelf ();
 
@@ -40,6 +40,9 @@ public interface P5ZLimnable  extends Limnable, IContainMultitudes
       
       boolean drf = QueryShouldDrawBeforeChildren ();
       
+      Limnable.CumuMats pushed_cm = cm;
+      cm = DependCumuMatsFrom (cm);
+
       BefoDraw (g);
       
       if (dr  &&  drf)
@@ -49,7 +52,7 @@ public interface P5ZLimnable  extends Limnable, IContainMultitudes
         if (NumChildren ()  >  0)
           for (Zeubject z  :  Children ())
             if (z instanceof P5ZLimnable)
-              ((P5ZLimnable)z) . RecursivelyDraw (g);
+              ((P5ZLimnable)z) . RecursivelyDraw (g, ratch, cm);
       
       if (dr  &&  ! drf)
         DrawSelf (g);

@@ -8,20 +8,16 @@ import oscP5.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import java.util.Random;
 
-import processing.core.*;
 import processing.data.JSONArray;
 import processing.data.JSONObject;
-import processing.event.*;
 import processing.opengl.PGraphicsOpenGL;
 
 
 public class P5ZApplet  extends P5ZLivingMaes
-{ MotherTime momma_tee;
-  long ratchet = 0;
+{ public Loopervisor global_looper;
 
   OscP5 osc_slurper;
   
@@ -40,56 +36,9 @@ public class P5ZApplet  extends P5ZLivingMaes
   
   public class UninvitedHost
     { public void pre ()
-        { spaque . DrainReservoir ();
-          yowque . DrainReservoir ();
-
-          ratchet += 8;
-          double t = momma_tee . CurTime ();
-          
-          VelvetLung vl = ProtoZoftThingGuts.MassBreather ();
-          if (vl != null)
-              vl . Inhale (ratchet, t);
-
-          //IronLung pulmo = IronLung.GlobalByName ("omni-lung");
-          for (IronLung pulmo  :  IronLung.GlobalLungs ())
-            if (pulmo != null  &&  pulmo != vl)
-              pulmo . Inhale (ratchet, t);
+        { if (global_looper != null)
+            global_looper. OnceUntoTheBreach ();
         }
-
-//      public void mouseEvent (MouseEvent e)
-//        { int tion = e . getAction ();
-//          switch (tion)
-//            { case MouseEvent.CLICK: case MouseEvent.ENTER:
-//              case MouseEvent.EXIT: case MouseEvent.WHEEL:
-//                return;
-//            }
-//          double xnrm = (double)(e . getX ()) / (double)width  -  0.5;  // ouch, to say the least.
-//          double ynrm = 0.5  -  (double)(e . getY ()) / (double)height;
-//          PlatonicMaes ma = maeses . get (0);  // plenty more oy.
-//          if (ma == null)
-//              return;
-//          Vect hit = ma.loc.val . Add (ma.ovr.val . Mul (ma.wid.val * xnrm))
-//                                . Add (ma.upp.val . Mul (ma.hei.val * ynrm));
-//          Vect n = ma.ovr.val . Cross (ma.upp.val) . Norm ();
-//          n . MulAcc (0.8 * ma.wid.val);
-//          Vect eye = hit . Add (n);
-//          Vect aim = ma.upp.val . Cross (ma.ovr.val) . Norm ();
-//          int b = e . getButton ();
-//          long butt = 0;
-//          if (b != 0)
-//            butt |= ((b == PConstants.LEFT)  ?  (0x01 << 0)
-//                     :  ((b == PConstants.CENTER)  ?  (0x01 << 1)
-//                         :  ((b == PConstants.RIGHT)  ?  (0x01 << 2)  :  0)));
-//          // next in the unending onslaught of oy:
-//          // (this is because upstream the 'RELEASE' event has the 'button' var
-//          // set to the button that's being released, but zeugma triggers on the
-//          // change of a bit in the overall button bitfield.
-//          if (tion == MouseEvent.RELEASE)
-//            butt = 0;
-//          // now, meanwhile: how bad is this really, making
-//          // the mouse event masquerade as wand input?
-//          spaque . InterpretRawWandish ("mouse-0", butt, eye, aim, ma.ovr.val);
-//        }
       
       public void oscEvent (OscMessage mess)
         { //String addr = mess . addrPattern ();
@@ -260,11 +209,10 @@ println(q + "th maes is thus: " + ma);
 
   
   public void P5ZVivify()
-    { momma_tee = new MotherTime ();
-      momma_tee . ZeroTime ();
+    { global_looper = new Loopervisor ();
 
-      spaque = new SpatialAqueduct ();
-      yowque = new YowlAqueduct ();
+      global_looper. AppendAqueduct (spaque = new SpatialAqueduct ());
+      global_looper. AppendAqueduct (yowque = new YowlAqueduct ());
       
       uniho = new UninvitedHost ();
       registerMethod ("pre", uniho);

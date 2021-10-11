@@ -36,14 +36,14 @@ public class ImageSplatter  extends Alignifer
   public long ZESpatialHarden (ZESpatialHardenEvent e)
     { if (! grab_prov . isEmpty ())
         return 0;
-      GrapplerPile gp = AssuredGrapplerPile ();
-      Vect cnt = gp.pnt_mat . TransformVect (Vect.zerov);
-      Vect o = gp.nrm_mat . TransformVect (Vect.xaxis);
-      Vect u = gp.nrm_mat . TransformVect (Vect.yaxis);
-      double wid = gp.pnt_mat . TransformVect (Vect.xaxis . Mul (im_wid))
-                        . Sub (cnt) . Mag ();
-      double hei = gp.pnt_mat . TransformVect (Vect.yaxis . Mul (im_hei))
-                        . Sub (cnt) . Mag ();
+      CumuMats cm = CurrentCumuMats ();
+      Vect cnt = cm.pmat . TransformVect (Vect.zerov);
+      Vect o = cm.nmat . TransformVect (Vect.xaxis);
+      Vect u = cm.nmat . TransformVect (Vect.yaxis);
+      double wid = cm.pmat . TransformVect (Vect.xaxis . Mul (im_wid))
+              . Sub (cnt) . Mag ();
+      double hei = cm.pmat . TransformVect (Vect.yaxis . Mul (im_hei))
+              . Sub (cnt) . Mag ();
       Vect hit = Geom.RayRectIntersection (e.loc, e.aim, cnt, o, u, wid, hei);
       if (hit == null)
         return 0;
@@ -68,9 +68,9 @@ public class ImageSplatter  extends Alignifer
         return 0;
       if (mah.maes != cur_maes)
         AlignToMaes (cur_maes = mah.maes);
-      GrapplerPile gp = AssuredGrapplerPile ();
-      Vect o = gp.nrm_mat . TransformVect (Vect.xaxis);
-      Vect u = gp.nrm_mat . TransformVect (Vect.yaxis);
+      CumuMats cm = CurrentCumuMats ();
+      Vect o = cm.nmat . TransformVect (Vect.xaxis);
+      Vect u = cm.nmat . TransformVect (Vect.yaxis);
       mah.hit = mah.hit . Sub (o . Mul (grab_off_h))
                         . Sub (u . Mul (grab_off_v));
       LocZoft () . Set (mah.hit);

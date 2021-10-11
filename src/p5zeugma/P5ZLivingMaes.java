@@ -114,7 +114,7 @@ public class P5ZLivingMaes  extends PApplet
   // the angry red foregoing is one that we should never see: sumpin'd be wrong.
   // that's because every direct instance of this class should be calling the
   // overridden ActuallyDraw() method belonging to a subclass instance; see
-  // the last line of draw(), below.
+  // the last line of draw(), well below.
 
 
   public void settings ()

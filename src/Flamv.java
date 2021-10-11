@@ -12,14 +12,7 @@ import processing.core.PImage;
 import processing.core.PMatrix3D;
 import processing.opengl.PGraphicsOpenGL;
 
-import zeugma.Matrix44;
-import zeugma.TrGrappler;
-import zeugma.RoGrappler;
-import zeugma.PlatonicMaes;
-import zeugma.SpaceThing;
-import zeugma.SinuVect;
-import zeugma.Vect;
-
+import zeugma.*;
 
 
 class ShimmyCrate  extends SpaceThing  implements P5ZLimnable
@@ -116,8 +109,14 @@ public class Flamv  extends P5ZApplet
     { ogl . background (40);
       if (! well_and_truly_ready)
         return;
-      
-      gaylord . RecursivelyDraw (ogl);
+
+      long ratch = -1;
+      Limnable.CumuMats cm = new Limnable.CumuMats ();
+      if (global_looper != null)
+        ratch = global_looper . RecentestRatchet ();
+      cm.rat_fresh = ratch;
+
+      gaylord . RecursivelyDraw (ogl, ratch, cm);
       
       int nx = 80;
       int ny = 45;
@@ -148,13 +147,13 @@ public class Flamv  extends P5ZApplet
       ogl . popStyle ();
       wallifier . AftaDraw (ogl);
       
-      stein . RecursivelyDraw (ogl);
-      forster . RecursivelyDraw (ogl);
+      stein . RecursivelyDraw (ogl, ratch, cm);
+      forster . RecursivelyDraw (ogl, ratch, cm);
       
       Iterator <Cursoresque> cuit = cherd.cursor_by_wand . values () . iterator ();
       while (cuit . hasNext ())
         { Cursoresque cur = cuit . next ();
-          cur . RecursivelyDraw (ogl);
+          cur . RecursivelyDraw (ogl, ratch, cm);
         }
     }
 
