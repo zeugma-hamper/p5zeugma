@@ -3,6 +3,7 @@ import java.util.Iterator;
 
 import p5zeugma.P5ZApplet;
 import p5zeugma.P5ZLimnable;
+import p5zeugma.P5ZLimnyThing;
 import p5zeugma.P5ZSpaceThing;
 import p5zeugma.P5ZApplet.Cursoresque;
 
@@ -15,10 +16,10 @@ import processing.opengl.PGraphicsOpenGL;
 import zeugma.*;
 
 
-class ShimmyCrate  extends SpaceThing  implements P5ZLimnable
+class ShimmyCrate  extends P5ZSpaceThing
 { String mess;
   double sc;
-  
+
   ShimmyCrate (String wrds, double sca, Vect offset, Vect shimax, double freq)
     { mess = wrds;
       sc = sca;
@@ -42,18 +43,67 @@ class ShimmyCrate  extends SpaceThing  implements P5ZLimnable
 }
 
 
+class Soikles  extends P5ZSpaceThing
+{
+  int nx = 80;
+  int ny = 45;
+  double w;
+  double h;
+  Vect o;
+  Vect u;
+  double gap_frac = 0.2;
+  double diamx;
+  double diamy;
+  Vect jogx;
+  Vect jogy;
+  Vect crgrtrn;
+  Vect p;
+
+  public Soikles (PlatonicMaes ma)
+    { w = ma . Width ();
+      h = ma . Height ();
+      o = ma . Over ();
+      u = ma . Up ();
+      diamx = w / ((1.0 + gap_frac) * nx);
+      diamy = h / ((1.0 + gap_frac) * ny);
+      jogx = o . Mul (diamx * (1.0 + gap_frac));
+      jogy = u . Mul (diamy * (1.0 + gap_frac));
+      crgrtrn = jogx . Mul ((double)nx);
+      p = Vect.zerov . Sub (jogx . Mul (0.5 * (nx - 1)))
+                     . Sub (jogy . Mul (0.5 * (ny - 1)));
+    }
+
+  public void DrawSelf (PGraphicsOpenGL g)
+    { g . pushStyle ();
+      g . noFill ();
+      g . stroke (255, 230);
+      for (int ww = ny  ;  ww > 0  ;  --ww)
+        { for (int qq = nx  ;  qq > 0  ;  --qq)
+            { g . ellipse ((float)p.x, (float)p.y, (float)diamx, (float)diamy);
+              p . AddAcc (jogx);
+            }
+          p . SubAcc (crgrtrn);
+          p . AddAcc (jogy);
+        }
+      g . popStyle ();
+    }
+}
+
+
 public class Flamv  extends P5ZApplet
-{ public SinuVect diago;
+{ public Soikles soiks;
+  public SinuVect diago;
   public ShimmyCrate topshim;
-  public P5ZSpaceThing gaylord;
+  public P5ZSpaceThing gaylord, omnibus;
   public P5ZSpaceThing wallifier;
   public ImageSplatter stein, forster;
-  public boolean well_and_truly_ready = false;
 
   public void setup ()
     { P5ZVivify ();
 
-      PlatonicMaes ma = maeses . get (0);
+      PlatonicMaes ma = FindMaesByName ("front");
+
+      soiks = new Soikles (ma);
 
       diago = new SinuVect (Vect.onesv . Sub (new Vect (0.0, 2.0, 0.0)) . Mul (133.31), 0.3113);
       topshim = new ShimmyCrate ("      Mesopotamian hints of imminent eversion",
@@ -71,14 +121,15 @@ public class Flamv  extends P5ZApplet
                                           150.0, Vect.yaxis . Mul (-850.0),
                                           Vect.xaxis . Mul (90.0), 0.57);
       shic . AppendChild (ycra);
-    
+
       gaylord = new P5ZSpaceThing ();
       gaylord . AppendChild (topshim);
       gaylord . AppendGrappler (new TrGrappler (Vect.yaxis . Mul (ma.hei.val * 0.15)));
-      
+
       wallifier = new P5ZSpaceThing ();
       wallifier . AppendGrappler (new TrGrappler (ma.loc.val));
-      
+      wallifier . AppendChild (soiks);
+
       PImage st = loadImage ("snacks/stein-picabia-smaller.png");
       PImage fo = loadImage ("snacks/forster-fry-smaller.png");
       stein = new ImageSplatter (st);
@@ -93,6 +144,19 @@ public class Flamv  extends P5ZApplet
 
       this.yowque . AppendPhage (stein);
       this.yowque . AppendPhage (forster);
+
+      omnibus = new P5ZSpaceThing ();
+      omnibus . AppendChild (stein);
+      omnibus . AppendChild (forster);
+
+      for (PlatonicMaes maes  :  maeses)
+        { maes . AppendLayer (gaylord);
+           if (maes == ma)
+             maes . AppendLayer (wallifier);
+          maes . AppendLayer (omnibus);
+          maes . AppendLayer (cherd);
+        }
+
 //    IronLung pulmo = IronLung.GlobalByName ("omni-lung");
 //    Eructathan e1 = new Eructathan ("Blarvles");
 //    pulmo . AppendBreathee (e1);
@@ -117,7 +181,7 @@ public class Flamv  extends P5ZApplet
       cm.rat_fresh = ratch;
 
       gaylord . RecursivelyDraw (ogl, ratch, cm);
-      
+
       int nx = 80;
       int ny = 45;
       double w = vital_maes . Width ();
@@ -146,10 +210,10 @@ public class Flamv  extends P5ZApplet
         }
       ogl . popStyle ();
       wallifier . AftaDraw (ogl);
-      
+
       stein . RecursivelyDraw (ogl, ratch, cm);
       forster . RecursivelyDraw (ogl, ratch, cm);
-      
+
       Iterator <Cursoresque> cuit = cherd.cursor_by_wand . values () . iterator ();
       while (cuit . hasNext ())
         { Cursoresque cur = cuit . next ();

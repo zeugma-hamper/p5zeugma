@@ -12,7 +12,7 @@ import processing.opengl.PGraphicsOpenGL;
 
 
 public class ImageSplatter  extends Alignifer
-							implements P5ZLimnable, ZESpatialPhagy, ZEYowlPhagy
+                            implements P5ZLimnable, ZESpatialPhagy, ZEYowlPhagy
 { PImage immy;
   double im_wid, im_hei;
   PlatonicMaes cur_maes;
@@ -37,6 +37,8 @@ public class ImageSplatter  extends Alignifer
     { if (! grab_prov . isEmpty ())
         return 0;
       CumuMats cm = CurrentCumuMats ();
+      if (cm  ==  null)
+        return 0;
       Vect cnt = cm.pmat . TransformVect (Vect.zerov);
       Vect o = cm.nmat . TransformVect (Vect.xaxis);
       Vect u = cm.nmat . TransformVect (Vect.yaxis);
@@ -69,12 +71,14 @@ public class ImageSplatter  extends Alignifer
       if (mah.maes != cur_maes)
         AlignToMaes (cur_maes = mah.maes);
       CumuMats cm = CurrentCumuMats ();
+      if (cm  ==  null)
+        return 0;
       Vect o = cm.nmat . TransformVect (Vect.xaxis);
       Vect u = cm.nmat . TransformVect (Vect.yaxis);
       mah.hit = mah.hit . Sub (o . Mul (grab_off_h))
                         . Sub (u . Mul (grab_off_v));
       LocZoft () . Set (mah.hit);
-      
+
       return 0;
     }
 

@@ -20,12 +20,14 @@ public class P5ZLivingMaes  extends PApplet
   public Bolex vital_cammy;
   public P5ZApplet vital_fuehrer;
   public DialectCatcher vital_interpreter;
-  
-  public int display_if_fullscreen;
-  
+
+  public int display_id;
+
+  public long last_limned_ratchet = -1;
+
   public static ArrayList <P5ZLivingMaes> all_living_maeses
     = new ArrayList <> ();
-  
+
   public static HashMap <PGraphicsOpenGL, PlatonicMaes> maes_by_gfx_handle
     = new HashMap <> ();
 
@@ -65,7 +67,7 @@ public class P5ZLivingMaes  extends PApplet
         // now, meanwhile: how bad is this really, making
         // the mouse event masquerade as wand input?
         vital_fuehrer.spaque . InterpretRawWandish ("mouse-0", butt, eye,
-        											                      aim, ma.ovr.val);
+                                                    aim, ma.ovr.val);
       }
 
     public void keyEvent (KeyEvent e)
@@ -90,26 +92,26 @@ public class P5ZLivingMaes  extends PApplet
       vital_cammy = null;
       vital_fuehrer = boese_fuehrer;
       vital_interpreter = new DialectCatcher ();
-      
-      display_if_fullscreen = dspl_no;
+
+      display_id = dspl_no;
 
       registerMethod ("mouseEvent", vital_interpreter);
       registerMethod ("keyEvent", vital_interpreter);
 
       if (boese_fuehrer != null)
         PApplet.runSketch (new String[] { this . getClass () . getName () },
-    	                   this);
+                           this);
 
       all_living_maeses . add (this);
     }
-  
+
   public void FullscreenOnDisplay (int d)
-    { display_if_fullscreen = d; }
+    { display_id = d; }
 
   public void PleaseDoNotFullscreen ()
-    { display_if_fullscreen *= (display_if_fullscreen > 0  ?  -1  :  1); }
+    { display_id *= (display_id > 0  ?  -1  :  1); }
 
-  public void ActuallyDraw (PGraphicsOpenGL ogl)
+  public void DrawAllLayers (PGraphicsOpenGL ogl, ArrayList <LimnyThing> lrs)
     { ogl . background (160, 20, 20); }
   // the angry red foregoing is one that we should never see: sumpin'd be wrong.
   // that's because every direct instance of this class should be calling the
@@ -118,10 +120,10 @@ public class P5ZLivingMaes  extends PApplet
 
 
   public void settings ()
-    { if (display_if_fullscreen  <  1)
-    	size (960, 540, P3D);
+    { if (display_id  <  1)
+        size (960, 540, P3D);
       else
-    	fullScreen (P3D, display_if_fullscreen);
+        fullScreen (P3D, display_id);
     }
 
   public void setup ()
@@ -132,9 +134,26 @@ public class P5ZLivingMaes  extends PApplet
   public void draw ()
     { PGraphics g = getGraphics ();
       if (! (g instanceof PGraphicsOpenGL)
-    	    ||  vital_maes == null
-    	    ||  vital_cammy == null)
-    	return;
+          ||  vital_maes == null
+          ||  vital_cammy == null)
+        return;
+
+      long ratch = -1;
+      if (vital_fuehrer != null  &&  vital_fuehrer.global_looper != null)
+        ratch = vital_fuehrer.global_looper . RecentestRatchet ();
+
+      if (ratch > 0  &&  ratch <= last_limned_ratchet)
+        { System.out.println ("ZOINKS! re-rendering frame at maes/ratchet "
+                              +  vital_maes . Name () + " @ "
+                              +  vital_maes . toString () + " / "
+                              +  Long.toString (ratch));
+          return;
+        }
+      else
+        System.out.println ("FINE: rendering frame at maes/ratchet "
+                            +  vital_maes . Name () + " @ "
+                            +  vital_maes . toString () + " / "
+                            +  Long.toString (ratch));
 
       PlatonicMaes ma = vital_maes;
       Bolex cam = vital_cammy;
@@ -145,25 +164,25 @@ public class P5ZLivingMaes  extends PApplet
       Vect u = cam . ViewUp ();
       // Vect o = n . Cross (u . Norm ()) . Norm () ;
       Vect c = e . Add (n . Mul (cam . ViewDist ()));
-        
+
       ogl . camera ((float)e.x, (float)e.y, (float)e.z,
                     (float)c.x, (float)c.y, (float)c.z,
                     (float)u.x, (float)u.y, (float)u.z);
       if (cam . ProjectionType ()  ==  Bolex.ProjType.PERSPECTIVE)
         { double asp = Math.tan (0.5 * cam . ViewHorizAngle ())
-    	                 /  Math.tan (0.5 * cam . ViewVertAngle ());
+                         /  Math.tan (0.5 * cam . ViewVertAngle ());
           double fvy = cam . ViewVertAngle ();
           ogl . perspective ((float)fvy, (float)asp,
-        		  			 (float)cam . NearClipDist (),
-        		  			 (float)cam . FarClipDist ());
+                             (float)cam . NearClipDist (),
+                             (float)cam . FarClipDist ());
         }
       else if (cam . ProjectionType ()  ==  Bolex.ProjType.ORTHOGRAPHIC)
         { double hlf_w = cam . ViewDist ()
-    	  		               * Math.tan (0.5 * cam . ViewHorizAngle ());
+                           * Math.tan (0.5 * cam . ViewHorizAngle ());
           double hlf_h = cam . ViewDist ()
                            * Math.tan (0.5 * cam . ViewVertAngle ());
           ogl . ortho (-(float)hlf_w, (float)hlf_w,
-        		  	       -(float)hlf_h, (float)hlf_h);
+                       -(float)hlf_h, (float)hlf_h);
         }
       else
         { // well... what?
@@ -177,9 +196,11 @@ public class P5ZLivingMaes  extends PApplet
 
       maes_by_gfx_handle . put (ogl, ma);
       if (vital_fuehrer == null)
-        this . ActuallyDraw (ogl);
+        this . DrawAllLayers (ogl, vital_maes.layers);
       else
-        vital_fuehrer . ActuallyDraw (ogl);
+        vital_fuehrer . DrawAllLayers (ogl, vital_maes.layers);
+
+      last_limned_ratchet = ratch;
     }
 
   public static PlatonicMaes.MaesAndHit ClosestAmongLiving (Vect frm, Vect aim)
@@ -203,5 +224,4 @@ public class P5ZLivingMaes  extends PApplet
       return (cls_maes == null)  ?  null
           :  new PlatonicMaes.MaesAndHit (cls_maes, cls_hit);
     }
-
 }

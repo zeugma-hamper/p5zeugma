@@ -17,10 +17,13 @@ import processing.opengl.PGraphicsOpenGL;
 
 
 public class P5ZApplet  extends P5ZLivingMaes
-{ public Loopervisor global_looper;
+{ public static P5ZApplet sole_instance = null;
+  public static boolean well_and_truly_ready = false;
+
+  public Loopervisor global_looper;
 
   OscP5 osc_slurper;
-  
+
   UninvitedHost uniho;
 
   protected SpatialAqueduct spaque;
@@ -30,16 +33,16 @@ public class P5ZApplet  extends P5ZLivingMaes
   protected Matrix44 raw_to_room_point_mat;
 
   protected ArrayList <PlatonicMaes> maeses = new ArrayList <> ();
-  
+
   protected CursorHerd cherd;
 
-  
+
   public class UninvitedHost
     { public void pre ()
         { if (global_looper != null)
-            global_looper. OnceUntoTheBreach ();
+            global_looper. OnceMoreUntoTheBreath ();
         }
-      
+
       public void oscEvent (OscMessage mess)
         { //String addr = mess . addrPattern ();
           //String ttag = mess . typetag ();
@@ -60,7 +63,7 @@ public class P5ZApplet  extends P5ZLivingMaes
           raw_to_room_point_mat . TransformVectInPlace (pos);
           raw_to_room_direc_mat . TransformVectInPlace (aim);
           raw_to_room_direc_mat . TransformVectInPlace (ovr);
-        
+
           spaque . InterpretRawWandish (wname, butts, pos, aim, ovr);
         }
 
@@ -133,7 +136,7 @@ public class P5ZApplet  extends P5ZLivingMaes
   }
 
 
-  public class CursorHerd  implements ZESpatialPhagy
+  public class CursorHerd  extends P5ZLimnyThing  implements ZESpatialPhagy
   { public HashMap <String, Cursoresque> cursor_by_wand = new HashMap <> ();
 
     public boolean PassTheBuckUpPhageHierarchy ()
@@ -143,7 +146,10 @@ public class P5ZApplet  extends P5ZLivingMaes
       { String prv = e . Provenance ();
         Cursoresque crs = cursor_by_wand . get (prv);
         if (crs == null)
-          cursor_by_wand . put (prv, crs = new Cursoresque (150.0, 6));
+          { crs = new Cursoresque (150.0, 6);
+            cursor_by_wand . put (prv, crs);
+            AppendChild (crs);
+          }
         return e . ProfferAsQuaffTo (crs);
       }
   }
@@ -207,16 +213,24 @@ println(q + "th maes is thus: " + ma);
         }
     }
 
-  
+
+  public PlatonicMaes FindMaesByName (String nm)
+    { if (nm != null)
+        for (PlatonicMaes ma  :  maeses)
+          if (ma . Name () . equals (nm))
+            return ma;
+      return null;
+    }
+
   public void P5ZVivify()
     { global_looper = new Loopervisor ();
 
       global_looper. AppendAqueduct (spaque = new SpatialAqueduct ());
       global_looper. AppendAqueduct (yowque = new YowlAqueduct ());
-      
+
       uniho = new UninvitedHost ();
       registerMethod ("pre", uniho);
-    
+
       osc_slurper = new OscP5 (uniho, 54345);
 
       HooverCoordTransforms ();
@@ -224,29 +238,52 @@ println(q + "th maes is thus: " + ma);
       vital_maes = maeses . get (0);
       vital_cammy = PlatonicMaes.CameraFromMaes (vital_maes);
       vital_fuehrer = this;
-      
+
       int q = 1;
       for (  ;  q < maeses . size ()  ;  ++q)
-        { int dspl = (display_if_fullscreen > 0)  ?  (q + 1)  :  -(q + 1);
+        { int dspl = (display_id > 0)  ?  (q + 1)  :  -(q + 1);
           P5ZLivingMaes lma = new P5ZLivingMaes (this, dspl);
           lma.vital_maes = maeses . get (q);
           lma.vital_cammy = PlatonicMaes.CameraFromMaes (lma.vital_maes);
         }
- 
+
       cherd = new CursorHerd ();
       spaque . AppendPhage (cherd);
 
-      Cursoresque curry = new Cursoresque (450.0, 6);
-      cherd.cursor_by_wand . put ("stasis-weasel", curry);
-      PlatonicMaes ma = maeses . get (0);
-      if (ma != null)
-    	  { curry . LocZoft () . Set (ma.loc.val);
-    	    curry . AlignToMaes (ma);
-    	  }
+      // Cursoresque curry = new Cursoresque (450.0, 6);
+      // cherd.cursor_by_wand . put ("stasis-weasel", curry);
+      // PlatonicMaes ma = maeses . get (0);
+      // if (ma != null)
+      //   { curry . LocZoft () . Set (ma.loc.val);
+      //     curry . AlignToMaes (ma);
+      //   }
+    }
+
+  public void DrawAllLayers (PGraphicsOpenGL ogl, ArrayList <LimnyThing> lrs)
+    { if (! well_and_truly_ready)
+        return;
+
+      ogl . hint (DISABLE_DEPTH_TEST);
+      ZeColor co = vital_maes.bg_iro . Val ();
+      ogl . background ((float)(255.0 * co.r), (float)(255.0 * co.g),
+                        (float)(255.0 * co.b), (float)(255.0 * co.a));
+      long ratch = -1;
+      if (global_looper != null)
+        ratch = global_looper . RecentestRatchet ();
+
+      Limnable.CumuMats cm = new Limnable.CumuMats ();
+      cm.rat_fresh = ratch;
+
+      for (LimnyThing lay  :  lrs)
+        if (lay instanceof P5ZLimnable)
+          ((P5ZLimnable)lay) . RecursivelyDraw (ogl, ratch, cm);
     }
 
   public P5ZApplet ()
     { super (null, 1);
-      display_if_fullscreen = 0;
+      if (sole_instance != null)
+        throw new RuntimeException ("Ye dassn't make more than one instance o' P5ZApplet...");
+      display_id = 0;
+      sole_instance = this;
     }
 }
