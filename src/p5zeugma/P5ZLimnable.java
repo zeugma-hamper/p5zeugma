@@ -3,6 +3,7 @@ package p5zeugma;
 
 
 import zeugma.Zeubject;
+import zeugma.ZeColor;
 import zeugma.Limnable;
 import zeugma.GrapplerPile;
 import zeugma.IContainMultitudes;
@@ -32,7 +33,7 @@ public interface P5ZLimnable  extends Limnable, IContainMultitudes
     }
 
   default void RecursivelyDraw (PGraphicsOpenGL g, long ratch,
-                                Limnable.CumuMats cm)
+                                Limnable.CumuMats cm, ZeColor adjc_above)
     { boolean dr = QueryShouldDraw ();
       boolean drc = QueryShouldDrawChildrenEvenIfNotSelf ();
       boolean ccm = QueryShouldCalcCumuMatsEvenIfNotDrawing ();
@@ -52,6 +53,9 @@ public interface P5ZLimnable  extends Limnable, IContainMultitudes
             cur_cm.rat_fresh = ratch;
         }
 
+      ZeColor adjc = AdjColor ();
+      ZeColor cumuc = (adjc != null)  ?  adjc_above . Mul (adjc)  :  adjc_above;
+      SetCumuAdjColor (cumuc);
       BefoDraw (g);
 
       if (dr  &&  drf)
@@ -61,7 +65,7 @@ public interface P5ZLimnable  extends Limnable, IContainMultitudes
         if (NumChildren ()  >  0)
           for (Zeubject z  :  Children ())
             if (z instanceof P5ZLimnable)
-              ((P5ZLimnable)z) . RecursivelyDraw (g, ratch, cur_cm);
+              ((P5ZLimnable)z) . RecursivelyDraw (g, ratch, cur_cm, cumuc);
 
       if (dr  &&  ! drf)
         DrawSelf (g);

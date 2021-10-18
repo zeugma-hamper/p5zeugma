@@ -2,15 +2,10 @@
 import java.util.Iterator;
 
 import p5zeugma.P5ZApplet;
-import p5zeugma.P5ZLimnable;
-import p5zeugma.P5ZLimnyThing;
 import p5zeugma.P5ZSpaceThing;
-import p5zeugma.P5ZApplet.Cursoresque;
 
 import processing.core.PApplet;
-import processing.core.PGraphics;
 import processing.core.PImage;
-import processing.core.PMatrix3D;
 import processing.opengl.PGraphicsOpenGL;
 
 import zeugma.*;
@@ -44,20 +39,14 @@ class ShimmyCrate  extends P5ZSpaceThing
 
 
 class Soikles  extends P5ZSpaceThing
-{
-  int nx = 80;
+{ int nx = 80;
   int ny = 45;
-  double w;
-  double h;
-  Vect o;
-  Vect u;
+  double w, h;
+  Vect o, u;
   double gap_frac = 0.2;
-  double diamx;
-  double diamy;
-  Vect jogx;
-  Vect jogy;
+  double diamx, diamy;
+  Vect jogx, jogy;
   Vect crgrtrn;
-  Vect p;
 
   public Soikles (PlatonicMaes ma)
     { w = ma . Width ();
@@ -69,14 +58,14 @@ class Soikles  extends P5ZSpaceThing
       jogx = o . Mul (diamx * (1.0 + gap_frac));
       jogy = u . Mul (diamy * (1.0 + gap_frac));
       crgrtrn = jogx . Mul ((double)nx);
-      p = Vect.zerov . Sub (jogx . Mul (0.5 * (nx - 1)))
-                     . Sub (jogy . Mul (0.5 * (ny - 1)));
     }
 
   public void DrawSelf (PGraphicsOpenGL g)
-    { g . pushStyle ();
+    { Vect p = Vect.zerov . Sub (jogx . Mul (0.5 * (nx - 1)))
+                          . Sub (jogy . Mul (0.5 * (ny - 1)));
+      g . pushStyle ();
       g . noFill ();
-      g . stroke (255, 230);
+      g . stroke (255, 30);
       for (int ww = ny  ;  ww > 0  ;  --ww)
         { for (int qq = nx  ;  qq > 0  ;  --qq)
             { g . ellipse ((float)p.x, (float)p.y, (float)diamx, (float)diamy);
@@ -151,11 +140,15 @@ public class Flamv  extends P5ZApplet
 
       for (PlatonicMaes maes  :  maeses)
         { maes . AppendLayer (gaylord);
-           if (maes == ma)
-             maes . AppendLayer (wallifier);
+          if (maes == ma)
+            maes . AppendLayer (wallifier);
           maes . AppendLayer (omnibus);
           maes . AppendLayer (cherd);
         }
+
+      ma = FindMaesByName ("table");
+      if (ma != null)
+        ma . SetAdjColor (new ZeColor (1.0f, 0.5f, 0.5f));
 
 //    IronLung pulmo = IronLung.GlobalByName ("omni-lung");
 //    Eructathan e1 = new Eructathan ("Blarvles");
@@ -167,58 +160,6 @@ public class Flamv  extends P5ZApplet
     { FullscreenOnDisplay (1);
       PleaseDoNotFullscreen ();
       super . settings ();
-    }
-
-  public void ActuallyDraw (PGraphicsOpenGL ogl)
-    { ogl . background (40);
-      if (! well_and_truly_ready)
-        return;
-
-      long ratch = -1;
-      Limnable.CumuMats cm = new Limnable.CumuMats ();
-      if (global_looper != null)
-        ratch = global_looper . RecentestRatchet ();
-      cm.rat_fresh = ratch;
-
-      gaylord . RecursivelyDraw (ogl, ratch, cm);
-
-      int nx = 80;
-      int ny = 45;
-      double w = vital_maes . Width ();
-      double h = vital_maes . Height ();
-      Vect o = vital_maes . Over ();
-      Vect u = vital_maes . Up ();
-      double gap_frac = 0.2;
-      double diamx = w / ((1.0 + gap_frac) * nx);
-      double diamy = h / ((1.0 + gap_frac) * ny);
-      Vect jogx = o . Mul (diamx * (1.0 + gap_frac));
-      Vect jogy = u . Mul (diamy * (1.0 + gap_frac));
-      Vect crgrtrn = jogx . Mul ((double)nx);
-      Vect p = Vect.zerov . Sub (jogx . Mul (0.5 * (nx - 1)))
-                          . Sub (jogy . Mul (0.5 * (ny - 1)));
-      wallifier . BefoDraw (ogl);
-      ogl . pushStyle ();
-      ogl . noFill ();
-      ogl . stroke (255, 30);
-      for (int ww = ny  ;  ww > 0  ;  --ww)
-        { for (int qq = nx  ;  qq > 0  ;  --qq)
-            { ogl . ellipse ((float)p.x, (float)p.y, (float)diamx, (float)diamy);
-              p . AddAcc (jogx);
-            }
-          p . SubAcc (crgrtrn);
-          p . AddAcc (jogy);
-        }
-      ogl . popStyle ();
-      wallifier . AftaDraw (ogl);
-
-      stein . RecursivelyDraw (ogl, ratch, cm);
-      forster . RecursivelyDraw (ogl, ratch, cm);
-
-      Iterator <Cursoresque> cuit = cherd.cursor_by_wand . values () . iterator ();
-      while (cuit . hasNext ())
-        { Cursoresque cur = cuit . next ();
-          cur . RecursivelyDraw (ogl, ratch, cm);
-        }
     }
 
   public static void main (String av[])

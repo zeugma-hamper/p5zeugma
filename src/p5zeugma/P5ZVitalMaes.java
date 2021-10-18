@@ -15,17 +15,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class P5ZLivingMaes  extends PApplet
-{ public PlatonicMaes vital_maes;
-  public Bolex vital_cammy;
-  public P5ZApplet vital_fuehrer;
+public class P5ZVitalMaes extends PApplet
+{ public PlatonicMaes its_maes;
+  public Bolex its_cammy;
+  public P5ZApplet its_fuehrer;
   public DialectCatcher vital_interpreter;
 
   public int display_id;
 
   public long last_limned_ratchet = -1;
 
-  public static ArrayList <P5ZLivingMaes> all_living_maeses
+  public static ArrayList <P5ZVitalMaes> all_living_maeses
     = new ArrayList <> ();
 
   public static HashMap <PGraphicsOpenGL, PlatonicMaes> maes_by_gfx_handle
@@ -43,7 +43,7 @@ public class P5ZLivingMaes  extends PApplet
           }
         double xnrm = (double)(e . getX ()) / (double)width  -  0.5;  // ouch, to say the least.
         double ynrm = 0.5  -  (double)(e . getY ()) / (double)height;
-        PlatonicMaes ma = vital_maes;
+        PlatonicMaes ma = its_maes;
         if (ma == null)
             return;
         Vect hit = ma.loc.val . Add (ma.ovr.val . Mul (ma.wid.val * xnrm))
@@ -66,7 +66,7 @@ public class P5ZLivingMaes  extends PApplet
           butt = 0;
         // now, meanwhile: how bad is this really, making
         // the mouse event masquerade as wand input?
-        vital_fuehrer.spaque . InterpretRawWandish ("mouse-0", butt, eye,
+        its_fuehrer.spaque . InterpretRawWandish ("mouse-0", butt, eye,
                                                     aim, ma.ovr.val);
       }
 
@@ -80,17 +80,17 @@ public class P5ZLivingMaes  extends PApplet
         if ((ms & KeyEvent.CTRL)   >  0)  mods |= ZEYowlEvent.MODK_CTRL;
         if ((ms & KeyEvent.ALT)    >  0)  mods |= ZEYowlEvent.MODK_ALT;
         if ((ms & KeyEvent.META)   >  0)  mods |= ZEYowlEvent.MODK_META;
-        vital_fuehrer.yowque
+        its_fuehrer.yowque
           . InterpretRawKeyfulness ("keyboard-0", tion != KeyEvent.RELEASE,
                                     e . getKey (), e . getKeyCode (), mods);
       }
   }
 
-  public P5ZLivingMaes (P5ZApplet boese_fuehrer, int dspl_no)
+  public P5ZVitalMaes(P5ZApplet boese_fuehrer, int dspl_no)
     { super ();
-      vital_maes = null;
-      vital_cammy = null;
-      vital_fuehrer = boese_fuehrer;
+      its_maes = null;
+      its_cammy = null;
+      its_fuehrer = boese_fuehrer;
       vital_interpreter = new DialectCatcher ();
 
       display_id = dspl_no;
@@ -111,12 +111,28 @@ public class P5ZLivingMaes  extends PApplet
   public void PleaseDoNotFullscreen ()
     { display_id *= (display_id > 0  ?  -1  :  1); }
 
+
   public void DrawAllLayers (PGraphicsOpenGL ogl, ArrayList <LimnyThing> lrs)
-    { ogl . background (160, 20, 20); }
-  // the angry red foregoing is one that we should never see: sumpin'd be wrong.
-  // that's because every direct instance of this class should be calling the
-  // overridden ActuallyDraw() method belonging to a subclass instance; see
-  // the last line of draw(), well below.
+    { if (its_fuehrer != null  &&  ! its_fuehrer.well_and_truly_ready)
+        return;
+
+      ogl . hint (DISABLE_DEPTH_TEST);
+      ZeColor co = its_maes.bg_iro . Val ();
+      ogl . background ((float)(255.0 * co.r), (float)(255.0 * co.g),
+                        (float)(255.0 * co.b), (float)(255.0 * co.a));
+      long ratch = -1;
+      if (its_fuehrer != null  &&  its_fuehrer.global_looper != null)
+        ratch = its_fuehrer.global_looper . RecentestRatchet ();
+
+      Limnable.CumuMats cm = new Limnable.CumuMats ();
+      cm.rat_fresh = ratch;
+
+      ZeColor adjc = its_maes. AdjColor ();
+
+      for (LimnyThing lay  :  lrs)
+        if (lay instanceof P5ZLimnable)
+          ((P5ZLimnable)lay) . RecursivelyDraw (ogl, ratch, cm, adjc);
+    }
 
 
   public void settings ()
@@ -134,29 +150,29 @@ public class P5ZLivingMaes  extends PApplet
   public void draw ()
     { PGraphics g = getGraphics ();
       if (! (g instanceof PGraphicsOpenGL)
-          ||  vital_maes == null
-          ||  vital_cammy == null)
+          ||  its_maes == null
+          ||  its_cammy == null)
         return;
 
       long ratch = -1;
-      if (vital_fuehrer != null  &&  vital_fuehrer.global_looper != null)
-        ratch = vital_fuehrer.global_looper . RecentestRatchet ();
+      if (its_fuehrer != null  &&  its_fuehrer.global_looper != null)
+        ratch = its_fuehrer.global_looper . RecentestRatchet ();
 
       if (ratch > 0  &&  ratch <= last_limned_ratchet)
-        { System.out.println ("ZOINKS! re-rendering frame at maes/ratchet "
-                              +  vital_maes . Name () + " @ "
-                              +  vital_maes . toString () + " / "
-                              +  Long.toString (ratch));
+        { // System.out.println ("ZOINKS! re-rendering frame at maes/ratchet "
+          //                     +  its_maes. Name () + " @ "
+          //                     +  its_maes. toString () + " / "
+          //                    +  Long.toString (ratch));
           return;
         }
-      else
-        System.out.println ("FINE: rendering frame at maes/ratchet "
-                            +  vital_maes . Name () + " @ "
-                            +  vital_maes . toString () + " / "
-                            +  Long.toString (ratch));
+      // else
+      //   System.out.println ("FINE: rendering frame at maes/ratchet "
+      //                       +  its_maes. Name () + " @ "
+      //                       +  its_maes. toString () + " / "
+      //                       +  Long.toString (ratch));
 
-      PlatonicMaes ma = vital_maes;
-      Bolex cam = vital_cammy;
+      PlatonicMaes ma = its_maes;
+      Bolex cam = its_cammy;
 
       PGraphicsOpenGL ogl = (PGraphicsOpenGL)g;
       Vect e = cam . ViewLoc ();
@@ -195,10 +211,7 @@ public class P5ZLivingMaes  extends PApplet
                              0.0f,  0.0f,  0.0f,  1.0f);
 
       maes_by_gfx_handle . put (ogl, ma);
-      if (vital_fuehrer == null)
-        this . DrawAllLayers (ogl, vital_maes.layers);
-      else
-        vital_fuehrer . DrawAllLayers (ogl, vital_maes.layers);
+      DrawAllLayers (ogl, its_maes.layers);
 
       last_limned_ratchet = ratch;
     }
@@ -207,8 +220,8 @@ public class P5ZLivingMaes  extends PApplet
     { Vect cls_hit = null;
       PlatonicMaes ma, cls_maes = null;
       double cls_dst = -1.0;
-      for (P5ZLivingMaes lm  :  all_living_maeses)
-        if ((ma = lm.vital_maes) != null)
+      for (P5ZVitalMaes lm  :  all_living_maeses)
+        if ((ma = lm.its_maes) != null)
           { Vect hit = Geom.RayRectIntersection (frm, aim, ma.loc.val,
                                                  ma.ovr.val, ma.upp.val,
                                                  ma.wid.val, ma.hei.val);

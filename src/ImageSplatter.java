@@ -1,7 +1,6 @@
 
 
-import p5zeugma.P5ZAlignifer;
-import p5zeugma.P5ZLivingMaes;
+import p5zeugma.P5ZVitalMaes;
 import p5zeugma.P5ZLimnable;
 
 import zeugma.*;
@@ -65,7 +64,7 @@ public class ImageSplatter  extends Alignifer
   public long ZESpatialMove (ZESpatialMoveEvent e)
     { if (! e . Provenance () . equals (grab_prov))
         return 0;
-      PlatonicMaes.MaesAndHit mah = P5ZLivingMaes.ClosestAmongLiving (e.loc, e.aim);
+      PlatonicMaes.MaesAndHit mah = P5ZVitalMaes.ClosestAmongLiving (e.loc, e.aim);
       if (mah == null)
         return 0;
       if (mah.maes != cur_maes)
@@ -92,6 +91,9 @@ public class ImageSplatter  extends Alignifer
 
   public void DrawSelf (PGraphicsOpenGL g)
     { g . imageMode (PConstants.CENTER);
+      if (cumu_adjc != null)
+        g . tint ((float)(255.0 * cumu_adjc.r), (float)(255.0 * cumu_adjc.g),
+                  (float)(255.0 * cumu_adjc.b), (float)(255.0 * cumu_adjc.a));
       g . image (immy, 0.0f, 0.0f, (float)im_wid, (float)im_hei);
     }
 

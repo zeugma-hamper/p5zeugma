@@ -16,7 +16,7 @@ import processing.data.JSONObject;
 import processing.opengl.PGraphicsOpenGL;
 
 
-public class P5ZApplet  extends P5ZLivingMaes
+public class P5ZApplet  extends P5ZVitalMaes
 { public static P5ZApplet sole_instance = null;
   public static boolean well_and_truly_ready = false;
 
@@ -96,7 +96,7 @@ public class P5ZApplet  extends P5ZLivingMaes
       }
     public void DrawSelf (PGraphicsOpenGL g)
       { Vect v;
-        if (cur_maes  !=  P5ZLivingMaes.maes_by_gfx_handle . get (g))
+        if (cur_maes  !=  P5ZVitalMaes.maes_by_gfx_handle . get (g))
           return;
         g . noStroke ();
         ZeColor c = iro.val;
@@ -235,16 +235,16 @@ println(q + "th maes is thus: " + ma);
 
       HooverCoordTransforms ();
       HooverMaeses ();
-      vital_maes = maeses . get (0);
-      vital_cammy = PlatonicMaes.CameraFromMaes (vital_maes);
-      vital_fuehrer = this;
+      its_maes = maeses . get (0);
+      its_cammy = PlatonicMaes.CameraFromMaes (its_maes);
+      its_fuehrer = this;
 
       int q = 1;
       for (  ;  q < maeses . size ()  ;  ++q)
         { int dspl = (display_id > 0)  ?  (q + 1)  :  -(q + 1);
-          P5ZLivingMaes lma = new P5ZLivingMaes (this, dspl);
-          lma.vital_maes = maeses . get (q);
-          lma.vital_cammy = PlatonicMaes.CameraFromMaes (lma.vital_maes);
+          P5ZVitalMaes lma = new P5ZVitalMaes(this, dspl);
+          lma.its_maes = maeses . get (q);
+          lma.its_cammy = PlatonicMaes.CameraFromMaes (lma.its_maes);
         }
 
       cherd = new CursorHerd ();
@@ -259,30 +259,11 @@ println(q + "th maes is thus: " + ma);
       //   }
     }
 
-  public void DrawAllLayers (PGraphicsOpenGL ogl, ArrayList <LimnyThing> lrs)
-    { if (! well_and_truly_ready)
-        return;
-
-      ogl . hint (DISABLE_DEPTH_TEST);
-      ZeColor co = vital_maes.bg_iro . Val ();
-      ogl . background ((float)(255.0 * co.r), (float)(255.0 * co.g),
-                        (float)(255.0 * co.b), (float)(255.0 * co.a));
-      long ratch = -1;
-      if (global_looper != null)
-        ratch = global_looper . RecentestRatchet ();
-
-      Limnable.CumuMats cm = new Limnable.CumuMats ();
-      cm.rat_fresh = ratch;
-
-      for (LimnyThing lay  :  lrs)
-        if (lay instanceof P5ZLimnable)
-          ((P5ZLimnable)lay) . RecursivelyDraw (ogl, ratch, cm);
-    }
-
   public P5ZApplet ()
     { super (null, 1);
       if (sole_instance != null)
-        throw new RuntimeException ("Ye dassn't make more than one instance o' P5ZApplet...");
+        throw new RuntimeException
+                    ("Ye dassn't make more than one instance o' P5ZApplet...");
       display_id = 0;
       sole_instance = this;
     }
