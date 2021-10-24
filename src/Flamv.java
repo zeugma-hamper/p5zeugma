@@ -147,8 +147,10 @@ public class Flamv  extends P5ZApplet
         }
 
       ma = FindMaesByName ("table");
+      SinuColor sc = new SinuColor (new ZeColor (0.0f, 0.5f, 0.5f, 0.0f),
+                                    0.666, new ZeColor (1.0f, 0.5f, 0.5f));
       if (ma != null)
-        ma . SetAdjColor (new ZeColor (1.0f, 0.5f, 0.5f));
+        ma . InstallAdjColorZoft (sc);
 
 //    IronLung pulmo = IronLung.GlobalByName ("omni-lung");
 //    Eructathan e1 = new Eructathan ("Blarvles");

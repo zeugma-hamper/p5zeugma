@@ -117,7 +117,7 @@ public class P5ZVitalMaes extends PApplet
         return;
 
       ogl . hint (DISABLE_DEPTH_TEST);
-      ZeColor co = its_maes.bg_iro . Val ();
+      ZeColor co = its_maes . BackgroundColor ();
       ogl . background ((float)(255.0 * co.r), (float)(255.0 * co.g),
                         (float)(255.0 * co.b), (float)(255.0 * co.a));
       long ratch = -1;
