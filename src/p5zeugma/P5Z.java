@@ -11,7 +11,18 @@ import processing.opengl.PGraphicsOpenGL;
 
 
 public class P5Z
-{
+{ public static Matrix44 yflip_mat;
+  public static PMatrix3D p5_yflip_mat;
+
+  static
+    { yflip_mat = new Matrix44 (1.0,  0.0,  0.0,  0.0,
+                                0.0, -1.0,  0.0,  0.0,
+                                0.0,  0.0,  1.0,  0.0,
+                                0.0,  0.0,  0.0,  1.0);
+      p5_yflip_mat = ToP (yflip_mat);
+    }
+
+
   public static PMatrix3D ToP (Matrix44 m)
     { // note -- please, won't you? -- the implicit transpose following:
         return new PMatrix3D
@@ -21,12 +32,19 @@ public class P5Z
              (float)m.m03, (float)m.m13, (float)m.m23, (float)m.m33);
     }
 
-  public static void ConcatModelView (PGraphicsOpenGL g, Matrix44 fwd_mat, Matrix44 inv_mat)
+  public static void ConcatModelView (PGraphicsOpenGL g,
+                                      Matrix44 fwd_mat, Matrix44 inv_mat)
     { PMatrix3D p_fwd = ToP (fwd_mat);
       PMatrix3D p_inv = ToP (inv_mat);
-      
+
       g.modelview . apply (p_fwd);
       g.modelviewInv . preApply (p_inv);
       g.projmodelview . apply (p_fwd);
+    }
+
+  public static void ModelViewFlipYAxis (PGraphicsOpenGL g)
+    { g.modelview . apply (p5_yflip_mat);
+      g.modelviewInv . preApply (p5_yflip_mat);
+      g.projmodelview . apply (p5_yflip_mat);
     }
 }
