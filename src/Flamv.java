@@ -1,4 +1,9 @@
 
+//
+// (c) treadle & loam, provisioners llc
+//
+
+
 import java.util.Iterator;
 
 import p5zeugma.P5ZApplet;

@@ -4,6 +4,7 @@ package p5zeugma;
 
 import zeugma.Zeubject;
 import zeugma.ZeColor;
+import zeugma.CumuMats;
 import zeugma.Limnable;
 import zeugma.GrapplerPile;
 import zeugma.IContainMultitudes;
@@ -33,7 +34,7 @@ public interface P5ZLimnable  extends Limnable, IContainMultitudes
     }
 
   default void RecursivelyDraw (PGraphicsOpenGL g, long ratch,
-                                Limnable.CumuMats cm, ZeColor adjc_above)
+                                CumuMats cm, ZeColor adjc_above)
     { boolean dr = QueryShouldDraw ();
       boolean drc = QueryShouldDrawChildrenEvenIfNotSelf ();
       boolean ccm = QueryShouldCalcCumuMatsEvenIfNotDrawing ();
@@ -43,7 +44,7 @@ public interface P5ZLimnable  extends Limnable, IContainMultitudes
 
       boolean drf = QueryShouldDrawBeforeChildren ();
 
-      Limnable.CumuMats cur_cm = CurrentCumuMats ();
+      CumuMats cur_cm = CurrentCumuMats ();
       if (cur_cm != null
           &&  (ratch <= cur_cm.rat_fresh  &&  ratch >= 0))
         { }   // i.e. only don't if it's already freshly done

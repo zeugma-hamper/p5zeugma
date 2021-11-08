@@ -86,7 +86,7 @@ public class P5ZVitalMaes extends PApplet
       }
   }
 
-  public P5ZVitalMaes(P5ZApplet boese_fuehrer, int dspl_no)
+  public P5ZVitalMaes (P5ZApplet boese_fuehrer, int dspl_no)
     { super ();
       its_maes = null;
       its_cammy = null;
@@ -124,7 +124,7 @@ public class P5ZVitalMaes extends PApplet
       if (its_fuehrer != null  &&  its_fuehrer.global_looper != null)
         ratch = its_fuehrer.global_looper . RecentestRatchet ();
 
-      Limnable.CumuMats cm = new Limnable.CumuMats ();
+      CumuMats cm = new CumuMats ();
       cm.rat_fresh = ratch;
 
       ZeColor adjc = its_maes. AdjColor ();

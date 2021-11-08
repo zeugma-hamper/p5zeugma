@@ -173,9 +173,20 @@ public class P5ZApplet  extends P5ZVitalMaes
 
 
   public void HooverCoordTransforms ()
-    { JSONObject jace = loadJSONObject
-        ("/opt/trelopro/config/json/coord-xform-raw-to-room.json");
-      println ("JACE is, well, " + jace);
+    { JSONObject jace = loadJSONObject ("config/coord-xform-raw-to-room.json");
+      if (jace == null)
+        jace = loadJSONObject
+          ("/opt/trelopro/config/json/coord-xform-raw-to-room.json");
+
+      if (jace == null)
+        { System.out.println
+            ("Alas: no room coord transform file available at "
+             + "</opt/trelopro/config/json/coord-xform-raw-to-room.json>");
+          raw_to_room_direc_mat = new Matrix44 ();
+          raw_to_room_point_mat = new Matrix44 ();
+          return;
+        }
+
       JSONArray dm = jace . getJSONArray ("direc_mat");
       JSONArray pm = jace . getJSONArray ("point_mat");
 
@@ -185,8 +196,12 @@ public class P5ZApplet  extends P5ZVitalMaes
 
 
   public void HooverMaeses ()
-    { JSONArray jarr = loadJSONArray
-        ("/opt/trelopro/config/json/maes-config.json");
+    { JSONArray jarr = loadJSONArray ("config/maes-config.json");
+      if (jarr == null)
+        jarr = loadJSONArray ("/opt/trelopro/config/json/maes-config.json");
+      // if still no success, we should, you know, say a little something
+      // and then at least have the good grace to set the hapless system
+      // up with some default maes or other... no?
       int num = jarr . size ();
       JSONObject ob;
       for (int q = 0  ;  q < num  ;  ++q)
@@ -221,6 +236,12 @@ println(q + "th maes is thus: " + ma);
             return ma;
       return null;
     }
+
+  public SpatialAqueduct SpatialEventAqueduct ()
+    { return spaque; }
+
+  public YowlAqueduct YowlEventAqueduct ()
+    { return yowque; }
 
   public void P5ZVivify()
     { global_looper = new Loopervisor ();
