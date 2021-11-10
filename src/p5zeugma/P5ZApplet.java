@@ -71,7 +71,8 @@ public class P5ZApplet  extends P5ZVitalMaes
 
   static Random randolph = new Random ();
 
-  public class Cursoresque  extends Alignifer  implements P5ZLimnable, ZESpatialPhagy
+  public class Cursoresque  extends Alignifer
+                            implements P5ZLimnable, ZESpatialPhagy
   { //public Vect wall_pos;
     public ArrayList <SinuVect> vs_lrg, vs_sml;
     public ZoftThing <ZeColor> iro;
@@ -84,13 +85,17 @@ public class P5ZApplet  extends P5ZVitalMaes
         cur_maes = null;
         for (int w = 0  ;  w < 2  ;  ++w)
           for (int q = 0  ;  q < nv  ;  ++q)
-            { double theeta = 2.0 * Math.PI / (double)nv * (double)q + (double)w * Math.PI;
-              Vect radial = new Vect ((Vect.xaxis . Mul (Math.cos (theeta))
-                                      . Add (Vect.yaxis . Mul (Math.sin (theeta))))
+            { double theeta
+                = 2.0 * Math.PI / (double)nv * (double)q + (double)w * Math.PI;
+              Vect radial
+                = new Vect ((Vect.xaxis . Mul (Math.cos (theeta))
+                             . Add (Vect.yaxis . Mul (Math.sin (theeta))))
                                         . Mul (0.5 * ((double)w + 1.0)));
-              SinuVect arm = new SinuVect (radial . Mul (sz * 0.065),
-                                           0.8  +  0.11 * randolph . nextDouble (),
-                                           radial . Mul (sz * 0.24 * (1.0 + 3.0 * (double)(q%2))));
+              SinuVect arm
+                = new SinuVect (radial . Mul (sz * 0.065),
+                                0.8  +  0.11 * randolph . nextDouble (),
+                                radial . Mul (sz * 0.24
+                                              * (1.0 + 3.0 * (double)(q%2))));
               ((w > 0) ? vs_lrg : vs_sml) . add (arm);
             }
       }
@@ -100,7 +105,7 @@ public class P5ZApplet  extends P5ZVitalMaes
           return;
         g . noStroke ();
         ZeColor c = iro.val;
-        g . fill ((int)(255 * c.r), (int)(255 * c.g), (int)(255 * c.b), (int)(255 * c.a));
+        g . fill (255.0f * c.r, 255.0f * c.g, 255.0f * c.b, 255.0f * c.a);
         g . beginShape ();
         for (SinuVect sv  :  vs_lrg)
           { v = sv.val;
@@ -117,7 +122,8 @@ public class P5ZApplet  extends P5ZVitalMaes
       }
 
     public long ZESpatialMove (ZESpatialMoveEvent e)
-      { PlatonicMaes.MaesAndHit mah = PlatonicMaes.ClosestAmong (maeses, e.loc, e.aim);
+      { PlatonicMaes.MaesAndHit mah
+          = PlatonicMaes.ClosestAmong (maeses, e.loc, e.aim);
         if (mah != null)
           { LocZoft () . Set (mah.hit);
             if (cur_maes  !=  mah.maes)
@@ -140,13 +146,13 @@ public class P5ZApplet  extends P5ZVitalMaes
   { public HashMap <String, Cursoresque> cursor_by_wand = new HashMap <> ();
 
     public boolean PassTheBuckUpPhageHierarchy ()
-      { return true; }   // so that all the various ZESpatial* events end up in ZESpatial()
+      { return true; }   // so that all ZESpatial* events end up in ZESpatial()
 
     public long ZESpatial (ZESpatialEvent e)
       { String prv = e . Provenance ();
         Cursoresque crs = cursor_by_wand . get (prv);
         if (crs == null)
-          { crs = new Cursoresque (150.0, 6);
+          { crs = new Cursoresque (80.0, 6);
             cursor_by_wand . put (prv, crs);
             AppendChild (crs);
           }
@@ -159,16 +165,20 @@ public class P5ZApplet  extends P5ZVitalMaes
     { if (ja == null  ||  ja . size ()  !=  16)
         return null;
       return new Matrix44
-          (ja . getFloat (0),  ja . getFloat (1),  ja . getFloat (2),  ja . getFloat (3),
-           ja . getFloat (4),  ja . getFloat (5),  ja . getFloat (6),  ja . getFloat (7),
-           ja . getFloat (8),  ja . getFloat (9),  ja . getFloat (10), ja . getFloat (11),
-           ja . getFloat (12), ja . getFloat (13), ja . getFloat (14), ja . getFloat (15));
+          (ja . getFloat (0),  ja . getFloat (1),
+                                      ja . getFloat (2),  ja . getFloat (3),
+           ja . getFloat (4),  ja . getFloat (5),
+                                      ja . getFloat (6),  ja . getFloat (7),
+           ja . getFloat (8),  ja . getFloat (9),
+                                      ja . getFloat (10), ja . getFloat (11),
+           ja . getFloat (12), ja . getFloat (13),
+                                      ja . getFloat (14), ja . getFloat (15));
   }
 
-  public static Vect ConjureVect (JSONArray jarr)
-    { if (jarr == null  ||  jarr . size ()  !=  3)
+  public static Vect ConjureVect (JSONArray ja)
+    { if (ja == null  ||  ja . size ()  !=  3)
         return null;
-      return new Vect (jarr . getFloat (0), jarr . getFloat (1), jarr . getFloat (2));
+      return new Vect (ja . getFloat (0), ja . getFloat (1), ja . getFloat (2));
     }
 
 
