@@ -67,6 +67,8 @@ public interface P5ZLimnable  extends Limnable, IContainMultitudes
           for (Zeubject z  :  Children ())
             if (z instanceof P5ZLimnable)
               ((P5ZLimnable)z) . RecursivelyDraw (g, ratch, cur_cm, cumuc);
+      // might be nice to be able to continue the recursion even for
+      // non-PZLimnables...
 
       if (dr  &&  ! drf)
         DrawSelf (g);

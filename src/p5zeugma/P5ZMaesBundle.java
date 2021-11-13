@@ -15,17 +15,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class P5ZVitalMaes extends PApplet
+public class P5ZMaesBundle extends PApplet
 { public PlatonicMaes its_maes;
   public Bolex its_cammy;
-  public P5ZApplet its_fuehrer;
+  public P5ZAlignifer its_backplate;
+  public P5ZApplet der_leiter;
   public DialectCatcher vital_interpreter;
 
   public int display_id;
 
   public long last_limned_ratchet = -1;
 
-  public static ArrayList <P5ZVitalMaes> all_living_maeses
+  public static ArrayList <P5ZMaesBundle> all_maes_bundles
     = new ArrayList <> ();
 
   public static HashMap <PGraphicsOpenGL, PlatonicMaes> maes_by_gfx_handle
@@ -66,7 +67,7 @@ public class P5ZVitalMaes extends PApplet
           butt = 0;
         // now, meanwhile: how bad is this really, making
         // the mouse event masquerade as wand input?
-        its_fuehrer.spaque . InterpretRawWandish ("mouse-0", butt, eye,
+        der_leiter.spaque . InterpretRawWandish ("mouse-0", butt, eye,
                                                     aim, ma.ovr.val);
       }
 
@@ -80,17 +81,18 @@ public class P5ZVitalMaes extends PApplet
         if ((ms & KeyEvent.CTRL)   >  0)  mods |= ZEYowlEvent.MODK_CTRL;
         if ((ms & KeyEvent.ALT)    >  0)  mods |= ZEYowlEvent.MODK_ALT;
         if ((ms & KeyEvent.META)   >  0)  mods |= ZEYowlEvent.MODK_META;
-        its_fuehrer.yowque
+        der_leiter.yowque
           . InterpretRawKeyfulness ("keyboard-0", tion != KeyEvent.RELEASE,
                                     e . getKey (), e . getKeyCode (), mods);
       }
   }
 
-  public P5ZVitalMaes (P5ZApplet boese_fuehrer, int dspl_no)
+  public P5ZMaesBundle(P5ZApplet boese_leiter, int dspl_no)
     { super ();
       its_maes = null;
       its_cammy = null;
-      its_fuehrer = boese_fuehrer;
+      its_backplate = new P5ZAlignifer ();
+      der_leiter = boese_leiter;
       vital_interpreter = new DialectCatcher ();
 
       display_id = dspl_no;
@@ -98,12 +100,20 @@ public class P5ZVitalMaes extends PApplet
       registerMethod ("mouseEvent", vital_interpreter);
       registerMethod ("keyEvent", vital_interpreter);
 
-      if (boese_fuehrer != null)
+      if (boese_leiter != null)
         PApplet.runSketch (new String[] { this . getClass () . getName () },
                            this);
 
-      all_living_maeses . add (this);
+      all_maes_bundles . add (this);
     }
+
+
+  public PlatonicMaes ItsMaes ()
+    { return its_maes; }
+
+  public Bolex ItsCamera ()
+    { return its_cammy; }
+
 
   public void FullscreenOnDisplay (int d)
     { display_id = d; }
@@ -113,7 +123,7 @@ public class P5ZVitalMaes extends PApplet
 
 
   public void DrawAllLayers (PGraphicsOpenGL ogl, ArrayList <LimnyThing> lrs)
-    { if (its_fuehrer != null  &&  ! its_fuehrer.well_and_truly_ready)
+    { if (der_leiter != null  &&  ! der_leiter.well_and_truly_ready)
         return;
 
       ogl . hint (DISABLE_DEPTH_TEST);
@@ -121,13 +131,23 @@ public class P5ZVitalMaes extends PApplet
       ogl . background ((float)(255.0 * co.r), (float)(255.0 * co.g),
                         (float)(255.0 * co.b), (float)(255.0 * co.a));
       long ratch = -1;
-      if (its_fuehrer != null  &&  its_fuehrer.global_looper != null)
-        ratch = its_fuehrer.global_looper . RecentestRatchet ();
+      if (der_leiter != null  &&  der_leiter.global_looper != null)
+        ratch = der_leiter.global_looper . RecentestRatchet ();
 
       CumuMats cm = new CumuMats ();
       cm.rat_fresh = ratch;
 
       ZeColor adjc = its_maes. AdjColor ();
+
+      if (der_leiter != null)
+        { ogl . push ();
+          GrapplerPile gp = its_backplate . AssuredGrapplerPile ();
+          P5Z.ConcatModelView (ogl, gp . PntMat (), gp . InvPntMat ());
+          der_leiter. PZDraw (ogl, this,
+                                (float)(its_maes.wid . Val ()),
+                                (float)(its_maes.hei . Val ()));
+          ogl . pop ();
+        }
 
       for (LimnyThing lay  :  lrs)
         if (lay instanceof P5ZLimnable)
@@ -155,8 +175,8 @@ public class P5ZVitalMaes extends PApplet
         return;
 
       long ratch = -1;
-      if (its_fuehrer != null  &&  its_fuehrer.global_looper != null)
-        ratch = its_fuehrer.global_looper . RecentestRatchet ();
+      if (der_leiter != null  &&  der_leiter.global_looper != null)
+        ratch = der_leiter.global_looper . RecentestRatchet ();
 
       if (ratch > 0  &&  ratch <= last_limned_ratchet)
         { // System.out.println ("ZOINKS! re-rendering frame at maes/ratchet "
@@ -220,8 +240,8 @@ public class P5ZVitalMaes extends PApplet
     { Vect cls_hit = null;
       PlatonicMaes ma, cls_maes = null;
       double cls_dst = -1.0;
-      for (P5ZVitalMaes lm  :  all_living_maeses)
-        if ((ma = lm.its_maes) != null)
+      for (P5ZMaesBundle mb  :  all_maes_bundles)
+        if ((ma = mb.its_maes) != null)
           { Vect hit = Geom.RayRectIntersection (frm, aim, ma.loc.val,
                                                  ma.ovr.val, ma.upp.val,
                                                  ma.wid.val, ma.hei.val);

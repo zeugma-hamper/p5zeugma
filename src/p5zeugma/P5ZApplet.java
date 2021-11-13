@@ -16,7 +16,7 @@ import processing.data.JSONObject;
 import processing.opengl.PGraphicsOpenGL;
 
 
-public class P5ZApplet  extends P5ZVitalMaes
+public class P5ZApplet  extends P5ZMaesBundle
 { public static P5ZApplet sole_instance = null;
   public static boolean well_and_truly_ready = false;
 
@@ -99,9 +99,10 @@ public class P5ZApplet  extends P5ZVitalMaes
               ((w > 0) ? vs_lrg : vs_sml) . add (arm);
             }
       }
+
     public void DrawSelf (PGraphicsOpenGL g)
       { Vect v;
-        if (cur_maes  !=  P5ZVitalMaes.maes_by_gfx_handle . get (g))
+        if (cur_maes  !=  P5ZMaesBundle.maes_by_gfx_handle . get (g))
           return;
         g . noStroke ();
         ZeColor c = iro.val;
@@ -253,6 +254,11 @@ println(q + "th maes is thus: " + ma);
   public YowlAqueduct YowlEventAqueduct ()
     { return yowque; }
 
+  public void PZDraw (PGraphicsOpenGL g, P5ZMaesBundle mbun,
+                      float sp_width, float sp_height)
+    { }
+
+
   public void P5ZVivify()
     { global_looper = new Loopervisor ();
 
@@ -268,14 +274,20 @@ println(q + "th maes is thus: " + ma);
       HooverMaeses ();
       its_maes = maeses . get (0);
       its_cammy = PlatonicMaes.CameraFromMaes (its_maes);
-      its_fuehrer = this;
+      der_leiter = this;
+      its_backplate . AlignToMaes (its_maes);
+      its_backplate . LocGrapplerZoftVect ()
+        . BecomeLike (its_maes . LocZoft ());
 
-      int q = 1;
+      int q = 1;  // i.e. we did ourself immediately above, so skip
       for (  ;  q < maeses . size ()  ;  ++q)
         { int dspl = (display_id > 0)  ?  (q + 1)  :  -(q + 1);
-          P5ZVitalMaes lma = new P5ZVitalMaes(this, dspl);
-          lma.its_maes = maeses . get (q);
-          lma.its_cammy = PlatonicMaes.CameraFromMaes (lma.its_maes);
+          P5ZMaesBundle mb = new P5ZMaesBundle (this, dspl);
+          mb.its_maes = maeses . get (q);
+          mb.its_cammy = PlatonicMaes.CameraFromMaes (mb.its_maes);
+          mb.its_backplate . AlignToMaes (mb.its_maes);
+          mb.its_backplate . LocGrapplerZoftVect ()
+            . BecomeLike (mb.its_maes . LocZoft ());
         }
 
       cherd = new CursorHerd ();

@@ -7,6 +7,7 @@
 import java.util.Iterator;
 
 import p5zeugma.P5ZApplet;
+import p5zeugma.P5ZMaesBundle;
 import p5zeugma.P5ZSpaceThing;
 
 import processing.core.PApplet;
@@ -161,6 +162,30 @@ public class Flamv  extends P5ZApplet
 //    Eructathan e1 = new Eructathan ("Blarvles");
 //    pulmo . AppendBreathee (e1);
       well_and_truly_ready = true;
+    }
+
+
+  public void PZDraw (PGraphicsOpenGL g, P5ZMaesBundle mbun,
+                      float sp_width, float sp_height)
+    { PlatonicMaes emm;
+      if (mbun == null
+          ||  (emm = mbun . ItsMaes ()) == null
+          ||  ! emm . Name () . equals ("left"))
+        return;
+
+      g . strokeWeight (0.5f);
+      g . stroke (255, 20);
+
+      Vect cc[] = { new Vect (sp_width, sp_height, 0.0) . Mul (0.5),
+                    new Vect (sp_width, -sp_height, 0.0) . Mul (0.5),
+                    new Vect (-sp_width, -sp_height, 0.0) . Mul (0.5),
+                    new Vect (-sp_width, sp_height, 0.0) . Mul (0.5) };
+
+      for (Vect c  :  cc)
+        { Vect b = c . Mul (0.15);
+          g . line ((float)b.x, (float)b.y, (float)b.z,
+                    (float)c.x, (float)c.y, (float)c.z);
+        }
     }
 
   public void settings()

@@ -4,7 +4,7 @@
 //
 
 
-import p5zeugma.P5ZVitalMaes;
+import p5zeugma.P5ZMaesBundle;
 import p5zeugma.P5ZLimnable;
 
 import zeugma.*;
@@ -68,7 +68,7 @@ public class ImageSplatter  extends Alignifer
   public long ZESpatialMove (ZESpatialMoveEvent e)
     { if (! e . Provenance () . equals (grab_prov))
         return 0;
-      PlatonicMaes.MaesAndHit mah = P5ZVitalMaes.ClosestAmongLiving (e.loc, e.aim);
+      PlatonicMaes.MaesAndHit mah = P5ZMaesBundle.ClosestAmongLiving (e.loc, e.aim);
       if (mah == null)
         return 0;
       if (mah.maes != cur_maes)
