@@ -11,14 +11,14 @@ import zeugma.IContainMultitudes;
 import processing.opengl.PGraphicsOpenGL;
 
 
-public interface P5ZLimnable  extends Limnable, IContainMultitudes
+public interface PZLimnable extends Limnable, IContainMultitudes
 {
   default void BefoDraw (PGraphicsOpenGL g)
     { g . pushMatrix ();
 
       GrapplerPile gp = UnsecuredGrapplerPile ();
       if (gp != null)
-        P5Z.ConcatModelView (g, gp . PntMat (), gp . InvPntMat ());
+        PZ.ConcatModelView (g, gp . PntMat (), gp . InvPntMat ());
     }
 
   default void AftaDraw (PGraphicsOpenGL g)
@@ -65,8 +65,8 @@ public interface P5ZLimnable  extends Limnable, IContainMultitudes
       if (dr  ||  drc)  // note the lack of " || ccm "...
         if (NumChildren ()  >  0)
           for (Zeubject z  :  Children ())
-            if (z instanceof P5ZLimnable)
-              ((P5ZLimnable)z) . RecursivelyDraw (g, ratch, cur_cm, cumuc);
+            if (z instanceof PZLimnable)
+              ((PZLimnable)z) . RecursivelyDraw (g, ratch, cur_cm, cumuc);
       // might be nice to be able to continue the recursion even for
       // non-PZLimnables...
 

@@ -10,7 +10,7 @@ import processing.core.PMatrix3D;
 import processing.opengl.PGraphicsOpenGL;
 
 
-public class P5Z
+public class PZ
 { public static Matrix44 yflip_mat;
   public static PMatrix3D p5_yflip_mat;
 

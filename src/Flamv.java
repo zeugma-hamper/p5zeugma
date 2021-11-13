@@ -4,11 +4,9 @@
 //
 
 
-import java.util.Iterator;
-
-import p5zeugma.P5ZApplet;
-import p5zeugma.P5ZMaesBundle;
-import p5zeugma.P5ZSpaceThing;
+import p5zeugma.PZApplet;
+import p5zeugma.PZMaesBundle;
+import p5zeugma.PZSpaceThing;
 
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -17,7 +15,7 @@ import processing.opengl.PGraphicsOpenGL;
 import zeugma.*;
 
 
-class ShimmyCrate  extends P5ZSpaceThing
+class ShimmyCrate  extends PZSpaceThing
 { String mess;
   double sc;
 
@@ -44,7 +42,7 @@ class ShimmyCrate  extends P5ZSpaceThing
 }
 
 
-class Soikles  extends P5ZSpaceThing
+class Soikles  extends PZSpaceThing
 { int nx = 80;
   int ny = 45;
   double w, h;
@@ -85,12 +83,12 @@ class Soikles  extends P5ZSpaceThing
 }
 
 
-public class Flamv  extends P5ZApplet
+public class Flamv  extends PZApplet
 { public Soikles soiks;
   public SinuVect diago;
   public ShimmyCrate topshim;
-  public P5ZSpaceThing gaylord, omnibus;
-  public P5ZSpaceThing wallifier;
+  public PZSpaceThing gaylord, omnibus;
+  public PZSpaceThing wallifier;
   public ImageSplatter stein, forster;
 
   public void setup ()
@@ -117,11 +115,11 @@ public class Flamv  extends P5ZApplet
                                           Vect.xaxis . Mul (90.0), 0.57);
       shic . AppendChild (ycra);
 
-      gaylord = new P5ZSpaceThing ();
+      gaylord = new PZSpaceThing();
       gaylord . AppendChild (topshim);
       gaylord . AppendGrappler (new TrGrappler (Vect.yaxis . Mul (ma.hei.val * 0.15)));
 
-      wallifier = new P5ZSpaceThing ();
+      wallifier = new PZSpaceThing();
       wallifier . AppendGrappler (new TrGrappler (ma.loc.val));
       wallifier . AppendChild (soiks);
 
@@ -140,7 +138,7 @@ public class Flamv  extends P5ZApplet
       this.yowque . AppendPhage (stein);
       this.yowque . AppendPhage (forster);
 
-      omnibus = new P5ZSpaceThing ();
+      omnibus = new PZSpaceThing();
       omnibus . AppendChild (stein);
       omnibus . AppendChild (forster);
 
@@ -165,7 +163,7 @@ public class Flamv  extends P5ZApplet
     }
 
 
-  public void PZDraw (PGraphicsOpenGL g, P5ZMaesBundle mbun,
+  public void PZDraw (PGraphicsOpenGL g, PZMaesBundle mbun,
                       float sp_width, float sp_height)
     { PlatonicMaes emm;
       if (mbun == null

@@ -15,18 +15,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class P5ZMaesBundle extends PApplet
+public class PZMaesBundle extends PApplet
 { public PlatonicMaes its_maes;
   public Bolex its_cammy;
-  public P5ZAlignifer its_backplate;
-  public P5ZApplet der_leiter;
+  public PZAlignifer its_backplate;
+  public PZApplet der_leiter;
   public DialectCatcher vital_interpreter;
 
   public int display_id;
 
   public long last_limned_ratchet = -1;
 
-  public static ArrayList <P5ZMaesBundle> all_maes_bundles
+  public static ArrayList <PZMaesBundle> all_maes_bundles
     = new ArrayList <> ();
 
   public static HashMap <PGraphicsOpenGL, PlatonicMaes> maes_by_gfx_handle
@@ -87,11 +87,11 @@ public class P5ZMaesBundle extends PApplet
       }
   }
 
-  public P5ZMaesBundle(P5ZApplet boese_leiter, int dspl_no)
+  public PZMaesBundle(PZApplet boese_leiter, int dspl_no)
     { super ();
       its_maes = null;
       its_cammy = null;
-      its_backplate = new P5ZAlignifer ();
+      its_backplate = new PZAlignifer();
       der_leiter = boese_leiter;
       vital_interpreter = new DialectCatcher ();
 
@@ -142,7 +142,7 @@ public class P5ZMaesBundle extends PApplet
       if (der_leiter != null)
         { ogl . push ();
           GrapplerPile gp = its_backplate . AssuredGrapplerPile ();
-          P5Z.ConcatModelView (ogl, gp . PntMat (), gp . InvPntMat ());
+          PZ.ConcatModelView (ogl, gp . PntMat (), gp . InvPntMat ());
           der_leiter. PZDraw (ogl, this,
                                 (float)(its_maes.wid . Val ()),
                                 (float)(its_maes.hei . Val ()));
@@ -150,8 +150,8 @@ public class P5ZMaesBundle extends PApplet
         }
 
       for (LimnyThing lay  :  lrs)
-        if (lay instanceof P5ZLimnable)
-          ((P5ZLimnable)lay) . RecursivelyDraw (ogl, ratch, cm, adjc);
+        if (lay instanceof PZLimnable)
+          ((PZLimnable)lay) . RecursivelyDraw (ogl, ratch, cm, adjc);
     }
 
 
@@ -240,7 +240,7 @@ public class P5ZMaesBundle extends PApplet
     { Vect cls_hit = null;
       PlatonicMaes ma, cls_maes = null;
       double cls_dst = -1.0;
-      for (P5ZMaesBundle mb  :  all_maes_bundles)
+      for (PZMaesBundle mb  :  all_maes_bundles)
         if ((ma = mb.its_maes) != null)
           { Vect hit = Geom.RayRectIntersection (frm, aim, ma.loc.val,
                                                  ma.ovr.val, ma.upp.val,

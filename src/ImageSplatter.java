@@ -4,8 +4,8 @@
 //
 
 
-import p5zeugma.P5ZMaesBundle;
-import p5zeugma.P5ZLimnable;
+import p5zeugma.PZMaesBundle;
+import p5zeugma.PZLimnable;
 
 import zeugma.*;
 
@@ -15,7 +15,7 @@ import processing.opengl.PGraphicsOpenGL;
 
 
 public class ImageSplatter  extends Alignifer
-                            implements P5ZLimnable, ZESpatialPhagy, ZEYowlPhagy
+                            implements PZLimnable, ZESpatialPhagy, ZEYowlPhagy
 { PImage immy;
   double im_wid, im_hei;
   PlatonicMaes cur_maes;
@@ -68,7 +68,7 @@ public class ImageSplatter  extends Alignifer
   public long ZESpatialMove (ZESpatialMoveEvent e)
     { if (! e . Provenance () . equals (grab_prov))
         return 0;
-      PlatonicMaes.MaesAndHit mah = P5ZMaesBundle.ClosestAmongLiving (e.loc, e.aim);
+      PlatonicMaes.MaesAndHit mah = PZMaesBundle.ClosestAmongLiving (e.loc, e.aim);
       if (mah == null)
         return 0;
       if (mah.maes != cur_maes)

@@ -16,8 +16,8 @@ import processing.data.JSONObject;
 import processing.opengl.PGraphicsOpenGL;
 
 
-public class P5ZApplet  extends P5ZMaesBundle
-{ public static P5ZApplet sole_instance = null;
+public class PZApplet extends PZMaesBundle
+{ public static PZApplet sole_instance = null;
   public static boolean well_and_truly_ready = false;
 
   public Loopervisor global_looper;
@@ -72,7 +72,7 @@ public class P5ZApplet  extends P5ZMaesBundle
   static Random randolph = new Random ();
 
   public class Cursoresque  extends Alignifer
-                            implements P5ZLimnable, ZESpatialPhagy
+                            implements PZLimnable, ZESpatialPhagy
   { //public Vect wall_pos;
     public ArrayList <SinuVect> vs_lrg, vs_sml;
     public ZoftThing <ZeColor> iro;
@@ -102,7 +102,7 @@ public class P5ZApplet  extends P5ZMaesBundle
 
     public void DrawSelf (PGraphicsOpenGL g)
       { Vect v;
-        if (cur_maes  !=  P5ZMaesBundle.maes_by_gfx_handle . get (g))
+        if (cur_maes  !=  PZMaesBundle.maes_by_gfx_handle . get (g))
           return;
         g . noStroke ();
         ZeColor c = iro.val;
@@ -143,7 +143,7 @@ public class P5ZApplet  extends P5ZMaesBundle
   }
 
 
-  public class CursorHerd  extends P5ZLimnyThing  implements ZESpatialPhagy
+  public class CursorHerd  extends PZLimnyThing implements ZESpatialPhagy
   { public HashMap <String, Cursoresque> cursor_by_wand = new HashMap <> ();
 
     public boolean PassTheBuckUpPhageHierarchy ()
@@ -254,7 +254,7 @@ println(q + "th maes is thus: " + ma);
   public YowlAqueduct YowlEventAqueduct ()
     { return yowque; }
 
-  public void PZDraw (PGraphicsOpenGL g, P5ZMaesBundle mbun,
+  public void PZDraw (PGraphicsOpenGL g, PZMaesBundle mbun,
                       float sp_width, float sp_height)
     { }
 
@@ -282,7 +282,7 @@ println(q + "th maes is thus: " + ma);
       int q = 1;  // i.e. we did ourself immediately above, so skip
       for (  ;  q < maeses . size ()  ;  ++q)
         { int dspl = (display_id > 0)  ?  (q + 1)  :  -(q + 1);
-          P5ZMaesBundle mb = new P5ZMaesBundle (this, dspl);
+          PZMaesBundle mb = new PZMaesBundle(this, dspl);
           mb.its_maes = maeses . get (q);
           mb.its_cammy = PlatonicMaes.CameraFromMaes (mb.its_maes);
           mb.its_backplate . AlignToMaes (mb.its_maes);
@@ -302,11 +302,11 @@ println(q + "th maes is thus: " + ma);
       //   }
     }
 
-  public P5ZApplet ()
+  public PZApplet()
     { super (null, 1);
       if (sole_instance != null)
         throw new RuntimeException
-                    ("Ye dassn't make more than one instance o' P5ZApplet...");
+                    ("Ye dassn't make more than one instance o' PZApplet...");
       display_id = 0;
       sole_instance = this;
     }
