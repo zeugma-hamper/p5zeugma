@@ -6,6 +6,7 @@ import zeugma.*;
 
 import oscP5.*;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -16,7 +17,7 @@ import processing.data.JSONObject;
 import processing.opengl.PGraphicsOpenGL;
 
 
-public class PZApplet extends PZMaesBundle
+public class PZApplet  extends PZMaesBundle
 { public static PZApplet sole_instance = null;
   public static boolean well_and_truly_ready = false;
 
@@ -33,6 +34,7 @@ public class PZApplet extends PZMaesBundle
   protected Matrix44 raw_to_room_point_mat;
 
   protected ArrayList <PlatonicMaes> maeses = new ArrayList <> ();
+  protected ArrayList <PZMaesBundle> all_mbundles = new ArrayList <> ();
 
   protected CursorHerd cherd;
 
@@ -240,13 +242,37 @@ println(q + "th maes is thus: " + ma);
     }
 
 
-  public PlatonicMaes FindMaesByName (String nm)
+  public List <PlatonicMaes> AllMaeses ()
+    { return maeses; }
+
+  public PlatonicMaes MaesByName (String nm)
     { if (nm != null)
         for (PlatonicMaes ma  :  maeses)
           if (ma . Name () . equals (nm))
             return ma;
       return null;
     }
+
+  public List <PZMaesBundle> AllMaesBundles ()
+    { return all_mbundles; }
+
+
+  public PZMaesBundle MaesBundleByMaes (PlatonicMaes ma)
+    { for (PZMaesBundle mb  :  all_mbundles)
+        if (mb . ItsMaes ()  ==  ma)
+          return mb;
+      return null;
+    }
+
+  public PZMaesBundle MaesBundleByMaesName (String mname)
+    { PlatonicMaes ma;
+      for (PZMaesBundle mb  :  all_mbundles)
+        if ((ma = mb . ItsMaes ())  ==  ma)
+          if (ma . Name () . equals (mname))
+            return mb;
+      return null;
+    }
+
 
   public SpatialAqueduct SpatialEventAqueduct ()
     { return spaque; }
@@ -272,22 +298,22 @@ println(q + "th maes is thus: " + ma);
 
       HooverCoordTransforms ();
       HooverMaeses ();
-      its_maes = maeses . get (0);
-      its_cammy = PlatonicMaes.CameraFromMaes (its_maes);
-      der_leiter = this;
-      its_backplate . AlignToMaes (its_maes);
-      its_backplate . LocGrapplerZoftVect ()
-        . BecomeLike (its_maes . LocZoft ());
 
-      int q = 1;  // i.e. we did ourself immediately above, so skip
-      for (  ;  q < maeses . size ()  ;  ++q)
+      for (int q = 0  ;  q < maeses . size ()  ;  ++q)
         { int dspl = (display_id > 0)  ?  (q + 1)  :  -(q + 1);
-          PZMaesBundle mb = new PZMaesBundle(this, dspl);
+          PZMaesBundle mb;
+          if (q == 0)  // special handling, natŭrlich, for the alpha MBundle
+            { mb = this;  der_leiter = this; }
+          else
+            mb = new PZMaesBundle (this, dspl);
+          all_mbundles . add (mb);
+
           mb.its_maes = maeses . get (q);
           mb.its_cammy = PlatonicMaes.CameraFromMaes (mb.its_maes);
           mb.its_backplate . AlignToMaes (mb.its_maes);
           mb.its_backplate . LocGrapplerZoftVect ()
             . BecomeLike (mb.its_maes . LocZoft ());
+          mb.its_maes . AppendLayer (mb.its_backplate);
         }
 
       cherd = new CursorHerd ();

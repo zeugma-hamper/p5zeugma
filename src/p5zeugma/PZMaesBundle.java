@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class PZMaesBundle extends PApplet
+public class PZMaesBundle  extends PApplet
 { public PlatonicMaes its_maes;
   public Bolex its_cammy;
   public PZAlignifer its_backplate;
@@ -113,6 +113,9 @@ public class PZMaesBundle extends PApplet
 
   public Bolex ItsCamera ()
     { return its_cammy; }
+
+  public PZAlignifer ItsBackplate ()
+    { return its_backplate; }
 
 
   public void FullscreenOnDisplay (int d)

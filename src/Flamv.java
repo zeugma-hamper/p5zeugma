@@ -94,7 +94,7 @@ public class Flamv  extends PZApplet
   public void setup ()
     { P5ZVivify ();
 
-      PlatonicMaes ma = FindMaesByName ("front");
+      PlatonicMaes ma = MaesByName ("front");
 
       soiks = new Soikles (ma);
 
@@ -150,7 +150,7 @@ public class Flamv  extends PZApplet
           maes . AppendLayer (cherd);
         }
 
-      ma = FindMaesByName ("table");
+      ma = MaesByName ("table");
       SinuColor sc = new SinuColor (new ZeColor (0.0f, 0.5f, 0.5f, 0.0f),
                                     0.666, new ZeColor (1.0f, 0.5f, 0.5f));
       if (ma != null)
