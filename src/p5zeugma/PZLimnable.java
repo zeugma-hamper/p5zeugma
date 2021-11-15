@@ -4,6 +4,7 @@ package p5zeugma;
 
 import zeugma.Zeubject;
 import zeugma.ZeColor;
+import zeugma.ZoftThing;
 import zeugma.CumuMats;
 import zeugma.Limnable;
 import zeugma.GrapplerPile;
@@ -23,6 +24,41 @@ public interface PZLimnable extends Limnable, IContainMultitudes
 
   default void AftaDraw (PGraphicsOpenGL g)
     { g . popMatrix (); }
+
+
+  default void PZfill (PGraphicsOpenGL g, ZoftThing <ZeColor> cz)
+    { PZfill (g, (cz != null) ? cz.val : ZeColor.white); }
+
+  default void PZfill (PGraphicsOpenGL g, ZeColor c)
+    { ZeColor adj = CumuAdjColor ();
+      g . fill (255.0f * adj.r * c.r,
+                255.0f * adj.g * c.g,
+                255.0f * adj.b * c.b,
+                255.0f * adj.a * c.a);
+    }
+
+  default void PZstroke (PGraphicsOpenGL g, ZoftThing <ZeColor> cz)
+    { PZstroke (g, (cz != null) ? cz.val : ZeColor.white); }
+
+  default void PZstroke (PGraphicsOpenGL g, ZeColor c)
+    { ZeColor adj = CumuAdjColor ();
+      g . stroke (255.0f * adj.r * c.r,
+                  255.0f * adj.g * c.g,
+                  255.0f * adj.b * c.b,
+                  255.0f * adj.a * c.a);
+    }
+
+  default void PZtint (PGraphicsOpenGL g, ZoftThing <ZeColor> cz)
+    { PZtint (g, (cz != null) ? cz.val : ZeColor.white); }
+
+  default void PZtint (PGraphicsOpenGL g, ZeColor c)
+    { ZeColor adj = CumuAdjColor ();
+      g . tint (255.0f * adj.r * c.r,
+                255.0f * adj.g * c.g,
+                255.0f * adj.b * c.b,
+                255.0f * adj.a * c.a);
+    }
+
 
   default void DrawSelf (PGraphicsOpenGL g)
     { }

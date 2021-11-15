@@ -95,9 +95,7 @@ public class ImageSplatter  extends Alignifer
 
   public void DrawSelf (PGraphicsOpenGL g)
     { g . imageMode (PConstants.CENTER);
-      if (cumu_adjc != null)
-        g . tint ((float)(255.0 * cumu_adjc.r), (float)(255.0 * cumu_adjc.g),
-                  (float)(255.0 * cumu_adjc.b), (float)(255.0 * cumu_adjc.a));
+      PZtint (g, ZeColor.white);
       g . image (immy, 0.0f, 0.0f, (float)im_wid, (float)im_hei);
     }
 
