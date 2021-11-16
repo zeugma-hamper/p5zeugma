@@ -62,9 +62,20 @@ public class PZApplet  extends PZMaesBundle
                                mess . get (9) . doubleValue (),
                                mess . get (10) . doubleValue ());
 
-          raw_to_room_point_mat . TransformVectInPlace (pos);
-          raw_to_room_direc_mat . TransformVectInPlace (aim);
-          raw_to_room_direc_mat . TransformVectInPlace (ovr);
+          if (raw_to_room_point_mat != null)
+              raw_to_room_point_mat . TransformVectInPlace (pos);
+          else
+            System.out.println
+              ("Wafna! Freakin' threads... raw_to_room_point_mat not "
+               + "loaded yet...");
+
+          if (raw_to_room_direc_mat != null)
+            { raw_to_room_direc_mat . TransformVectInPlace (aim);
+              raw_to_room_direc_mat . TransformVectInPlace (ovr);
+            }
+          else
+            System.out.println
+              ("Merde! raw_to_room_direc_mat not yet loaded: thread kuso.");
 
           spaque . InterpretRawWandish (wname, butts, pos, aim, ovr);
         }
