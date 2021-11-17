@@ -92,22 +92,28 @@ public class Flamv  extends PZApplet
   public ImageSplatter stein, forster;
 
   public void setup ()
-    { P5ZVivify ();
+    { PZVivify ();
 
       PlatonicMaes ma = MaesByName ("front");
 
       soiks = new Soikles (ma);
 
-      diago = new SinuVect (Vect.onesv . Sub (new Vect (0.0, 2.0, 0.0)) . Mul (133.31), 0.3113);
-      topshim = new ShimmyCrate ("      Mesopotamian hints of imminent eversion",
-                                 200.0, ma.loc.val,
-                                 Vect.onesv . Sub (new Vect (0.0, 2.0, 0.0)) . Mul (133.31),
-                                 0.3113);
+      diago = new SinuVect (Vect.onesv . Sub (new Vect (0.0, 2.0, 0.0))
+                            . Mul (133.31), 0.3113);
+      topshim
+        = new ShimmyCrate ("      Mesopotamian hints of imminent eversion",
+                           200.0, ma.loc.val,
+                           Vect.onesv . Sub (new Vect (0.0, 2.0, 0.0))
+                             . Mul (133.31),
+                           0.3113);
 
-      ShimmyCrate shic = new ShimmyCrate ("    who but Blavatsky?", 100.0, Vect.yaxis . Mul (-1250.0),
-                                          Vect.yaxis . Mul (80.0), 0.7);
+      ShimmyCrate shic
+        = new ShimmyCrate ("    who but Blavatsky?", 100.0,
+                           Vect.yaxis . Mul (-1250.0),
+                           Vect.yaxis . Mul (80.0), 0.7);
       shic . AssuredGrapplerPile ()
-        . PrependGrappler (new RoGrappler (Vect.zaxis, -30.0 * Math.PI / 180.0));
+        . PrependGrappler (new RoGrappler (Vect.zaxis,
+                                           -30.0 * Math.PI / 180.0));
       topshim . AppendChild (shic);
 
       ShimmyCrate ycra = new ShimmyCrate ("     and then the loudest glance...",
@@ -117,7 +123,8 @@ public class Flamv  extends PZApplet
 
       gaylord = new PZSpaceThing();
       gaylord . AppendChild (topshim);
-      gaylord . AppendGrappler (new TrGrappler (Vect.yaxis . Mul (ma.hei.val * 0.15)));
+      gaylord . AppendGrappler (new TrGrappler (Vect.yaxis . Mul (ma.hei.val
+                                                                  * 0.15)));
 
       wallifier = new PZSpaceThing();
       wallifier . AppendGrappler (new TrGrappler (ma.loc.val));

@@ -7,6 +7,7 @@ import zeugma.*;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
+import processing.core.PMatrix3D;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 import processing.opengl.PGraphicsOpenGL;
@@ -87,7 +88,7 @@ public class PZMaesBundle  extends PApplet
       }
   }
 
-  public PZMaesBundle(PZApplet boese_leiter, int dspl_no)
+  public PZMaesBundle (PZApplet boese_leiter, int dspl_no)
     { super ();
       its_maes = null;
       its_cammy = null;
@@ -260,4 +261,21 @@ public class PZMaesBundle  extends PApplet
       return (cls_maes == null)  ?  null
           :  new PlatonicMaes.MaesAndHit (cls_maes, cls_hit);
     }
+
+//
+/// following: some conveni-enttes.
+//
+  public static PMatrix3D ToP (Matrix44 m)
+    { return PZ.ToP (m); }
+
+  public static void PZConcatModelView (PGraphicsOpenGL g,
+                                        Matrix44 fwd_mat, Matrix44 inv_mat)
+    { PZ.ConcatModelView (g, fwd_mat, inv_mat); }
+
+  public static void PZModelViewFlipYAxis (PGraphicsOpenGL g)
+    { PZ.ModelViewFlipYAxis (g); }
+//
+///
+//
+
 }

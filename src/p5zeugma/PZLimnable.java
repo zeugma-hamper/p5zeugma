@@ -5,11 +5,14 @@ package p5zeugma;
 import zeugma.Zeubject;
 import zeugma.ZeColor;
 import zeugma.ZoftThing;
+import zeugma.Matrix44;
 import zeugma.CumuMats;
 import zeugma.Limnable;
 import zeugma.GrapplerPile;
 import zeugma.IContainMultitudes;
+
 import processing.opengl.PGraphicsOpenGL;
+import processing.core.PMatrix3D;
 
 
 public interface PZLimnable extends Limnable, IContainMultitudes
@@ -111,4 +114,24 @@ public interface PZLimnable extends Limnable, IContainMultitudes
 
       AftaDraw (g);
     }
+
+//
+/// the following are not strictly necessary, but the idea here is that
+/// we want these methods to be accessible from as many code contexts
+/// as possible. (i.e. whatever class you're "in", this being java...)
+//
+
+  public static PMatrix3D ToP (Matrix44 m)
+    { return PZ.ToP (m); }
+
+  public static void PZConcatModelView (PGraphicsOpenGL g,
+                                        Matrix44 fwd_mat, Matrix44 inv_mat)
+    { PZ.ConcatModelView (g, fwd_mat, inv_mat); }
+
+  public static void PZModelViewFlipYAxis (PGraphicsOpenGL g)
+    { PZ.ModelViewFlipYAxis (g); }
+
+//
+///
+//
 }

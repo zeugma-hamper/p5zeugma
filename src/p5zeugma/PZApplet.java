@@ -296,7 +296,7 @@ println(q + "th maes is thus: " + ma);
     { }
 
 
-  public void P5ZVivify()
+  public void PZVivify ()
     { global_looper = new Loopervisor ();
 
       global_looper. AppendAqueduct (spaque = new SpatialAqueduct ());
@@ -329,17 +329,10 @@ println(q + "th maes is thus: " + ma);
 
       cherd = new CursorHerd ();
       spaque . AppendPhage (cherd);
-
-      // Cursoresque curry = new Cursoresque (450.0, 6);
-      // cherd.cursor_by_wand . put ("stasis-weasel", curry);
-      // PlatonicMaes ma = maeses . get (0);
-      // if (ma != null)
-      //   { curry . LocZoft () . Set (ma.loc.val);
-      //     curry . AlignToMaes (ma);
-      //   }
     }
 
-  public PZApplet()
+
+  public PZApplet ()
     { super (null, 1);
       if (sole_instance != null)
         throw new RuntimeException
