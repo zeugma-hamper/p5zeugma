@@ -12,6 +12,7 @@ import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 import processing.opengl.PGraphicsOpenGL;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -102,8 +103,12 @@ public class PZMaesBundle  extends PApplet
       registerMethod ("keyEvent", vital_interpreter);
 
       if (boese_leiter != null)
-        PApplet.runSketch (new String[] { this . getClass () . getName () },
-                           this);
+        new Thread() {
+          public void run() {
+            PApplet.runSketch (new String[] { this . getClass () . getName () },
+                    PZMaesBundle.this);
+          }
+        }.start();
 
       all_maes_bundles . add (this);
     }
@@ -160,10 +165,12 @@ public class PZMaesBundle  extends PApplet
 
 
   public void settings ()
-    { if (display_id  <  1)
-        size (960, 540, P3D);
-      else
-        fullScreen (P3D, display_id);
+    { if (display_id  <  1) {
+        size(960, 540, P3D);
+        //size (960, 540, "info.fathom.hydra.HydraGraphics");
+      } else {
+        fullScreen(P3D, display_id);
+      }
     }
 
   public void setup ()
