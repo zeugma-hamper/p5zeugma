@@ -13,6 +13,7 @@ import processing.event.MouseEvent;
 import processing.opengl.PGraphicsOpenGL;
 
 import java.awt.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -103,12 +104,13 @@ public class PZMaesBundle  extends PApplet
       registerMethod ("keyEvent", vital_interpreter);
 
       if (boese_leiter != null)
-        new Thread() {
-          public void run() {
-            PApplet.runSketch (new String[] { this . getClass () . getName () },
-                    PZMaesBundle.this);
-          }
-        }.start();
+        new Thread () {
+          public void run ()
+            { PApplet.runSketch
+                (new String[] { this . getClass () . getName () },
+                 PZMaesBundle.this);
+            }
+        } . start ();
 
       all_maes_bundles . add (this);
     }
@@ -178,18 +180,8 @@ public class PZMaesBundle  extends PApplet
       //
     }
 
-  public void draw ()
-    { PGraphics g = getGraphics ();
-      if (! (g instanceof PGraphicsOpenGL)
-          ||  its_maes == null
-          ||  its_cammy == null)
-        return;
-
-      long ratch = -1;
-      if (der_leiter != null  &&  der_leiter.global_looper != null)
-        ratch = der_leiter.global_looper . RecentestRatchet ();
-
-      if (ratch > 0  &&  ratch <= last_limned_ratchet)
+  protected void _ActuallyDraw (PGraphicsOpenGL ogl, long ratch)
+    { if (ratch > 0  &&  ratch <= last_limned_ratchet)
         { // System.out.println ("ZOINKS! re-rendering frame at maes/ratchet "
           //                     +  its_maes. Name () + " @ "
           //                     +  its_maes. toString () + " / "
@@ -205,7 +197,6 @@ public class PZMaesBundle  extends PApplet
       PlatonicMaes ma = its_maes;
       Bolex cam = its_cammy;
 
-      PGraphicsOpenGL ogl = (PGraphicsOpenGL)g;
       Vect e = cam . ViewLoc ();
       Vect n = cam . ViewAim ();
       Vect u = cam . ViewUp ();
@@ -246,6 +237,24 @@ public class PZMaesBundle  extends PApplet
 
       last_limned_ratchet = ratch;
     }
+
+
+  public void draw ()
+    { PGraphics g = getGraphics ();
+      if (! (g instanceof PGraphicsOpenGL)
+          ||  its_maes == null
+          ||  its_cammy == null)
+        return;
+
+      long ratch = -1;
+      if (der_leiter != null  &&  der_leiter.global_looper != null)
+        ratch = der_leiter.global_looper . RecentestRatchet ();
+
+      PGraphicsOpenGL ogl = (PGraphicsOpenGL)g;
+
+      _ActuallyDraw (ogl, ratch);
+    }
+
 
   public static PlatonicMaes.MaesAndHit ClosestAmongLiving (Vect frm, Vect aim)
     { Vect cls_hit = null;
