@@ -119,6 +119,9 @@ public class PZMaesBundle  extends PApplet
   public PlatonicMaes ItsMaes ()
     { return its_maes; }
 
+  public String ItsMaesName ()
+    { return (its_maes == null)  ?  ""  :  its_maes . Name (); }
+
   public Bolex ItsCamera ()
     { return its_cammy; }
 
@@ -167,12 +170,14 @@ public class PZMaesBundle  extends PApplet
 
 
   public void settings ()
-    { if (display_id  <  1) {
-        size(960, 540, P3D);
-        //size (960, 540, "info.fathom.hydra.HydraGraphics");
-      } else {
-        fullScreen(P3D, display_id);
-      }
+    { if (display_id  <  1)
+        { size (960, 540, P3D);
+          //size (960, 540, "info.fathom.hydra.HydraGraphics");
+        }
+      else
+        { fullScreen (P3D, display_id);
+          //
+        }
     }
 
   public void setup ()

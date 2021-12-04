@@ -253,6 +253,9 @@ println(q + "th maes is thus: " + ma);
     }
 
 
+  public void AssertWellAndTrulyReady ()
+    { well_and_truly_ready = true; }
+
   public List <PlatonicMaes> AllMaeses ()
     { return maeses; }
 
@@ -290,6 +293,7 @@ println(q + "th maes is thus: " + ma);
 
   public YowlAqueduct YowlEventAqueduct ()
     { return yowque; }
+
 
   public void PZDraw (PGraphicsOpenGL g, PZMaesBundle mbun,
                       float sp_width, float sp_height)
