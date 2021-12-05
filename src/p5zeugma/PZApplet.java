@@ -6,14 +6,20 @@ import zeugma.*;
 
 import oscP5.*;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import java.util.Random;
 
-import processing.data.JSONArray;
-import processing.data.JSONObject;
 import processing.opengl.PGraphicsOpenGL;
 
 
@@ -176,30 +182,69 @@ public class PZApplet  extends PZMaesBundle
 
 
   public static Matrix44 ConjureMatrix44 (JSONArray ja)
-    { if (ja == null  ||  ja . size ()  !=  16)
+    { if (ja == null  ||  ja . length ()  !=  16)
         return null;
       return new Matrix44
-          (ja . getFloat (0),  ja . getFloat (1),
-                                      ja . getFloat (2),  ja . getFloat (3),
-           ja . getFloat (4),  ja . getFloat (5),
-                                      ja . getFloat (6),  ja . getFloat (7),
-           ja . getFloat (8),  ja . getFloat (9),
-                                      ja . getFloat (10), ja . getFloat (11),
-           ja . getFloat (12), ja . getFloat (13),
-                                      ja . getFloat (14), ja . getFloat (15));
+          (ja . getDouble (0),  ja . getDouble (1),
+                                      ja . getDouble (2),  ja . getDouble (3),
+           ja . getDouble (4),  ja . getDouble (5),
+                                      ja . getDouble (6),  ja . getDouble (7),
+           ja . getDouble (8),  ja . getDouble (9),
+                                      ja . getDouble (10), ja . getDouble (11),
+           ja . getDouble (12), ja . getDouble (13),
+                                      ja . getDouble (14), ja . getDouble (15));
   }
 
   public static Vect ConjureVect (JSONArray ja)
-    { if (ja == null  ||  ja . size ()  !=  3)
+    { if (ja == null  ||  ja . length ()  !=  3)
         return null;
-      return new Vect (ja . getFloat (0), ja . getFloat (1), ja . getFloat (2));
+      return new Vect (ja . getDouble (0),
+                       ja . getDouble (1),
+                       ja . getDouble (2));
+    }
+
+
+  public static JSONObject LoadJSONObjectFromFile (String fname)
+    { return LoadJSONObjectFromFile (Path.of (fname)); }
+
+  public static JSONObject LoadJSONObjectFromFile (Path pth)
+    { String raw_s;
+      try
+        { raw_s = Files.readString (pth); }
+      catch (IOException ex)
+        { System.out.println
+            ("Churlish exception hit while reading file <" + pth
+             + "> into string, with this message:\n" + ex + "\n");
+          return null;
+        }
+      JSONObject jobj = new JSONObject (raw_s);
+      return jobj;
+    }
+
+
+  public static JSONArray LoadJSONArrayFromFile (String fname)
+    { return LoadJSONArrayFromFile (Path.of (fname)); }
+
+  public static JSONArray LoadJSONArrayFromFile (Path pth)
+    { String raw_s;
+      try
+        { raw_s = Files.readString (pth); }
+      catch (IOException ex)
+        { System.out.println
+            ("Wondrous exception while reading file <" + pth
+             + "> into string, bearing this message:\n" + ex + "\n");
+          return null;
+        }
+      JSONArray jarr = new JSONArray (raw_s);
+      return jarr;
     }
 
 
   public void HooverCoordTransforms ()
-    { JSONObject jace = loadJSONObject ("config/coord-xform-raw-to-room.json");
+    { JSONObject jace
+        = LoadJSONObjectFromFile ("config/coord-xform-raw-to-room.json");
       if (jace == null)
-        jace = loadJSONObject
+        jace = LoadJSONObjectFromFile
           ("/opt/trelopro/config/json/coord-xform-raw-to-room.json");
 
       if (jace == null)
@@ -220,21 +265,22 @@ public class PZApplet  extends PZMaesBundle
 
 
   public void HooverMaeses ()
-    { JSONArray jarr = loadJSONArray ("config/maes-config.json");
+    { JSONArray jarr = LoadJSONArrayFromFile ("config/maes-config.json");
       if (jarr == null)
-        jarr = loadJSONArray ("/opt/trelopro/config/json/maes-config.json");
+        jarr = LoadJSONArrayFromFile
+          ("/opt/trelopro/config/json/maes-config.json");
+
       // if still no success, we should, you know, say a little something
       // and then at least have the good grace to set the hapless system
       // up with some default maes or other... no?
-      int num = jarr . size ();
+      int num = jarr . length ();
       JSONObject ob;
       for (int q = 0  ;  q < num  ;  ++q)
         { if ((ob = jarr . getJSONObject (q))  ==  null)
             continue;
           if (ob . isNull ("name")  ||  ob . isNull ("location")  ||
               ob . isNull ("over")  ||  ob . isNull ("up")  ||
-              ob . isNull ("width")  ||  ob . isNull ("height")  ||
-              ob . isNull ("ideal-pixwid")  ||  ob . isNull ("ideal-pixhei"))
+              ob . isNull ("width")  ||  ob . isNull ("height"))
             continue;
 
           PlatonicMaes ma = new PlatonicMaes ();
@@ -242,10 +288,19 @@ public class PZApplet  extends PZMaesBundle
           ma.loc = new ZoftVect (ConjureVect (ob . getJSONArray ("location")));
           ma.ovr = new ZoftVect (ConjureVect (ob . getJSONArray ("over")));
           ma.upp = new ZoftVect (ConjureVect (ob . getJSONArray ("up")));
-          ma.wid = new ZoftFloat (ob . getFloat ("width"));
-          ma.hei = new ZoftFloat (ob . getFloat ("height"));
-          ma.ideal_pixwid = ob . getInt ("ideal-pixwid");
-          ma.ideal_pixhei = ob . getInt ("ideal-pixhei");
+          ma.wid = new ZoftFloat (ob . getDouble ("width"));
+          ma.hei = new ZoftFloat (ob . getDouble ("height"));
+
+          if (! (ob . isNull ("ideal_pixwid")
+                 ||  ob . isNull ("ideal_pixhei")))
+            { ma.ideal_pixwid = ob . getLong ("ideal-pixwid");
+              ma.ideal_pixhei = ob . getLong ("ideal-pixhei");
+            }
+
+          if (! (ob . isNull ("pixwid")  ||  ob . isNull ("pixhei")))
+            { ma.pixwid = ob . getLong ("pixwid");
+              ma.pixhei = ob . getLong ("pixhei");
+            }
 
           maeses . add (ma);
 println(q + "th maes is thus: " + ma);
@@ -301,34 +356,24 @@ println(q + "th maes is thus: " + ma);
 
 
   public void PZVivify ()
-    { global_looper = new Loopervisor ();
-
-      global_looper. AppendAqueduct (spaque = new SpatialAqueduct ());
-      global_looper. AppendAqueduct (yowque = new YowlAqueduct ());
-
+    { //
       uniho = new UninvitedHost ();
       registerMethod ("pre", uniho);
 
       osc_slurper = new OscP5 (uniho, 54345);
 
-      HooverCoordTransforms ();
-      HooverMaeses ();
-
       for (int q = 0  ;  q < maeses . size ()  ;  ++q)
         { int dspl = (display_id > 0)  ?  (q + 1)  :  -(q + 1);
           PZMaesBundle mb;
           if (q == 0)  // special handling, natŭrlich, for the alpha MBundle
-            { mb = this;  der_leiter = this; }
+            { mb = this;
+              der_leiter = this;
+            }
           else
-            mb = new PZMaesBundle (this, dspl);
+            { mb = new PZMaesBundle (this, dspl);
+              mb . InternalizeMaes (maeses . get (q));
+            }
           all_mbundles . add (mb);
-
-          mb.its_maes = maeses . get (q);
-          mb.its_cammy = PlatonicMaes.CameraFromMaes (mb.its_maes);
-          mb.its_backplate . AlignToMaes (mb.its_maes);
-          mb.its_backplate . LocGrapplerZoftVect ()
-            . BecomeLike (mb.its_maes . LocZoft ());
-          mb.its_maes . AppendLayer (mb.its_backplate);
         }
 
       cherd = new CursorHerd ();
@@ -338,10 +383,21 @@ println(q + "th maes is thus: " + ma);
 
   public PZApplet ()
     { super (null, 1);
+
       if (sole_instance != null)
         throw new RuntimeException
                     ("Ye dassn't make more than one instance o' PZApplet...");
       display_id = 0;
       sole_instance = this;
+
+      global_looper = new Loopervisor ();
+
+      global_looper. AppendAqueduct (spaque = new SpatialAqueduct ());
+      global_looper. AppendAqueduct (yowque = new YowlAqueduct ());
+
+      HooverCoordTransforms ();
+      HooverMaeses ();
+
+      InternalizeMaes (maeses . get (0));
     }
 }

@@ -5,6 +5,8 @@
       "up" : [0.0, 1.0, 0.0],
       "width" : 7772.4,
       "height" : 4372.0,
+      "pixwid" : 1600,
+      "pixhei" : 900,
       "ideal-pixwid" : 3840,
       "ideal-pixhei" : 2160
     },

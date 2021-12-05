@@ -116,6 +116,21 @@ public class PZMaesBundle  extends PApplet
     }
 
 
+  public void InternalizeMaes (PlatonicMaes ma)
+    { if (ma == null)
+        return;
+
+      its_maes = ma;
+
+      its_cammy = PlatonicMaes.CameraFromMaes (ma);
+
+      its_backplate . AlignToMaes (ma);
+      its_backplate . LocGrapplerZoftVect ()
+        . BecomeLike (ma . LocZoft ());
+      its_maes . AppendLayer (its_backplate);
+    }
+
+
   public PlatonicMaes ItsMaes ()
     { return its_maes; }
 
@@ -171,8 +186,16 @@ public class PZMaesBundle  extends PApplet
 
   public void settings ()
     { if (display_id  <  1)
-        { size (960, 540, P3D);
-          //size (960, 540, "info.fathom.hydra.HydraGraphics");
+        { int win_wid = 960;
+          int win_hei = 540;
+          if (its_maes != null
+              &&  its_maes.pixwid > 0
+              &&  its_maes.pixhei > 0)
+            { win_wid = (int)(its_maes.pixwid);
+              win_hei = (int)(its_maes.pixhei);
+            }
+          size (win_wid, win_hei, P3D);
+          //size (wid, hei, "info.fathom.hydra.HydraGraphics");
         }
       else
         { fullScreen (P3D, display_id);
