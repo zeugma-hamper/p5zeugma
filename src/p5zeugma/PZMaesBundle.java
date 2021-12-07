@@ -29,6 +29,9 @@ public class PZMaesBundle  extends PApplet
 
   public long last_limned_ratchet = -1;
 
+  public final static int default_win_wid = 960;
+  public final static int default_win_hei = 540;
+
   public static ArrayList <PZMaesBundle> all_maes_bundles
     = new ArrayList <> ();
 
@@ -89,6 +92,9 @@ public class PZMaesBundle  extends PApplet
                                     e . getKey (), e . getKeyCode (), mods);
       }
   }
+//
+/// bittersweet terminus of nested class DialectCatcher
+//
 
   public PZMaesBundle (PZApplet boese_leiter, int dspl_no)
     { super ();
@@ -186,15 +192,20 @@ public class PZMaesBundle  extends PApplet
 
   public void settings ()
     { if (display_id  <  1)
-        { int win_wid = 960;
-          int win_hei = 540;
+        { int win_wid = default_win_wid;
+          int win_hei = default_win_hei;
           if (its_maes != null
-              &&  its_maes.pixwid > 0
-              &&  its_maes.pixhei > 0)
-            { win_wid = (int)(its_maes.pixwid);
-              win_hei = (int)(its_maes.pixhei);
+              &&  its_maes.requested_pixwid > 0
+              &&  its_maes.requested_pixhei > 0)
+            { win_wid = (int)(its_maes.requested_pixwid);
+              win_hei = (int)(its_maes.requested_pixhei);
             }
           size (win_wid, win_hei, P3D);
+
+          if (its_maes != null)
+            { its_maes.pixwid = win_wid;
+              its_maes.pixhei = win_hei;
+            }
           //size (wid, hei, "info.fathom.hydra.HydraGraphics");
         }
       else
@@ -279,6 +290,9 @@ public class PZMaesBundle  extends PApplet
         ratch = der_leiter.global_looper . RecentestRatchet ();
 
       PGraphicsOpenGL ogl = (PGraphicsOpenGL)g;
+
+      its_maes.pixwid = this.width;
+      its_maes.pixhei = this.height;
 
       _ActuallyDraw (ogl, ratch);
     }

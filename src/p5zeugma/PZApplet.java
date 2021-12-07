@@ -297,9 +297,10 @@ public class PZApplet  extends PZMaesBundle
               ma.ideal_pixhei = ob . getLong ("ideal-pixhei");
             }
 
-          if (! (ob . isNull ("pixwid")  ||  ob . isNull ("pixhei")))
-            { ma.pixwid = ob . getLong ("pixwid");
-              ma.pixhei = ob . getLong ("pixhei");
+          if (! (ob . isNull ("requested-pixwid")
+                 ||  ob . isNull ("requested-pixhei")))
+            { ma.requested_pixwid = ob . getLong ("requested-pixwid");
+              ma.requested_pixhei = ob . getLong ("requested-pixhei");
             }
 
           maeses . add (ma);
