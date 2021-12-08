@@ -85,8 +85,10 @@ public class PZApplet  extends PZMaesBundle
 
           spaque . InterpretRawWandish (wname, butts, pos, aim, ovr);
         }
-
     }
+//
+/// hereabove: farewell to the flesh of nested class UninvitedHost
+//
 
   static Random randolph = new Random ();
 
@@ -160,6 +162,9 @@ public class PZApplet  extends PZMaesBundle
         return 0;
       }
   }
+//
+/// just now: auf wiedersehen to nested class Cursoresque...
+//
 
 
   public class CursorHerd  extends PZLimnyThing implements ZESpatialPhagy
@@ -179,6 +184,9 @@ public class PZApplet  extends PZMaesBundle
         return e . ProfferAsQuaffTo (crs);
       }
   }
+//
+/// adios to nested class CursorHerd
+//
 
 
   public static Matrix44 ConjureMatrix44 (JSONArray ja)
@@ -291,8 +299,8 @@ public class PZApplet  extends PZMaesBundle
           ma.wid = new ZoftFloat (ob . getDouble ("width"));
           ma.hei = new ZoftFloat (ob . getDouble ("height"));
 
-          if (! (ob . isNull ("ideal_pixwid")
-                 ||  ob . isNull ("ideal_pixhei")))
+          if (! (ob . isNull ("ideal-pixwid")
+                 ||  ob . isNull ("ideal-pixhei")))
             { ma.ideal_pixwid = ob . getLong ("ideal-pixwid");
               ma.ideal_pixhei = ob . getLong ("ideal-pixhei");
             }

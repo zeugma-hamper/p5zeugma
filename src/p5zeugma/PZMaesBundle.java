@@ -96,6 +96,7 @@ public class PZMaesBundle  extends PApplet
 /// bittersweet terminus of nested class DialectCatcher
 //
 
+
   public PZMaesBundle (PZApplet boese_leiter, int dspl_no)
     { super ();
       its_maes = null;
@@ -178,9 +179,19 @@ public class PZMaesBundle  extends PApplet
         { ogl . push ();
           GrapplerPile gp = its_backplate . AssuredGrapplerPile ();
           PZ.ConcatModelView (ogl, gp . PntMat (), gp . InvPntMat ());
+
+          int hold_w = der_leiter.width;
+          int hold_h = der_leiter.height;
+          der_leiter.width = this.width;
+          der_leiter.height = this.height;
+
           der_leiter. PZDraw (ogl, this,
-                                (float)(its_maes.wid . Val ()),
-                                (float)(its_maes.hei . Val ()));
+                              (float)(its_maes.wid . Val ()),
+                              (float)(its_maes.hei . Val ()));
+
+          der_leiter.width = hold_w;
+          der_leiter.height = hold_h;
+
           ogl . pop ();
         }
 
@@ -294,7 +305,19 @@ public class PZMaesBundle  extends PApplet
       its_maes.pixwid = this.width;
       its_maes.pixhei = this.height;
 
+      boolean squirrel_away
+        = (its_maes.ideal_pixwid > 0  &&  its_maes.ideal_pixhei > 0);
+      if (squirrel_away)
+        { this.width = (int)its_maes.ideal_pixwid;
+          this.height = (int)its_maes.ideal_pixhei;
+        }
+
       _ActuallyDraw (ogl, ratch);
+
+      if (squirrel_away)
+        { this.width = (int)its_maes.pixwid;
+          this.height = (int)its_maes.pixhei;
+        }
     }
 
 
