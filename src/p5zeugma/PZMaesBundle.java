@@ -29,6 +29,8 @@ public class PZMaesBundle  extends PApplet
 
   public long last_limned_ratchet = -1;
 
+  public boolean shunt_raw_key_events_to_der_leiter = false;
+
   public final static int default_win_wid = 960;
   public final static int default_win_hei = 540;
 
@@ -78,7 +80,15 @@ public class PZMaesBundle  extends PApplet
       }
 
     public void keyEvent (KeyEvent e)
-      { int tion = e . getAction ();
+      { if (shunt_raw_key_events_to_der_leiter)
+          { if (PZMaesBundle.this != der_leiter  &&  der_leiter != null)
+              der_leiter . handleKeyEvent (e);
+            // actually, makes sense not to bypass the ZeEvent transformation
+            // & handling below, even if shunting raw events, so we won't ...
+            // return;
+          }
+
+        int tion = e . getAction ();
         if (tion  ==  KeyEvent.TYPE)
           return;
         long mods = 0;
@@ -156,6 +166,20 @@ public class PZMaesBundle  extends PApplet
 
   public void PleaseDoNotFullscreen ()
     { display_id *= (display_id > 0  ?  -1  :  1); }
+
+
+  public boolean ShouldForwardRawKeyEventsToLeader ()
+    { return shunt_raw_key_events_to_der_leiter; }
+
+  public void SetShouldForwardRawKeyEventsToLeader (boolean frketl)
+    { shunt_raw_key_events_to_der_leiter = frketl; }
+
+  public static void SetShouldForwardRawKeyEventsFromAllWindowsToLeader
+                                                                 (boolean frwd)
+    { for (PZMaesBundle mbun  :  all_maes_bundles)
+        if (mbun != null)
+          mbun . SetShouldForwardRawKeyEventsToLeader (frwd);
+    }
 
 
   public void DrawAllLayers (PGraphicsOpenGL ogl, ArrayList <LimnyThing> lrs)
