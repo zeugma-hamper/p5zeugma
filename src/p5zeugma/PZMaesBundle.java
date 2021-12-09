@@ -25,6 +25,10 @@ public class PZMaesBundle  extends PApplet
   public PZApplet der_leiter;
   public DialectCatcher vital_interpreter;
 
+  public PGraphics most_recent_pgraphics = null;
+
+  public double actual_to_ideal_pixel_ratio = 1.0;
+
   public int display_id;
 
   public long last_limned_ratchet = -1;
@@ -160,6 +164,32 @@ public class PZMaesBundle  extends PApplet
   public PZAlignifer ItsBackplate ()
     { return its_backplate; }
 
+  // thanks, awt, for trampling on the classname 'List'. Genius!
+  public static java.util.List <PZMaesBundle> AllMaesBundles ()
+    { return all_maes_bundles; }
+
+  public static PZMaesBundle MaesBundleByMaes (PlatonicMaes ma)
+    { for (PZMaesBundle mb  :  all_maes_bundles)
+        if (mb . ItsMaes ()  ==  ma)
+          return mb;
+      return null;
+    }
+
+  public static PZMaesBundle MaesBundleByMaesName (String mname)
+    { PlatonicMaes ma;
+      for (PZMaesBundle mb  :  all_maes_bundles)
+        if ((ma = mb . ItsMaes ())  ==  ma)
+          if (ma . Name () . equals (mname))
+            return mb;
+      return null;
+    }
+
+  public double ActualToIdealPixelRatio ()
+    { return actual_to_ideal_pixel_ratio; }
+
+  public void SetActualToIdealPixelRatio (double atipr)
+    { actual_to_ideal_pixel_ratio = atipr; }
+
 
   public void FullscreenOnDisplay (int d)
     { display_id = d; }
@@ -262,11 +292,8 @@ public class PZMaesBundle  extends PApplet
           //                    +  Long.toString (ratch));
           return;
         }
-      // else
-      //   System.out.println ("FINE: rendering frame at maes/ratchet "
-      //                       +  its_maes. Name () + " @ "
-      //                       +  its_maes. toString () + " / "
-      //                       +  Long.toString (ratch));
+
+      most_recent_pgraphics = ogl;
 
       PlatonicMaes ma = its_maes;
       Bolex cam = its_cammy;

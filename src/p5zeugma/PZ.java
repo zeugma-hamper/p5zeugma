@@ -7,6 +7,7 @@ import zeugma.Matrix44;
 
 import processing.core.PMatrix;
 import processing.core.PMatrix3D;
+import processing.core.PGraphics;
 import processing.opengl.PGraphicsOpenGL;
 
 
@@ -46,5 +47,19 @@ public class PZ
     { g.modelview . apply (p5_yflip_mat);
       g.modelviewInv . preApply (p5_yflip_mat);
       g.projmodelview . apply (p5_yflip_mat);
+    }
+
+  public static PZMaesBundle MaesBundleByPGraphics (PGraphics g)
+    { for (PZMaesBundle mbun  :  PZMaesBundle.AllMaesBundles ())
+        if (g  ==  mbun.most_recent_pgraphics)
+          return mbun;
+      return null;
+    }
+
+  public static double ActualToIdealPixelRatioFor (PGraphics g)
+    { PZMaesBundle mbun = MaesBundleByPGraphics (g);
+      if (mbun != null)
+        return mbun . ActualToIdealPixelRatio ();
+      return 1.0;
     }
 }

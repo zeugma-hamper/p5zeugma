@@ -40,7 +40,7 @@ public class PZApplet  extends PZMaesBundle
   protected Matrix44 raw_to_room_point_mat;
 
   protected ArrayList <PlatonicMaes> maeses = new ArrayList <> ();
-  protected ArrayList <PZMaesBundle> all_mbundles = new ArrayList <> ();
+//  protected ArrayList <PZMaesBundle> all_mbundles = new ArrayList <> ();
 
   protected CursorHerd cherd;
 
@@ -331,25 +331,25 @@ println(q + "th maes is thus: " + ma);
       return null;
     }
 
-  public List <PZMaesBundle> AllMaesBundles ()
-    { return all_mbundles; }
+  // public List <PZMaesBundle> AllMaesBundles ()
+  //   { return all_mbundles; }
 
 
-  public PZMaesBundle MaesBundleByMaes (PlatonicMaes ma)
-    { for (PZMaesBundle mb  :  all_mbundles)
-        if (mb . ItsMaes ()  ==  ma)
-          return mb;
-      return null;
-    }
+  // public PZMaesBundle MaesBundleByMaes (PlatonicMaes ma)
+  //   { for (PZMaesBundle mb  :  all_mbundles)
+  //       if (mb . ItsMaes ()  ==  ma)
+  //         return mb;
+  //     return null;
+  //   }
 
-  public PZMaesBundle MaesBundleByMaesName (String mname)
-    { PlatonicMaes ma;
-      for (PZMaesBundle mb  :  all_mbundles)
-        if ((ma = mb . ItsMaes ())  ==  ma)
-          if (ma . Name () . equals (mname))
-            return mb;
-      return null;
-    }
+  // public PZMaesBundle MaesBundleByMaesName (String mname)
+  //   { PlatonicMaes ma;
+  //     for (PZMaesBundle mb  :  all_mbundles)
+  //       if ((ma = mb . ItsMaes ())  ==  ma)
+  //         if (ma . Name () . equals (mname))
+  //           return mb;
+  //     return null;
+  //   }
 
 
   public SpatialAqueduct SpatialEventAqueduct ()
@@ -382,7 +382,7 @@ println(q + "th maes is thus: " + ma);
             { mb = new PZMaesBundle (this, dspl);
               mb . InternalizeMaes (maeses . get (q));
             }
-          all_mbundles . add (mb);
+//          all_mbundles . add (mb);
         }
 
       cherd = new CursorHerd ();
