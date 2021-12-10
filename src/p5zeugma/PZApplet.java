@@ -16,7 +16,9 @@ import org.json.JSONException;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.HashMap;
+import java.util.Collection;
 
 import java.util.Random;
 
@@ -99,6 +101,8 @@ public class PZApplet  extends PZMaesBundle
     public ZoftThing <ZeColor> iro;
     public PlatonicMaes cur_maes;
 
+    public static Map <String, Double> scale_factor_by_maes = null;
+
     public Cursoresque (double sz, int nv)
       { vs_lrg = new ArrayList <SinuVect> ();
         vs_sml = new ArrayList <SinuVect> ();
@@ -149,7 +153,13 @@ public class PZApplet  extends PZMaesBundle
         if (mah != null)
           { LocZoft () . Set (mah.hit);
             if (cur_maes  !=  mah.maes)
-              AlignToMaes (cur_maes = mah.maes);
+              { AlignToMaes (cur_maes = mah.maes);
+                if (scale_factor_by_maes != null)
+                  { Double s = scale_factor_by_maes . get (mah.maes . Name ());
+                    double ess = (s != null)  ?  s  :  1.0;
+                    SetScale (ess);
+                  }
+              }
           }
         return 0;
       }
@@ -183,6 +193,12 @@ public class PZApplet  extends PZMaesBundle
           }
         return e . ProfferAsQuaffTo (crs);
       }
+
+    public Map <String, Cursoresque> CursorsByWand ()
+      { return cursor_by_wand; }
+
+    public Collection <Cursoresque> AllCursors ()
+      { return cursor_by_wand . values (); }
   }
 //
 /// adios to nested class CursorHerd
@@ -330,26 +346,6 @@ println(q + "th maes is thus: " + ma);
             return ma;
       return null;
     }
-
-  // public List <PZMaesBundle> AllMaesBundles ()
-  //   { return all_mbundles; }
-
-
-  // public PZMaesBundle MaesBundleByMaes (PlatonicMaes ma)
-  //   { for (PZMaesBundle mb  :  all_mbundles)
-  //       if (mb . ItsMaes ()  ==  ma)
-  //         return mb;
-  //     return null;
-  //   }
-
-  // public PZMaesBundle MaesBundleByMaesName (String mname)
-  //   { PlatonicMaes ma;
-  //     for (PZMaesBundle mb  :  all_mbundles)
-  //       if ((ma = mb . ItsMaes ())  ==  ma)
-  //         if (ma . Name () . equals (mname))
-  //           return mb;
-  //     return null;
-  //   }
 
 
   public SpatialAqueduct SpatialEventAqueduct ()
