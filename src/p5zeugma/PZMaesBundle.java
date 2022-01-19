@@ -34,6 +34,7 @@ public class PZMaesBundle  extends PApplet
   public long last_limned_ratchet = -1;
 
   public boolean shunt_raw_key_events_to_der_leiter = false;
+  public static boolean neutralize_esc_key_armageddon = false;
 
   public final static int default_win_wid = 960;
   public final static int default_win_hei = 540;
@@ -104,6 +105,9 @@ public class PZMaesBundle  extends PApplet
         der_leiter.yowque
           . InterpretRawKeyfulness ("keyboard-0", tion != KeyEvent.RELEASE,
                                     e . getKey (), e . getKeyCode (), mods);
+
+        if (e . getKey () == 27  &&  neutralize_esc_key_armageddon)
+          /*e.*/key = 0;   // gott im himmel... schrecklich!
       }
   }
 //
@@ -196,6 +200,13 @@ public class PZMaesBundle  extends PApplet
 
   public void PleaseDoNotFullscreen ()
     { display_id *= (display_id > 0  ?  -1  :  1); }
+
+
+  public boolean ShouldNeutralizeESCKeyArmageddon ()
+    { return neutralize_esc_key_armageddon; }
+
+  public void SetShouldNeutralizeESCKeyArmageddon (boolean neka)
+    { neutralize_esc_key_armageddon = neka; }
 
 
   public boolean ShouldForwardRawKeyEventsToLeader ()
