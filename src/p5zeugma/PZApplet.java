@@ -360,6 +360,7 @@ println(q + "th maes is thus: " + ma);
     { }
 
 
+  // the following is (or'd durn well better be) called from within setup()
   public void PZVivify ()
     { //
       uniho = new UninvitedHost ();
@@ -380,6 +381,11 @@ println(q + "th maes is thus: " + ma);
             }
 //          all_mbundles . add (mb);
         }
+
+      surface . setResizable (permit_window_resize);
+      // the line foregoing also appears in children windows' setup();
+      // but if we don't do it here it won't be enacted for this
+      // most primary of all windows.
 
       cherd = new CursorHerd ();
       spaque . AppendPhage (cherd);

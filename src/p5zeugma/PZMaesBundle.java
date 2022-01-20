@@ -33,6 +33,8 @@ public class PZMaesBundle  extends PApplet
 
   public long last_limned_ratchet = -1;
 
+  public static boolean permit_window_resize = false;
+
   public boolean shunt_raw_key_events_to_der_leiter = false;
   public static boolean neutralize_esc_key_armageddon = false;
 
@@ -202,10 +204,17 @@ public class PZMaesBundle  extends PApplet
     { display_id *= (display_id > 0  ?  -1  :  1); }
 
 
-  public boolean ShouldNeutralizeESCKeyArmageddon ()
+  public static boolean ShouldPermitWindowResize ()
+    { return permit_window_resize; }
+
+  public static void SetShouldPermitWindowResize (boolean pwr)
+    { permit_window_resize = pwr; }
+
+
+  public static boolean ShouldNeutralizeESCKeyArmageddon ()
     { return neutralize_esc_key_armageddon; }
 
-  public void SetShouldNeutralizeESCKeyArmageddon (boolean neka)
+  public static void SetShouldNeutralizeESCKeyArmageddon (boolean neka)
     { neutralize_esc_key_armageddon = neka; }
 
 
@@ -293,6 +302,7 @@ public class PZMaesBundle  extends PApplet
   public void setup ()
     { surface . setTitle ("little billy");
       //
+      surface . setResizable (permit_window_resize);
     }
 
   protected void _ActuallyDraw (PGraphicsOpenGL ogl, long ratch)
