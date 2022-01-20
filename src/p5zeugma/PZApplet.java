@@ -315,10 +315,15 @@ public class PZApplet  extends PZMaesBundle
           ma.wid = new ZoftFloat (ob . getDouble ("width"));
           ma.hei = new ZoftFloat (ob . getDouble ("height"));
 
-          if (! (ob . isNull ("ideal-pixwid")
-                 ||  ob . isNull ("ideal-pixhei")))
-            { ma.ideal_pixwid = ob . getLong ("ideal-pixwid");
-              ma.ideal_pixhei = ob . getLong ("ideal-pixhei");
+          if (! (ob . isNull ("as-if-pixwid")
+                 ||  ob . isNull ("as-if-pixhei")))
+            { ma.as_if_pixwid = ob . getLong ("as-if-pixwid");
+              ma.as_if_pixhei = ob . getLong ("as-if-pixhei");
+            }
+          else if (! (ob . isNull ("ideal-pixwid")  // a bit o' back-compat
+                      ||  ob . isNull ("ideal-pixhei")))
+            { ma.as_if_pixwid = ob . getLong ("ideal-pixwid");
+              ma.as_if_pixhei = ob . getLong ("ideal-pixhei");
             }
 
           if (! (ob . isNull ("requested-pixwid")

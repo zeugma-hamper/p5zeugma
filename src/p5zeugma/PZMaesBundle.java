@@ -374,14 +374,30 @@ public class PZMaesBundle  extends PApplet
 
       PGraphicsOpenGL ogl = (PGraphicsOpenGL)g;
 
+      // the whole agglomeration of hoo-hah below -- i.e. everything
+      // except for the "_ActuallyDraw()" line -- exists to allow
+      // programs to specify an "as-if" pixel size that's different
+      // from the window's (or, more generally, rendering region's)
+      // actual pixular size.
+      //
+      // very specifically, by the time execution reaches this point,
+      // the surrounding Processing (tm) machinery has already used
+      // the 'width' and 'height' variables in a call to glViewport(),
+      // so that mapping is set. now we temporarily/heretically set
+      // those same variables to the as-if values; code within
+      // "_ActuallyDraw()" that uses Processing's pixel-based rendering
+      // API -- e.g. "text()" or "circle()" with non-3D arguments --
+      // will consequently function as if the rendering space had the
+      // "as-if" pixel extent. Y'know?
+
       its_maes.pixwid = this.width;
       its_maes.pixhei = this.height;
 
       boolean squirrel_away
-        = (its_maes.ideal_pixwid > 0  &&  its_maes.ideal_pixhei > 0);
+        = (its_maes.as_if_pixwid > 0  &&  its_maes.as_if_pixhei > 0);
       if (squirrel_away)
-        { this.width = (int)its_maes.ideal_pixwid;
-          this.height = (int)its_maes.ideal_pixhei;
+        { this.width = (int)its_maes.as_if_pixwid;
+          this.height = (int)its_maes.as_if_pixhei;
         }
 
       _ActuallyDraw (ogl, ratch);
