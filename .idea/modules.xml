@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../java-zeugma/java-zeugma.iml" filepath="$PROJECT_DIR$/../java-zeugma/java-zeugma.iml" />
       <module fileurl="file://$PROJECT_DIR$/p5z.iml" filepath="$PROJECT_DIR$/p5z.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../processing4/core/processing4-core.iml" filepath="$PROJECT_DIR$/../processing4/core/processing4-core.iml" />
     </modules>
   </component>
 </project>
