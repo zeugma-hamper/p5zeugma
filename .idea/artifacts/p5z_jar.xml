@@ -12,7 +12,6 @@
       <element id="library" level="module" name="oscP5.jar" module-name="p5z" />
       <element id="library" level="module" name="core.jar" module-name="p5z" />
       <element id="library" level="module" name="jogl-all.jar" module-name="p5z" />
-      <element id="library" level="project" name="processing-library" />
     </root>
   </artifact>
 </component>
