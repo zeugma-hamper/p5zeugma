@@ -174,6 +174,9 @@ public class PZMaesBundle  extends PApplet
   public static java.util.List <PZMaesBundle> AllMaesBundles ()
     { return all_maes_bundles; }
 
+  public static PZMaesBundle NthMaesBundle (int ind)
+    { return all_maes_bundles . get (ind); }
+
   public static PZMaesBundle MaesBundleByMaes (PlatonicMaes ma)
     { for (PZMaesBundle mb  :  all_maes_bundles)
         if (mb . ItsMaes ()  ==  ma)

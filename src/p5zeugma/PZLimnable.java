@@ -5,6 +5,7 @@ package p5zeugma;
 import zeugma.Zeubject;
 import zeugma.ZeColor;
 import zeugma.ZoftThing;
+import zeugma.Vect;
 import zeugma.Matrix44;
 import zeugma.CumuMats;
 import zeugma.Limnable;
@@ -60,6 +61,15 @@ public interface PZLimnable extends Limnable, IContainMultitudes
                 255.0f * adj.g * c.g,
                 255.0f * adj.b * c.b,
                 255.0f * adj.a * c.a);
+    }
+
+
+  default void PZpoint (PGraphicsOpenGL g, Vect p)
+    { g . point ((float)p.x, (float)p.y, (float)p.z); }
+
+  default void PZline (PGraphicsOpenGL g, Vect p1, Vect p2)
+    { g . line ((float)p1.x, (float)p1.y, (float)p1.z,
+                (float)p2.x, (float)p2.y, (float)p2.z);
     }
 
 
