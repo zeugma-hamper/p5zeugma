@@ -360,6 +360,21 @@ println(q + "th maes is thus: " + ma);
     { return yowque; }
 
 
+  public boolean EnrollSpatialPhage (ZESpatialPhagy phage)
+    { if (spaque != null)
+        if (spaque . AppendPhage (phage)  ==  0)
+          return true;
+      return false;
+    }
+
+  public boolean EnrollYowlPhage (ZEYowlPhagy phage)
+    { if (yowque != null)
+        if (yowque . AppendPhage (phage)  ==  0)
+          return true;
+      return false;
+    }
+
+
   public void PZDraw (PGraphicsOpenGL g, PZMaesBundle mbun,
                       float sp_width, float sp_height)
     { }
