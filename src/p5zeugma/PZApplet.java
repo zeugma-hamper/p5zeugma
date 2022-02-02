@@ -6,7 +6,9 @@ import zeugma.*;
 
 import oscP5.*;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -226,6 +228,33 @@ public class PZApplet  extends PZMaesBundle
                        ja . getDouble (1),
                        ja . getDouble (2));
     }
+
+
+  public static JSONObject LoadJSONObjectFromFile2 (String fname) {
+    Path pth = Path.of(fname);
+    if (!Files.exists(pth)) {
+      try {
+        // look for things relative to the 'ole jar file
+        // from which PZApplet has emerged
+        URL classUrl = PZApplet.class.getProtectionDomain().getCodeSource().getLocation();
+        String decodedPath = classUrl.toURI().getSchemeSpecificPart();
+        File jarFolder = new File(decodedPath).getParentFile();
+        File soughtFile = new File(jarFolder, fname);
+        pth = soughtFile.toPath();
+
+      } catch (Exception e) {
+        System.err.println("oh for pity's sake");
+        e.printStackTrace();
+      }
+    }
+    try {
+      return new JSONObject(Files.readString(pth));
+    } catch (IOException e) {
+      System.err.println("is that really necessary?");
+      e.printStackTrace();
+    }
+    return null;
+  }
 
 
   public static JSONObject LoadJSONObjectFromFile (String fname)
