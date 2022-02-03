@@ -230,31 +230,32 @@ public class PZApplet  extends PZMaesBundle
     }
 
 
-  public static JSONObject LoadJSONObjectFromFile2 (String fname) {
-    Path pth = Path.of(fname);
-    if (!Files.exists(pth)) {
-      try {
-        // look for things relative to the 'ole jar file
-        // from which PZApplet has emerged
-        URL classUrl = PZApplet.class.getProtectionDomain().getCodeSource().getLocation();
-        String decodedPath = classUrl.toURI().getSchemeSpecificPart();
-        File jarFolder = new File(decodedPath).getParentFile();
-        File soughtFile = new File(jarFolder, fname);
-        pth = soughtFile.toPath();
+  public static Path ResolvePathInADesperateJavaWorld (String fname)
+    { return ResolvePathInADesperateJavaWorld (Path.of (fname)); }
 
-      } catch (Exception e) {
-        System.err.println("oh for pity's sake");
-        e.printStackTrace();
-      }
+  public static Path ResolvePathInADesperateJavaWorld (Path pth)
+    { if (pth == null)
+        return pth;
+      String fname = pth . getFileName () . toString ();
+      if (! Files.exists (pth))
+        { try
+            { // look for things relative to the 'ole jar file
+              // from which PZApplet has emerged
+              URL classUrl = PZApplet.class . getProtectionDomain ()
+                . getCodeSource () . getLocation ();
+              String decodedPath = classUrl.toURI () . getSchemeSpecificPart ();
+              File jarFolder = new File (decodedPath) . getParentFile ();
+              File soughtFile = new File (jarFolder, fname);
+              pth = soughtFile . toPath ();
+            }
+          catch (Exception e)
+            { System.err . println ("oh for pity's sake");
+              e . printStackTrace ();
+              return null;
+            }
+        }
+      return pth;
     }
-    try {
-      return new JSONObject(Files.readString(pth));
-    } catch (IOException e) {
-      System.err.println("is that really necessary?");
-      e.printStackTrace();
-    }
-    return null;
-  }
 
 
   public static JSONObject LoadJSONObjectFromFile (String fname)
@@ -262,6 +263,7 @@ public class PZApplet  extends PZMaesBundle
 
   public static JSONObject LoadJSONObjectFromFile (Path pth)
     { String raw_s;
+      pth = ResolvePathInADesperateJavaWorld (pth);
       try
         { raw_s = Files.readString (pth); }
       catch (IOException ex)
@@ -280,6 +282,7 @@ public class PZApplet  extends PZMaesBundle
 
   public static JSONArray LoadJSONArrayFromFile (Path pth)
     { String raw_s;
+      pth = ResolvePathInADesperateJavaWorld (pth);
       try
         { raw_s = Files.readString (pth); }
       catch (IOException ex)
