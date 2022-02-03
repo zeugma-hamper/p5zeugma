@@ -8,9 +8,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="oscP5" level="project" />
+    <orderEntry type="library" name="json-20210307" level="project" />
     <orderEntry type="module" module-name="processing4-core" />
     <orderEntry type="module" module-name="java-zeugma" />
-    <orderEntry type="library" name="json-20210307" level="project" />
-    <orderEntry type="library" name="oscP5" level="project" />
   </component>
 </module>
