@@ -456,14 +456,21 @@ public class PZMaesBundle  extends PApplet
 
 
   public static PlatonicMaes.MaesAndHit ClosestAmongLiving (Vect frm, Vect aim)
+    { return ClosestAmongLiving (frm, aim, false); }
+
+  public static PlatonicMaes.MaesAndHit
+   ClosestAmongLiving (Vect frm, Vect aim, boolean restrict_to_orig_geom)
     { Vect cls_hit = null;
       PlatonicMaes ma, cls_maes = null;
       double cls_dst = -1.0;
       for (PZMaesBundle mb  :  all_maes_bundles)
         if ((ma = mb.its_maes) != null)
-          { Vect hit = Geom.RayRectIntersection (frm, aim, ma.loc.val,
+          { double use_w = restrict_to_orig_geom  ?  ma.wid.val  :  ma.cur_wid;
+            double use_h = restrict_to_orig_geom  ?  ma.hei.val  :  ma.cur_hei;
+
+            Vect hit = Geom.RayRectIntersection (frm, aim, ma.loc.val,
                                                  ma.ovr.val, ma.upp.val,
-                                                 ma.wid.val, ma.hei.val);
+                                                 use_w, use_h);
             if (hit != null)
               { double d = hit . Sub (frm) . AutoDot ();
                 if (cls_dst < 0.0  ||  d < cls_dst)
