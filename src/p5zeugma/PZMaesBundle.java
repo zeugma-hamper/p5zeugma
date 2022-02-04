@@ -380,6 +380,7 @@ public class PZMaesBundle  extends PApplet
       boolean changed_aspra = false;
 
       double orig_aspra = its_maes.wid.val / its_maes.hei.val;
+      double prev_pix_aspra = its_maes.cur_wid / its_maes.cur_hei;
       double pix_aspra = (double)this.width / (double)this.height;
 
       if (its_maes.cur_wid < 0.0  ||  its_maes.cur_hei < 0.0)
@@ -392,15 +393,20 @@ public class PZMaesBundle  extends PApplet
           its_maes.pixhei = this.height;
           PlatonicMaes.RefreshCameraFromMaesAndPixelWH (its_cammy, its_maes);
 
-          if (orig_aspra != pix_aspra)
+          if (pix_aspra != prev_pix_aspra)
             { changed_aspra = true;
+
               if (pix_aspra > orig_aspra)
                 { its_maes.cur_wid = its_maes.hei.val * pix_aspra;
                   its_maes.cur_hei = its_maes.hei.val;
                 }
-              else
+              else if (pix_aspra < orig_aspra)
                 { its_maes.cur_wid = its_maes.wid.val;
                   its_maes.cur_hei = its_maes.wid.val / pix_aspra;
+                }
+              else
+                { its_maes.cur_wid = its_maes.wid.val;
+                  its_maes.cur_hei = its_maes.hei.val;
                 }
             }
         }
@@ -432,7 +438,7 @@ public class PZMaesBundle  extends PApplet
           if (changed_aspra)
             { if (pix_aspra > orig_aspra)
                 aiw = aih * pix_aspra;
-              else
+              else if (pix_aspra < orig_aspra)
                 aih = aiw / pix_aspra;
             }
 
