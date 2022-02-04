@@ -92,7 +92,9 @@ public class Flamv  extends PZApplet
   public ImageSplatter stein, forster;
 
   public void setup ()
-    { PZVivify ();
+    { SetShouldPermitWindowResize (true);  // tragically, must go before PZViv...
+
+      PZVivify ();
 
       PlatonicMaes ma = MaesByName ("front");
 

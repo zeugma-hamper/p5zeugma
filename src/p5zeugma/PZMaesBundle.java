@@ -62,12 +62,12 @@ public class PZMaesBundle  extends PApplet
         PlatonicMaes ma = its_maes;
         if (ma == null)
             return;
-        Vect hit = ma.loc.val . Add (ma.ovr.val . Mul (ma.wid.val * xnrm))
-                              . Add (ma.upp.val . Mul (ma.hei.val * ynrm));
+        Vect hit = ma.loc.val . Add (ma.ovr.val . Mul (ma.cur_wid * xnrm))
+                              . Add (ma.upp.val . Mul (ma.cur_hei * ynrm));
         Vect n = ma.ovr.val . Cross (ma.upp.val) . Norm ();
+        Vect aim = n . Neg ();
         n . MulAcc (0.8 * ma.wid.val);
         Vect eye = hit . Add (n);
-        Vect aim = ma.upp.val . Cross (ma.ovr.val) . Norm ();
         int b = e . getButton ();
         long butt = 0;
         if (b != 0)
@@ -377,6 +377,34 @@ public class PZMaesBundle  extends PApplet
 
       PGraphicsOpenGL ogl = (PGraphicsOpenGL)g;
 
+      boolean changed_aspra = false;
+
+      double orig_aspra = its_maes.wid.val / its_maes.hei.val;
+      double pix_aspra = (double)this.width / (double)this.height;
+
+      if (its_maes.cur_wid < 0.0  ||  its_maes.cur_hei < 0.0)
+        { its_maes.cur_wid = its_maes.wid.val;
+          its_maes.cur_hei = its_maes.hei.val;
+        }
+
+      if (this.width != its_maes.pixwid  ||  this.height != its_maes.pixhei)
+        { its_maes.pixwid = this.width;
+          its_maes.pixhei = this.height;
+          PlatonicMaes.RefreshCameraFromMaesAndPixelWH (its_cammy, its_maes);
+
+          if (orig_aspra != pix_aspra)
+            { changed_aspra = true;
+              if (pix_aspra > orig_aspra)
+                { its_maes.cur_wid = its_maes.hei.val * pix_aspra;
+                  its_maes.cur_hei = its_maes.hei.val;
+                }
+              else
+                { its_maes.cur_wid = its_maes.wid.val;
+                  its_maes.cur_hei = its_maes.wid.val / pix_aspra;
+                }
+            }
+        }
+
       // the whole agglomeration of hoo-hah below -- i.e. everything
       // except for the "_ActuallyDraw()" line -- exists to allow
       // programs to specify an "as-if" pixel size that's different
@@ -393,19 +421,28 @@ public class PZMaesBundle  extends PApplet
       // will consequently function as if the rendering space had the
       // "as-if" pixel extent. Y'know?
 
-      its_maes.pixwid = this.width;
-      its_maes.pixhei = this.height;
 
-      boolean squirrel_away
+      boolean feign_pixel_size
         = (its_maes.as_if_pixwid > 0  &&  its_maes.as_if_pixhei > 0);
-      if (squirrel_away)
-        { this.width = (int)its_maes.as_if_pixwid;
-          this.height = (int)its_maes.as_if_pixhei;
+
+      if (feign_pixel_size)
+        { double aiw = (double)its_maes.as_if_pixwid;
+          double aih = (double)its_maes.as_if_pixhei;
+
+          if (changed_aspra)
+            { if (pix_aspra > orig_aspra)
+                aiw = aih * pix_aspra;
+              else
+                aih = aiw / pix_aspra;
+            }
+
+          this.width = (int)aiw;
+          this.height = (int)aih;
         }
 
       _ActuallyDraw (ogl, ratch);
 
-      if (squirrel_away)
+      if (feign_pixel_size)
         { this.width = (int)its_maes.pixwid;
           this.height = (int)its_maes.pixhei;
         }
