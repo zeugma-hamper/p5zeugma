@@ -3,7 +3,9 @@ package p5zeugma;
 
 
 import zeugma.Vect;
+import zeugma.ZeColor;
 import zeugma.Matrix44;
+import zeugma.ZoftThing;
 
 import processing.core.PMatrix;
 import processing.core.PMatrix3D;
@@ -61,5 +63,51 @@ public class PZ
       if (mbun != null)
         return mbun . ActualToIdealPixelRatio ();
       return 1.0;
+    }
+
+//
+///
+//
+
+  public static void fill (PGraphicsOpenGL g, ZoftThing <ZeColor> cz)
+    { PZ.fill (g, (cz != null) ? cz.val : ZeColor.white); }
+
+  public static void fill (PGraphicsOpenGL g, ZeColor c)
+    { // ZeColor adj = CumuAdjColor ();
+      g . fill (255.0f * c.r,
+                255.0f * c.g,
+                255.0f * c.b,
+                255.0f * c.a);
+    }
+
+  public static void stroke (PGraphicsOpenGL g, ZoftThing <ZeColor> cz)
+    { PZ.stroke (g, (cz != null) ? cz.val : ZeColor.white); }
+
+  public static void stroke (PGraphicsOpenGL g, ZeColor c)
+    { //ZeColor adj = CumuAdjColor ();
+      g . stroke (255.0f * c.r,
+                  255.0f * c.g,
+                  255.0f * c.b,
+                  255.0f * c.a);
+    }
+
+  public static void tint (PGraphicsOpenGL g, ZoftThing <ZeColor> cz)
+    { PZ.tint (g, (cz != null) ? cz.val : ZeColor.white); }
+
+  public static void tint (PGraphicsOpenGL g, ZeColor c)
+    { //ZeColor adj = CumuAdjColor ();
+      g . tint (255.0f * c.r,
+                255.0f * c.g,
+                255.0f * c.b,
+                255.0f * c.a);
+    }
+
+
+  public static void point (PGraphicsOpenGL g, Vect p)
+    { g . point ((float)p.x, (float)p.y, (float)p.z); }
+
+  public static void line (PGraphicsOpenGL g, Vect p1, Vect p2)
+    { g . line ((float)p1.x, (float)p1.y, (float)p1.z,
+                (float)p2.x, (float)p2.y, (float)p2.z);
     }
 }

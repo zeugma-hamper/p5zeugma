@@ -549,13 +549,13 @@ public class PZMaesBundle  extends PApplet
             double rphei = PZMaesBundle.default_win_hei;
 
             if (maes.requested_pixwid > 0  &&  maes.requested_pixhei > 0)
-              { rpwid = maes.requested_pixwid;
-                rphei = maes.requested_pixhei;
+              { rpwid = maes . RequestedPixelWidth ();
+                rphei = maes . RequestedPixelHeight ();
               }
 
             if (maes.as_if_pixwid > 0  &&  maes.as_if_pixhei > 0)
-              { ipwid = maes.as_if_pixwid;
-                iphei = maes.as_if_pixhei;
+              { ipwid = maes . AsIfPixelWidth ();
+                iphei = maes . AsIfPixelHeight ();
               }
             else
               { ipwid = rpwid;  iphei = rphei; }
@@ -563,17 +563,41 @@ public class PZMaesBundle  extends PApplet
             mbun . SetActualToIdealPixelRatio (rpwid / ipwid);
 
             GrapplerPile gpile = bplate . AssuredGrapplerPile ();
-            TrGrappler trg = new TrGrappler (-0.5 * ipwid, -0.5 * iphei, 0.0);
-            // ScGrappler scg = new ScGrappler (maes . Width () / rpwid);
-            ScGrappler scg = new ScGrappler (maes . Width () / ipwid);
 
-            gpile . InsertGrappler (trg, 0);
-            gpile . InsertGrappler (new ScGrappler (1.0, -1.0, 1.0), 1);
-            gpile . InsertGrappler (scg, 2);
+            Vect transv = new Vect (-0.5 * ipwid, -0.5 * iphei, 0.0);
+            TrGrappler trg = (TrGrappler) gpile . FindGrappler ("bp-trans");
+            if (trg == null)
+              { trg = new TrGrappler (transv);
+                trg . SetName ("bp-trans");
+                gpile . InsertGrappler (trg, 0);
+              }
+            else
+              trg . SetTranslation (transv);
+
+            ScGrappler flg = (ScGrappler) gpile . FindGrappler ("bp-flipy");
+            if (flg == null)
+              { flg = new ScGrappler (1.0, -1.0, 1.0);
+                flg . SetName ("bp-flipy");
+                gpile . InsertGrappler (flg, 1);
+              }
+
+            Vect scalev = new Vect (maes . CurWidth () / ipwid);
+            ScGrappler scg = (ScGrappler) gpile . FindGrappler ("bp-scale");
+            if (scg == null)
+              { scg = new ScGrappler (scalev);
+                scg . SetName ("bp-scale");
+                gpile . InsertGrappler (scg, 2);
+              }
+            else
+              scg . SetScale (scalev);
           }
     }
 
-
+  public static void ReviseBackplateAdaptationForP5Coords (PlatonicMaes maes,
+                                                           PZMaesBundle mbun)
+    { if (mbun != null)
+        AdaptBackplateForP5Coords (mbun);
+    }
 
 //
 /// following: some conveni-enttes.

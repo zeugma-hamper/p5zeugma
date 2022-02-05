@@ -7,6 +7,7 @@
 import p5zeugma.PZApplet;
 import p5zeugma.PZMaesBundle;
 import p5zeugma.PZSpaceThing;
+import p5zeugma.PZ;
 
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -167,7 +168,11 @@ public class Flamv  extends PZApplet
 
       PZMaesBundle mbun = MaesBundleByMaesName ("left");
       if (mbun != null)
-        mbun . AppendMaesGeomChangeVoyeur (Flamv::MaesPalpingYelper);
+        { PZMaesBundle . AdaptBackplateForP5Coords (mbun);
+          mbun . AppendMaesGeomChangeVoyeur (Flamv::MaesPalpingYelper);
+          mbun . AppendMaesGeomChangeVoyeur
+            (PZMaesBundle::ReviseBackplateAdaptationForP5Coords);
+        }
 
 //    IronLung pulmo = IronLung.GlobalByName ("omni-lung");
 //    Eructathan e1 = new Eructathan ("Blarvles");
@@ -196,15 +201,25 @@ public class Flamv  extends PZApplet
       g . strokeWeight (0.5f);
       g . stroke (255, 20);
 
-      Vect cc[] = { new Vect (sp_width, sp_height, 0.0) . Mul (0.5),
-                    new Vect (sp_width, -sp_height, 0.0) . Mul (0.5),
-                    new Vect (-sp_width, -sp_height, 0.0) . Mul (0.5),
-                    new Vect (-sp_width, sp_height, 0.0) . Mul (0.5) };
+      // Vect cc[] = { new Vect (sp_width, sp_height, 0.0) . Mul (0.5),
+      //               new Vect (sp_width, -sp_height, 0.0) . Mul (0.5),
+      //               new Vect (-sp_width, -sp_height, 0.0) . Mul (0.5),
+      //               new Vect (-sp_width, sp_height, 0.0) . Mul (0.5) };
+      //
+      // above: the version for reg'lar coords; below, processingized coords.
+      //
+      double rgt = emm.as_if_pixwid - 1.0;
+      double bot = emm.as_if_pixhei - 1.0;
+      Vect cc[] = { new Vect (0.0, 0.0, 0.0),
+                    new Vect (rgt, 0.0, 0.0),
+                    new Vect (0.0, bot, 0.0),
+                    new Vect (rgt, bot, 0.0) };
+
+      Vect cnt = new Vect (0.5 * rgt, 0.5 * bot, 0.0);
 
       for (Vect c  :  cc)
-        { Vect b = c . Mul (0.15);
-          g . line ((float)b.x, (float)b.y, (float)b.z,
-                    (float)c.x, (float)c.y, (float)c.z);
+        { Vect b = cnt . Add (c . Sub (cnt) . Mul (0.15));
+          PZ.line (g, b, c);
         }
     }
 

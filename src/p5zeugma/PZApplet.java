@@ -344,18 +344,22 @@ public class PZApplet  extends PZMaesBundle
           ma.loc = new ZoftVect (ConjureVect (ob . getJSONArray ("location")));
           ma.ovr = new ZoftVect (ConjureVect (ob . getJSONArray ("over")));
           ma.upp = new ZoftVect (ConjureVect (ob . getJSONArray ("up")));
-          ma.wid = new ZoftFloat (ob . getDouble ("width"));
-          ma.hei = new ZoftFloat (ob . getDouble ("height"));
+          ma.wid = new ZoftFloat (ma.cur_wid = ob . getDouble ("width"));
+          ma.hei = new ZoftFloat (ma.cur_hei = ob . getDouble ("height"));
 
           if (! (ob . isNull ("as-if-pixwid")
                  ||  ob . isNull ("as-if-pixhei")))
             { ma.as_if_pixwid = ob . getLong ("as-if-pixwid");
               ma.as_if_pixhei = ob . getLong ("as-if-pixhei");
+              ma.cur_as_if_pwid = ma.as_if_pixwid;
+              ma.cur_as_if_phei = ma.as_if_pixhei;
             }
           else if (! (ob . isNull ("ideal-pixwid")  // a bit o' back-compat
                       ||  ob . isNull ("ideal-pixhei")))
             { ma.as_if_pixwid = ob . getLong ("ideal-pixwid");
               ma.as_if_pixhei = ob . getLong ("ideal-pixhei");
+              ma.cur_as_if_pwid = ma.as_if_pixwid;
+              ma.cur_as_if_phei = ma.as_if_pixhei;
             }
 
           if (! (ob . isNull ("requested-pixwid")
