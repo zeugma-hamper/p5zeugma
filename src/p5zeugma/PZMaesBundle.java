@@ -532,6 +532,50 @@ public class PZMaesBundle  extends PApplet
     }
 
 //
+/// getting in the mood for Processing-style coordinates.
+//
+
+  public static void AdaptBackplateForP5Coords (PZMaesBundle mbun)
+    { if (mbun == null)
+        return;
+
+      PlatonicMaes maes;
+      PZAlignifer bplate;
+
+      if ((bplate = mbun . ItsBackplate ())  !=  null)
+        if ((maes = mbun . ItsMaes ())  !=  null)
+          { double ipwid, iphei;
+            double rpwid = PZMaesBundle.default_win_wid;
+            double rphei = PZMaesBundle.default_win_hei;
+
+            if (maes.requested_pixwid > 0  &&  maes.requested_pixhei > 0)
+              { rpwid = maes.requested_pixwid;
+                rphei = maes.requested_pixhei;
+              }
+
+            if (maes.as_if_pixwid > 0  &&  maes.as_if_pixhei > 0)
+              { ipwid = maes.as_if_pixwid;
+                iphei = maes.as_if_pixhei;
+              }
+            else
+              { ipwid = rpwid;  iphei = rphei; }
+
+            mbun . SetActualToIdealPixelRatio (rpwid / ipwid);
+
+            GrapplerPile gpile = bplate . AssuredGrapplerPile ();
+            TrGrappler trg = new TrGrappler (-0.5 * ipwid, -0.5 * iphei, 0.0);
+            // ScGrappler scg = new ScGrappler (maes . Width () / rpwid);
+            ScGrappler scg = new ScGrappler (maes . Width () / ipwid);
+
+            gpile . InsertGrappler (trg, 0);
+            gpile . InsertGrappler (new ScGrappler (1.0, -1.0, 1.0), 1);
+            gpile . InsertGrappler (scg, 2);
+          }
+    }
+
+
+
+//
 /// following: some conveni-enttes.
 //
   public static PMatrix3D ToP (Matrix44 m)
