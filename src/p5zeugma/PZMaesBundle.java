@@ -17,6 +17,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import java.util.function.BiConsumer;
+
 
 public class PZMaesBundle  extends PApplet
 { public PlatonicMaes its_maes;
@@ -32,6 +34,9 @@ public class PZMaesBundle  extends PApplet
   public int display_id;
 
   public long last_limned_ratchet = -1;
+
+  public ArrayList <BiConsumer <PlatonicMaes, PZMaesBundle>>
+    maes_geom_change_voyeurs;
 
   public static boolean permit_window_resize = false;
 
@@ -125,6 +130,8 @@ public class PZMaesBundle  extends PApplet
       der_leiter = boese_leiter;
       vital_interpreter = new DialectCatcher ();
 
+      maes_geom_change_voyeurs = new ArrayList <> ();
+
       display_id = dspl_no;
 
       registerMethod ("mouseEvent", vital_interpreter);
@@ -200,6 +207,29 @@ public class PZMaesBundle  extends PApplet
     { actual_to_ideal_pixel_ratio = atipr; }
 
 
+  public int NumMaesGeomChangeVoyeurs ()
+    { return maes_geom_change_voyeurs . size (); }
+
+  public BiConsumer <PlatonicMaes, PZMaesBundle>
+   NthMaesGeomChangeVoyeur (int ind)
+    { if (ind < 0  ||  ind >= maes_geom_change_voyeurs . size ())
+        return null;
+      return maes_geom_change_voyeurs . get (ind);
+    }
+
+  public boolean AppendMaesGeomChangeVoyeur (BiConsumer <PlatonicMaes,
+                                                         PZMaesBundle> mgcv)
+    { if (maes_geom_change_voyeurs . indexOf (mgcv)  >=  0)
+        return false;
+      return maes_geom_change_voyeurs . add (mgcv);
+    }
+
+  public boolean RemoveMaesGeomChangeVoyeur (BiConsumer <PlatonicMaes,
+                                                         PZMaesBundle> mgcv)
+    { return maes_geom_change_voyeurs . remove (mgcv); }
+
+
+
   public void FullscreenOnDisplay (int d)
     { display_id = d; }
 
@@ -263,8 +293,8 @@ public class PZMaesBundle  extends PApplet
           der_leiter.height = this.height;
 
           der_leiter. PZDraw (ogl, this,
-                              (float)(its_maes.wid . Val ()),
-                              (float)(its_maes.hei . Val ()));
+                              (float)(its_maes.cur_wid),
+                              (float)(its_maes.cur_hei));
 
           der_leiter.width = hold_w;
           der_leiter.height = hold_h;
@@ -364,6 +394,53 @@ public class PZMaesBundle  extends PApplet
     }
 
 
+  public void ReactToCanvasResize (boolean feign_pixel_size)
+    { PlatonicMaes m = its_maes;  // for breivty, sanity
+
+      double orig_aspra = m.wid.val / m.hei.val;
+      double prev_pix_aspra = m.cur_wid / m.cur_hei;
+      double pix_aspra = (double)this.width / (double)this.height;
+
+      m.pixwid = this.width;
+      m.pixhei = this.height;
+      PlatonicMaes.RefreshCameraFromMaesAndPixelWH (its_cammy, its_maes);
+
+      if (pix_aspra != prev_pix_aspra)
+        { if (pix_aspra > orig_aspra)
+            { m.cur_wid = m.hei.val * pix_aspra;
+              m.cur_hei = m.hei.val;
+            }
+          else if (pix_aspra < orig_aspra)
+            { m.cur_wid = m.wid.val;
+              m.cur_hei = m.wid.val / pix_aspra;
+            }
+          else
+            { m.cur_wid = m.wid.val;
+              m.cur_hei = m.hei.val;
+            }
+        }
+
+      if (feign_pixel_size)
+        { if (pix_aspra > orig_aspra)
+            { m.cur_as_if_pwid = (long)((double)m.as_if_pixhei * pix_aspra);
+              m.cur_as_if_phei = m.as_if_pixhei;
+            }
+          else if (pix_aspra < orig_aspra)
+            { m.cur_as_if_pwid = m.as_if_pixwid;
+              m.cur_as_if_phei = (long)((double)m.as_if_pixwid / pix_aspra);
+            }
+          else
+            { m.cur_as_if_pwid = m.as_if_pixwid;
+              m.cur_as_if_phei = m.as_if_pixhei;
+            }
+        }
+
+      for (BiConsumer <PlatonicMaes, PZMaesBundle> mgcv
+             :  maes_geom_change_voyeurs)
+        mgcv . accept (m, this);
+    }
+
+
   public void draw ()
     { PGraphics g = getGraphics ();
       if (! (g instanceof PGraphicsOpenGL)
@@ -376,46 +453,29 @@ public class PZMaesBundle  extends PApplet
         ratch = der_leiter.global_looper . RecentestRatchet ();
 
       PGraphicsOpenGL ogl = (PGraphicsOpenGL)g;
+      PlatonicMaes m = its_maes;  // de-prolix
 
-      boolean changed_aspra = false;
-
-      double orig_aspra = its_maes.wid.val / its_maes.hei.val;
-      double prev_pix_aspra = its_maes.cur_wid / its_maes.cur_hei;
-      double pix_aspra = (double)this.width / (double)this.height;
-
-      if (its_maes.cur_wid < 0.0  ||  its_maes.cur_hei < 0.0)
-        { its_maes.cur_wid = its_maes.wid.val;
-          its_maes.cur_hei = its_maes.hei.val;
+      if (m.cur_wid < 0.0  ||  m.cur_hei < 0.0)
+        { m.cur_wid = m.wid.val;
+          m.cur_hei = m.hei.val;
         }
 
-      if (this.width != its_maes.pixwid  ||  this.height != its_maes.pixhei)
-        { its_maes.pixwid = this.width;
-          its_maes.pixhei = this.height;
-          PlatonicMaes.RefreshCameraFromMaesAndPixelWH (its_cammy, its_maes);
+      boolean feign_pixel_size
+        = (m.as_if_pixwid > 0  &&  m.as_if_pixhei > 0);
 
-          if (pix_aspra != prev_pix_aspra)
-            { changed_aspra = true;
-
-              if (pix_aspra > orig_aspra)
-                { its_maes.cur_wid = its_maes.hei.val * pix_aspra;
-                  its_maes.cur_hei = its_maes.hei.val;
-                }
-              else if (pix_aspra < orig_aspra)
-                { its_maes.cur_wid = its_maes.wid.val;
-                  its_maes.cur_hei = its_maes.wid.val / pix_aspra;
-                }
-              else
-                { its_maes.cur_wid = its_maes.wid.val;
-                  its_maes.cur_hei = its_maes.hei.val;
-                }
-            }
+      if (feign_pixel_size  &&  (m.cur_as_if_pwid < 0.0
+                                 ||  m.cur_as_if_phei < 0.0))
+        { m.cur_as_if_pwid = m.as_if_pixwid;
+          m.cur_as_if_phei = m.as_if_pixhei;
         }
 
-      // the whole agglomeration of hoo-hah below -- i.e. everything
-      // except for the "_ActuallyDraw()" line -- exists to allow
-      // programs to specify an "as-if" pixel size that's different
-      // from the window's (or, more generally, rendering region's)
-      // actual pixular size.
+      if (this.width != m.pixwid  ||  this.height != m.pixhei)
+        ReactToCanvasResize (feign_pixel_size);
+
+      // the hoo-hah below bookending the "_ActuallyDraw()" line
+      // allows programs to specify an "as-if" pixel size that's
+      // different from the window's (or, more generally, rendering
+      // region's) actual pixular size.
       //
       // very specifically, by the time execution reaches this point,
       // the surrounding Processing (tm) machinery has already used
@@ -428,29 +488,16 @@ public class PZMaesBundle  extends PApplet
       // "as-if" pixel extent. Y'know?
 
 
-      boolean feign_pixel_size
-        = (its_maes.as_if_pixwid > 0  &&  its_maes.as_if_pixhei > 0);
-
       if (feign_pixel_size)
-        { double aiw = (double)its_maes.as_if_pixwid;
-          double aih = (double)its_maes.as_if_pixhei;
-
-          if (changed_aspra)
-            { if (pix_aspra > orig_aspra)
-                aiw = aih * pix_aspra;
-              else if (pix_aspra < orig_aspra)
-                aih = aiw / pix_aspra;
-            }
-
-          this.width = (int)aiw;
-          this.height = (int)aih;
+        { this.width = (int)m.cur_as_if_pwid;
+          this.height = (int)m.cur_as_if_phei;
         }
 
       _ActuallyDraw (ogl, ratch);
 
       if (feign_pixel_size)
-        { this.width = (int)its_maes.pixwid;
-          this.height = (int)its_maes.pixhei;
+        { this.width = (int)m.pixwid;
+          this.height = (int)m.pixhei;
         }
     }
 

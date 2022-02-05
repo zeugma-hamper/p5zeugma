@@ -165,10 +165,23 @@ public class Flamv  extends PZApplet
       if (ma != null)
         ma . InstallAdjColorZoft (sc);
 
+      PZMaesBundle mbun = MaesBundleByMaesName ("left");
+      if (mbun != null)
+        mbun . AppendMaesGeomChangeVoyeur (Flamv::MaesPalpingYelper);
+
 //    IronLung pulmo = IronLung.GlobalByName ("omni-lung");
 //    Eructathan e1 = new Eructathan ("Blarvles");
 //    pulmo . AppendBreathee (e1);
       well_and_truly_ready = true;
+    }
+
+  static void MaesPalpingYelper (PlatonicMaes ma, PZMaesBundle mbun)
+    { if (ma . Name () . equals ("left"))
+        System.out.printf ("side wall maes wrenched around to [%d %d]...\n",
+                           ma.cur_as_if_pwid, ma.cur_as_if_phei);
+      else
+        System.out.printf ("maes <%s> warped thus: [%f %f]...\n",
+                           ma . Name (), ma.cur_wid, ma.cur_hei);
     }
 
 
