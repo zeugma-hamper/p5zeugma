@@ -236,10 +236,10 @@ public class PZApplet  extends PZMaesBundle
   public static Path ResolvePathInADesperateJavaWorld (Path pth)
     { if (pth == null)
         return pth;
-      String fname = pth . getFileName () . toString ();
-      if (! Files.exists (pth))
+      if (! Files.exists (pth)  &&  ! pth . isAbsolute ())
         { try
-            { // look for things relative to the 'ole jar file
+            { String fname = pth . toString ();
+              // look for things relative to the 'ole jar file
               // from which PZApplet has emerged
               URL classUrl = PZApplet.class . getProtectionDomain ()
                 . getCodeSource () . getLocation ();
