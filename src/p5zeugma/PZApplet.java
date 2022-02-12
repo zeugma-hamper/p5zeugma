@@ -362,7 +362,12 @@ public class PZApplet  extends PZMaesBundle
               ma.cur_as_if_phei = ma.as_if_pixhei;
             }
 
-          if (! (ob . isNull ("requested-pixwid")
+          if (! (ob . isNull ("pixwid")
+                 ||  ob . isNull ("pixhei")))
+            { ma.requested_pixwid = ob . getLong ("pixwid");
+              ma.requested_pixhei = ob . getLong ("pixhei");
+            }
+          else if (! (ob . isNull ("requested-pixwid")
                  ||  ob . isNull ("requested-pixhei")))
             { ma.requested_pixwid = ob . getLong ("requested-pixwid");
               ma.requested_pixhei = ob . getLong ("requested-pixhei");
