@@ -206,10 +206,10 @@ public class PZMaesBundle  extends PApplet
       return null;
     }
 
-  public double ActualToIdealPixelRatio ()
+  public double ActualToAsIfPixelRatio ()
     { return actual_to_ideal_pixel_ratio; }
 
-  public void SetActualToIdealPixelRatio (double atipr)
+  public void SetActualToAsIfPixelRatio (double atipr)
     { actual_to_ideal_pixel_ratio = atipr; }
 
 
@@ -464,6 +464,14 @@ public class PZMaesBundle  extends PApplet
             { m.cur_as_if_pwid = m.as_if_pixwid;
               m.cur_as_if_phei = m.as_if_pixhei;
             }
+          SetActualToAsIfPixelRatio ((double)m.pixwid
+                                     / (double)m.cur_as_if_pwid);
+          m.cur_as_if_toplef
+            . Set (0.5 * (double)(m.as_if_pixwid - m.cur_as_if_pwid),
+                   0.5 * (double)(m.as_if_pixhei - m.cur_as_if_phei));
+// System.out.printf("hey: new as-if-w/h: %d %d; new toplef: [%f %f].\n",
+//                   m.cur_as_if_pwid, m.cur_as_if_phei,
+//                   m.cur_as_if_toplef.x, m.cur_as_if_toplef.y);
         }
 
       for (BiConsumer <PlatonicMaes, PZMaesBundle> mgcv
@@ -591,7 +599,7 @@ public class PZMaesBundle  extends PApplet
             else
               { ipwid = rpwid;  iphei = rphei; }
 
-            mbun . SetActualToIdealPixelRatio (rpwid / ipwid);
+            mbun . SetActualToAsIfPixelRatio (rpwid / ipwid);
 
             GrapplerPile gpile = bplate . AssuredGrapplerPile ();
 

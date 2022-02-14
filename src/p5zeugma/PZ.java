@@ -6,6 +6,7 @@ import zeugma.Vect;
 import zeugma.ZeColor;
 import zeugma.Matrix44;
 import zeugma.ZoftThing;
+import zeugma.PlatonicMaes;
 
 import processing.core.PMatrix;
 import processing.core.PMatrix3D;
@@ -58,10 +59,17 @@ public class PZ
       return null;
     }
 
-  public static double ActualToIdealPixelRatioFor (PGraphics g)
+  public static PlatonicMaes MaesByPGraphics (PGraphics g)
+    { for (PZMaesBundle mbun  :  PZMaesBundle.AllMaesBundles ())
+        if (g  ==  mbun.most_recent_pgraphics)
+          return mbun.its_maes;
+      return null;
+    }
+
+  public static double ActualToAsIfPixelRatioFor (PGraphics g)
     { PZMaesBundle mbun = MaesBundleByPGraphics (g);
       if (mbun != null)
-        return mbun . ActualToIdealPixelRatio ();
+        return mbun . ActualToAsIfPixelRatio ();
       return 1.0;
     }
 
