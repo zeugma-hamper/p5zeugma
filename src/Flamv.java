@@ -15,6 +15,8 @@ import processing.opengl.PGraphicsOpenGL;
 
 import zeugma.*;
 
+import java.util.HashMap;
+
 
 class ShimmyCrate  extends PZSpaceThing
 { String mess;
@@ -85,12 +87,14 @@ class Soikles  extends PZSpaceThing
 
 
 public class Flamv  extends PZApplet
+                    implements ZESpatialPhagy
 { public Soikles soiks;
   public SinuVect diago;
   public ShimmyCrate topshim;
   public PZSpaceThing gaylord, omnibus;
   public PZSpaceThing wallifier;
   public ImageSplatter stein, forster;
+  public HashMap <String, Vect> whackpt_by_maesname;
 
   public void setup ()
     { SetShouldPermitWindowResize (true);  // tragically, must go before PZViv...
@@ -144,6 +148,7 @@ public class Flamv  extends PZApplet
 
       this.spaque . AppendPhage (stein);
       this.spaque . AppendPhage (forster);
+      this.spaque . AppendPhage (this);
 
       this.yowque . AppendPhage (stein);
       this.yowque . AppendPhage (forster);
@@ -177,6 +182,9 @@ public class Flamv  extends PZApplet
 //    IronLung pulmo = IronLung.GlobalByName ("omni-lung");
 //    Eructathan e1 = new Eructathan ("Blarvles");
 //    pulmo . AppendBreathee (e1);
+
+      whackpt_by_maesname = new HashMap <> ();
+
       well_and_truly_ready = true;
     }
 
@@ -190,12 +198,53 @@ public class Flamv  extends PZApplet
     }
 
 
+  public long ZESpatialHarden (ZESpatialHardenEvent e)
+    { PlatonicMaes.MaesAndHit mah
+        = PZMaesBundle.ClosestAmongLiving (e.loc, e.aim);
+      if (mah == null)
+        return 0;
+
+      PZMaesBundle mbun = PZMaesBundle.MaesBundleByMaes (mah.maes);
+      if (mbun == null)
+        return 0;
+
+      Vect v = mah.hit;
+      System.out.printf ("whackage at screen [%f %f %f]...\n",
+                         mbun.screenX ((float)v.x, (float)v.y, (float)v.z),
+                         mbun.screenY ((float)v.x, (float)v.y, (float)v.z),
+                         mbun.screenZ ((float)v.x, (float)v.y, (float)v.z));
+      whackpt_by_maesname . put (mah.maes . Name (), v);
+
+      Vect vv = mbun . TransformWorldToScreen (v);
+      System.out.printf ("(... while the new hotness says [%f %f %f])\n",
+                         vv.x, vv.y, vv.z);
+
+      return 0;
+    }
+
+
   public void PZDraw (PGraphicsOpenGL g, PZMaesBundle mbun,
                       float sp_width, float sp_height)
     { PlatonicMaes emm;
       if (mbun == null
-          ||  (emm = mbun . ItsMaes ()) == null
-          ||  ! emm . Name () . equals ("left"))
+          ||  (emm = mbun . ItsMaes ()) == null)
+        return;
+
+      String nm = emm . Name ();
+      Vect v = whackpt_by_maesname . get (nm);
+      if (v != null)
+        { System.out.printf ("BUT: screen whackage (maes %s) at [%f %f %f]...\n",
+                             nm,
+                             mbun.screenX ((float)v.x, (float)v.y, (float)v.z),
+                             mbun.screenY ((float)v.x, (float)v.y, (float)v.z),
+                             mbun.screenZ ((float)v.x, (float)v.y, (float)v.z));
+          Vect vv = mbun . TransformWorldToScreen (v);
+          System.out.printf ("<< while novo dork has it thus: [%f %f %f] >>\n",
+                             vv.x, vv.y, vv.z);
+          whackpt_by_maesname . remove (nm);
+        }
+
+      if (! emm . Name () . equals ("left"))
         return;
 
       g . strokeWeight (0.5f);
