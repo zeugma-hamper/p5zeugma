@@ -53,6 +53,10 @@ public class PZApplet  extends PZMaesBundle
     { public void pre ()
         { if (global_looper != null)
             global_looper. OnceMoreUntoTheBreath ();
+
+          for (PZMaesBundle mbun  :  PZMaesBundle.AllMaesBundles ())
+            if (mbun != null)
+              mbun . FreshenInnards ();
         }
 
       public void oscEvent (OscMessage mess)

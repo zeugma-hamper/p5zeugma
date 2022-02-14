@@ -27,6 +27,9 @@ public class PZMaesBundle  extends PApplet
   public PZApplet der_leiter;
   public DialectCatcher vital_interpreter;
 
+  public Matrix44 view_mat;
+  public Matrix44 proj_mat;
+
   public PGraphics most_recent_pgraphics = null;
 
   public double actual_to_ideal_pixel_ratio = 1.0;
@@ -129,6 +132,9 @@ public class PZMaesBundle  extends PApplet
       its_backplate = new PZAlignifer();
       der_leiter = boese_leiter;
       vital_interpreter = new DialectCatcher ();
+
+      view_mat = new Matrix44 ();
+      proj_mat = new Matrix44 ();
 
       maes_geom_change_voyeurs = new ArrayList <> ();
 
@@ -336,6 +342,31 @@ public class PZMaesBundle  extends PApplet
     { surface . setTitle ("little billy");
       //
       surface . setResizable (permit_window_resize);
+    }
+
+  public Vect TransformWorldToScreen (Vect wrl)
+    { if (wrl == null  ||  its_cammy == null  ||  its_maes == null)
+        return null;
+      Vect outv = view_mat . TransformVect (wrl);
+      proj_mat . TransformVectInPlace (outv);
+
+      if (its_cammy . IsProjectionTypePerspective ())
+        if (outv.z != 0.0)
+          outv . MulAcc (1.0 / outv.z);
+        else
+          outv.x = outv.y = Double.MAX_VALUE;
+
+      outv.x = (outv.x + 0.5) * (double)its_maes.pixwid;
+      outv.y = (0.5 - outv.y) * (double)its_maes.pixhei;   // inverted y; blech.
+      outv.z = its_cammy . ViewDist ();
+      return outv;
+    }
+
+  public void FreshenInnards ()
+    { if (its_cammy != null)
+        { its_cammy . LoadViewMatrixInto (view_mat);
+          its_cammy . LoadProjectionMatrixInto (proj_mat);
+        }
     }
 
   protected void _ActuallyDraw (PGraphicsOpenGL ogl, long ratch)
