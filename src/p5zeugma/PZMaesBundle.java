@@ -360,8 +360,8 @@ public class PZMaesBundle  extends PApplet
         else
           outv.x = outv.y = Double.MAX_VALUE;
 
-      outv.x = (outv.x + 0.5) * (double)its_maes.pixwid;
-      outv.y = (0.5 - outv.y) * (double)its_maes.pixhei;   // inverted y; blech.
+      outv.x = 0.5 * (outv.x + 1.0) * (double)its_maes.pixwid;
+      outv.y = 0.5 * (1.0 - outv.y) * (double)its_maes.pixhei;   // inverted y.
       outv.z = its_cammy . ViewDist ();
       return outv;
     }
