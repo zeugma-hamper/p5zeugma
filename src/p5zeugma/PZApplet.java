@@ -377,6 +377,11 @@ public class PZApplet  extends PZMaesBundle
               ma.requested_pixhei = ob . getLong ("requested-pixhei");
             }
 
+          if (! ob . isNull ("window-title"))
+            { PZMaesBundle.init_wintitle_by_maesname
+                . put (ma . Name (), ob . getString ("window-title"));
+            }
+
           maeses . add (ma);
 println(q + "th maes is thus: " + ma);
         }
@@ -448,7 +453,10 @@ println(q + "th maes is thus: " + ma);
         }
 
       surface . setResizable (permit_window_resize);
-      // the line foregoing also appears in children windows' setup();
+      String wttl = init_wintitle_by_maesname . get (its_maes . Name ());
+      if (wttl != null)
+        surface . setTitle (wttl);
+      // the lines foregoing also appear in children windows' setup();
       // but if we don't do it here it won't be enacted for this
       // most primary of all windows.
 

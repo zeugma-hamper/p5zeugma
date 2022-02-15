@@ -43,6 +43,9 @@ public class PZMaesBundle  extends PApplet
 
   public static boolean permit_window_resize = false;
 
+  public static HashMap <String, String> init_wintitle_by_maesname
+    = new HashMap <> ();
+
   public boolean shunt_raw_key_events_to_der_leiter = false;
   public static boolean neutralize_esc_key_armageddon = false;
 
@@ -339,7 +342,8 @@ public class PZMaesBundle  extends PApplet
     }
 
   public void setup ()
-    { surface . setTitle ("little billy");
+    { String wttl = init_wintitle_by_maesname . get (its_maes . Name ());
+      surface . setTitle (wttl != null  ?  wttl  :  "little billy");
       //
       surface . setResizable (permit_window_resize);
     }
