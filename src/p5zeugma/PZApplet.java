@@ -91,7 +91,8 @@ public class PZApplet  extends PZMaesBundle
             System.out.println
               ("Merde! raw_to_room_direc_mat not yet loaded: thread kuso.");
 
-          spaque . InterpretRawWandish (wname, butts, pos, aim, ovr);
+          spaque . InterpretRawWandish (wname, butts, null, pos, aim, ovr);
+          // see, the null foregoing is the 'caress events' argument.
         }
     }
 //

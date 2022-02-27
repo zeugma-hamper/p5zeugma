@@ -65,7 +65,7 @@ public class PZMaesBundle  extends PApplet
           { case MouseEvent.CLICK:
             case MouseEvent.ENTER:
             case MouseEvent.EXIT:
-            case MouseEvent.WHEEL:
+//            case MouseEvent.WHEEL:
               return;
           }
         double xnrm = (double)(e . getX ()) / (double)width  -  0.5;  // ouch, to say the least.
@@ -79,22 +79,35 @@ public class PZMaesBundle  extends PApplet
         Vect aim = n . Neg ();
         n . MulAcc (0.8 * ma.wid.val);
         Vect eye = hit . Add (n);
-        int b = e . getButton ();
         long butt = 0;
-        if (b != 0)
-          butt |= ((b == PConstants.LEFT)  ?  (0x01 << 0)
-                   :  ((b == PConstants.CENTER)  ?  (0x01 << 1)
-                       :  ((b == PConstants.RIGHT)  ?  (0x01 << 2)  :  0)));
-        // next in the unending onslaught of oy:
-        // (this is because upstream the 'RELEASE' event has the 'button' var
-        // set to the button that's being released, but zeugma triggers on the
-        // change of a bit in the overall button bitfield.
+        java.util.List <LongAndVect> crss_lst = null;  // thanks so much, awt
+
+        // do the following whether the event's PRESS or not (so that the
+        // button bitfields persist until a release)... unless the event
+        // is WHEEL, in which case the event's 'button' field is set to,
+        // er, 37; and thus we skip.)
+        if (tion != MouseEvent.WHEEL)
+          { int b = e . getButton ();
+            if (b != 0)
+              butt |= ((b == PConstants.LEFT)  ?  (0x01 << 0)
+                       :  ((b == PConstants.CENTER)  ?  (0x01 << 1)
+                           :  ((b == PConstants.RIGHT)  ?  (0x01 << 2)  :  0)));
+          }
+
+        // upstream, the RELEASE event has the 'button' var set to the
+        // button that's being released, but zeugma triggers on the change
+        // of a bit in the overall button bitfield.
         if (tion == MouseEvent.RELEASE)
           butt = 0;
+        else if (tion == MouseEvent.WHEEL)
+          (crss_lst = new ArrayList <> ())
+            . add (new LongAndVect (0, new Vect (0.0,
+                                                 (double)e . getCount (),
+                                                 0.0)));
         // now, meanwhile: how bad is this really, making
         // the mouse event masquerade as wand input?
-        der_leiter.spaque . InterpretRawWandish ("mouse-0", butt, eye,
-                                                    aim, ma.ovr.val);
+        der_leiter.spaque . InterpretRawWandish ("mouse-0", butt, crss_lst,
+                                                 eye, aim, ma.ovr.val);
       }
 
     public void keyEvent (KeyEvent e)

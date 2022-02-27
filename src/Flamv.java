@@ -222,6 +222,19 @@ public class Flamv  extends PZApplet
       return 0;
     }
 
+  public long ZESpatialCaress (ZESpatialCaressEvent e)
+    { PlatonicMaes.MaesAndHit mah
+        = PZMaesBundle.ClosestAmongLiving (e.loc, e.aim);
+      if (mah == null)
+        return 0;
+
+      Vect v = mah.hit;
+      Vect c = e . CaressValue ();
+      System.out.printf ("at hitpoint [%f %f %f], this caress {%f %f %f}.\n",
+                         v.x, v.y, v.z, c.x, c.y, c.z);
+      return 0;
+    }
+
 
   public void PZDraw (PGraphicsOpenGL g, PZMaesBundle mbun,
                       float sp_width, float sp_height)
