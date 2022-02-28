@@ -59,7 +59,9 @@ public class PZMaesBundle  extends PApplet
     = new HashMap <> ();
 
   public class DialectCatcher
-  { public void mouseEvent (MouseEvent e)
+  { public long prev_butt = 0;
+
+    public void mouseEvent (MouseEvent e)
       { int tion = e . getAction ();
         switch (tion)
           { case MouseEvent.CLICK:
@@ -99,11 +101,17 @@ public class PZMaesBundle  extends PApplet
         // of a bit in the overall button bitfield.
         if (tion == MouseEvent.RELEASE)
           butt = 0;
-        else if (tion == MouseEvent.WHEEL)
-          (crss_lst = new ArrayList <> ())
-            . add (new LongAndVect (0, new Vect (0.0,
-                                                 (double)e . getCount (),
-                                                 0.0)));
+
+        if (tion == MouseEvent.WHEEL)
+          { (crss_lst = new ArrayList <> ())
+              . add (new LongAndVect (0, new Vect (0.0,
+                                                   (double)e . getCount (),
+                                                   0.0)));
+            butt = prev_butt;
+          }
+        else
+          prev_butt = butt;
+
         // now, meanwhile: how bad is this really, making
         // the mouse event masquerade as wand input?
         der_leiter.spaque . InterpretRawWandish ("mouse-0", butt, crss_lst,
