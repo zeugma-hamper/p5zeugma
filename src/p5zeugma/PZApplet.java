@@ -404,6 +404,10 @@ println(q + "th maes is thus: " + ma);
     }
 
 
+  public CursorHerd ItsCursorHerd ()
+    { return cherd; }
+
+
   public SpatialAqueduct SpatialEventAqueduct ()
     { return spaque; }
 
