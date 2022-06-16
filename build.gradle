@@ -1,13 +1,22 @@
 
 plugins {
-    id "com.diffplug.spotless" version "6.7.0"
     id 'java-library'
     id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id "com.diffplug.spotless" version "6.7.0"
 }
 
 // These are set in gradle.properties.
 group = libraryGroup
 version = libraryVersion
+
+
+java {
+    toolchain {
+            languageVersion.set (JavaLanguageVersion.of (17))
+    }
+}
+
 
 sourceSets {
     main {
@@ -24,9 +33,17 @@ repositories {
 
 dependencies {
     api 'org.treadleandloam:zeugma-core:0.0.13-SNAPSHOT'
+
+    api files ('../processing4/core/library/core.jar',
+               '../processing4/core/library/gluegen-rt.jar',
+               '../processing4/core/library/jogl-all.jar',
+               'libs/oscP5.jar',
+               'libs/json-20210307.jar')
+
     // This will come online when we start adding tests.
     // testImplementation 'junit:junit:4.13.2'
 }
+
 
 spotless {
     java {
@@ -34,7 +51,9 @@ spotless {
         //importOrder()
         removeUnusedImports()
     }
+    ratchetFrom 'aorta'
 }
+
 
 publishing {
     publications {
