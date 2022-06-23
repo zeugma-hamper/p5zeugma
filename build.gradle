@@ -30,10 +30,17 @@ sourceSets {
     }
 }
 
+
 repositories {
     mavenCentral()
     mavenLocal()
 }
+
+
+
+// below, we are obviously counting on processing4 being located in
+// a directory parallel to this one; a nice addition would allow
+// that location to be configurable.
 
 dependencies {
     api "org.treadleandloam:zeugma-core:0.0.13-SNAPSHOT"
@@ -72,6 +79,13 @@ task absorbP5NativeLibs {
             into "$projectDir/udda/natives"
         }
     }
+    // the following is stopgapular in the extreme... for some
+    // reason (temporarily, we presume) on macos the runtime wants
+    // to load from a directory inside 'natives' called 'macosx-universal',
+    // rather than one of {macos-aarch64, macos-x86_64}. Thus for now
+    // we sheepishly copy the contents of the -aarch64 directory into
+    // one with the name actually sought. This means of course that
+    // the resulting uberjar won't work on Intel Macos machines...
     doLast {
         mkdir "$projectDir/udda/natives/macosx-universal"
         copy {
@@ -88,9 +102,9 @@ task blurtPlaintively {
 
 
 
-// rather than attach absorbP5... to, say, assemble and publish, we
-// do the following, which are the minimal precursors to everything
-// we care about.
+// rather than attach 'absorbP5...' to, say, the 'assemble' & 'publish'
+// tasks, we do the following, which are the minimal precursors to
+// everything we care about.
 
 tasks.named ("jar")
     { dependsOn 'absorbP5NativeLibs' }
