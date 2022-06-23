@@ -1,0 +1,157 @@
+
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'org.barfuin.gradle.taskinfo' version '1.0.5'
+    id "com.diffplug.spotless" version "6.7.0"
+}
+
+// These are set in gradle.properties.
+group = libraryGroup
+version = libraryVersion
+
+
+java {
+    toolchain {
+            languageVersion.set (JavaLanguageVersion.of (17))
+    }
+}
+
+
+sourceSets {
+    main {
+        java {
+            srcDirs "src"
+        }
+        resources {
+            srcDirs "udda"
+        }
+    }
+}
+
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+
+
+// below, we are obviously counting on processing4 being located in
+// a directory parallel to this one; a nice addition would allow
+// that location to be configurable.
+
+dependencies {
+    api "org.treadleandloam:zeugma-core:0.0.13-SNAPSHOT"
+
+    api files ("$projectDir/../processing4/core/library/core.jar",
+               "$projectDir/../processing4/core/library/gluegen-rt.jar",
+               "$projectDir/../processing4/core/library/jogl-all.jar",
+               "$projectDir/libs/oscP5.jar",
+               "$projectDir/libs/json-20210307.jar")
+
+    // This will come online when we start adding tests.
+    // testImplementation "junit:junit:4.13.2"
+}
+
+
+clean {
+    delete "$projectDir/udda"
+}
+
+
+task absorbP5NativeLibs {
+    doFirst { println "One thing or another..." }
+    doLast {
+        mkdir "$projectDir/udda"
+    }
+    doLast {
+        mkdir "$projectDir/udda/natives"
+    }
+    doLast {
+        copy {
+            from ("$projectDir/../processing4/core/library/") {
+                include "linux*/**"
+                include "macos*/**"
+                include "windows*/**"
+            }
+            into "$projectDir/udda/natives"
+        }
+    }
+    // the following is stopgapular in the extreme... for some
+    // reason (temporarily, we presume) on macos the runtime wants
+    // to load from a directory inside 'natives' called 'macosx-universal',
+    // rather than one of {macos-aarch64, macos-x86_64}. Thus for now
+    // we sheepishly copy the contents of the -aarch64 directory into
+    // one with the name actually sought. This means of course that
+    // the resulting uberjar won't work on Intel Macos machines...
+    doLast {
+        mkdir "$projectDir/udda/natives/macosx-universal"
+        copy {
+            from "$projectDir/../processing4/core/library/macos-aarch64"
+            into "$projectDir/udda/natives/macosx-universal"
+        }
+    }
+}
+
+
+task blurtPlaintively {
+    doFirst { println "Wafna! Wafna!" }
+}
+
+
+
+// rather than attach 'absorbP5...' to, say, the 'assemble' & 'publish'
+// tasks, we do the following, which are the minimal precursors to
+// everything we care about.
+
+tasks.named ("jar")
+    { dependsOn 'absorbP5NativeLibs' }
+
+tasks.named ("shadowJar")
+    { dependsOn 'absorbP5NativeLibs' }
+
+
+
+spotless {
+    java {
+        // for now let's not: we group & order imports deliberately.
+        //importOrder()
+        removeUnusedImports ()
+    }
+    ratchetFrom 'aorta'
+}
+
+
+publishing {
+    publications {
+        zeugma(MavenPublication) {
+            pom {
+                name = libraryName
+                description = "Zeugma but, you know, fitted to Processing."
+                url = "https://github.com/zeugma-hamper/p5zeugma"
+                licenses {
+                    license {
+                        name = "MIT License"
+                        url = "http://www.opensource.org/licenses/mit-license.php"
+                        distribution = "repo"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "vanderoops"
+                        name = "John Underkoffler"
+                        email = "jh@treadleandloam.com"
+                    }
+                }
+                scm {
+                    connection = "scm:git:git://github.com/zeugma-hamper/p5zeugma.git"
+                    developerConnection = "scm:git:ssh://github.com/zeugma-hamper/p5zeugma.git"
+                    url = "https://github.com/zeugma-hamper/p5zeugma"
+                }
+            }
+            from components.java
+        }
+    }
+}
