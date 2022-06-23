@@ -87,17 +87,24 @@ task blurtPlaintively {
 }
 
 
-tasks.named ("assemble") { dependsOn 'absorbP5NativeLibs' }
 
-tasks.named ("assemble") { dependsOn 'blurtPlaintively' }
+// rather than attach absorbP5... to, say, assemble and publish, we
+// do the following, which are the minimal precursors to everything
+// we care about.
+
+tasks.named ("jar")
+    { dependsOn 'absorbP5NativeLibs' }
+
+tasks.named ("shadowJar")
+    { dependsOn 'absorbP5NativeLibs' }
 
 
 
 spotless {
     java {
-        // for now let's not; we group & order imports deliberately.
+        // for now let's not: we group & order imports deliberately.
         //importOrder()
-        removeUnusedImports()
+        removeUnusedImports ()
     }
     ratchetFrom 'aorta'
 }
@@ -108,7 +115,7 @@ publishing {
         zeugma(MavenPublication) {
             pom {
                 name = libraryName
-                description = "Zeugma fitted to Processing."
+                description = "Zeugma but, you know, fitted to Processing."
                 url = "https://github.com/zeugma-hamper/p5zeugma"
                 licenses {
                     license {
