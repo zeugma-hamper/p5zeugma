@@ -40,8 +40,8 @@ public class PZApplet  extends PZMaesBundle
   protected SpatialAqueduct spaque;
   protected YowlAqueduct yowque;
 
-  protected Matrix44 raw_to_room_direc_mat;
   protected Matrix44 raw_to_room_point_mat;
+  protected Matrix44 raw_to_room_direc_mat;
 
   protected ArrayList <PlatonicMaes> maeses = new ArrayList <> ();
 //  protected ArrayList <PZMaesBundle> all_mbundles = new ArrayList <> ();
@@ -301,6 +301,33 @@ public class PZApplet  extends PZMaesBundle
     }
 
 
+  public Matrix44 RawToRoomPointMatrix ()
+    { return raw_to_room_point_mat; }
+
+  public Matrix44 RawToRoomDirectionMatrix ()
+    { return raw_to_room_direc_mat; }
+
+
+  public void SetRawToRoomPointMatrix (Matrix44 rtrpm)
+    { if (raw_to_room_point_mat == null)
+        raw_to_room_point_mat = new Matrix44 ();
+      if (rtrpm != null)
+        raw_to_room_point_mat . Load (rtrpm);
+    }
+
+  public void SetRawToRoomDirectionMatrix (Matrix44 rtrdm)
+    { if (raw_to_room_direc_mat == null)
+        raw_to_room_direc_mat = new Matrix44 ();
+      if (rtrdm != null)
+        raw_to_room_direc_mat . Load (rtrdm);
+    }
+
+  public void SetRawToRoomMatrices (Matrix44 rtrpm, Matrix44 rtrdm)
+    { SetRawToRoomPointMatrix (rtrpm);
+      SetRawToRoomDirectionMatrix (rtrdm);
+    }
+
+
   public void HooverCoordTransforms ()
     { JSONObject jace
         = LoadJSONObjectFromFile ("config/coord-xform-raw-to-room.json");
@@ -320,8 +347,8 @@ public class PZApplet  extends PZMaesBundle
       JSONArray dm = jace . getJSONArray ("direc_mat");
       JSONArray pm = jace . getJSONArray ("point_mat");
 
-      raw_to_room_direc_mat = ConjureMatrix44 (dm);
-      raw_to_room_point_mat = ConjureMatrix44 (pm);
+      SetRawToRoomPointMatrix (ConjureMatrix44 (pm));
+      SetRawToRoomDirectionMatrix (ConjureMatrix44 (dm));
     }
 
 
@@ -483,6 +510,9 @@ println(q + "th maes is thus: " + ma);
 
       global_looper. AppendAqueduct (spaque = new SpatialAqueduct ());
       global_looper. AppendAqueduct (yowque = new YowlAqueduct ());
+
+      // just in case, there'll be something instead of nothing:
+      SetRawToRoomMatrices (Matrix44.idmat, Matrix44.idmat);
 
       HooverCoordTransforms ();
       HooverMaeses ();
