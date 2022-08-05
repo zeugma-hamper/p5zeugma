@@ -115,7 +115,8 @@ public class PZMaesBundle  extends PApplet
         // now, meanwhile: how bad is this really, making
         // the mouse event masquerade as wand input?
         der_leiter.spaque . InterpretRawWandish ("mouse-0", butt, crss_lst,
-                                                 eye, aim, ma.ovr.val);
+                                                 eye, aim, ma.ovr.val,
+                                                 its_maes, its_cammy, hit);
       }
 
     public void keyEvent (KeyEvent e)
