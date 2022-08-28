@@ -43,7 +43,7 @@ public class PZApplet  extends PZMaesBundle
   protected Matrix44 raw_to_room_point_mat;
   protected Matrix44 raw_to_room_direc_mat;
 
-  protected ArrayList <PlatonicMaes> maeses = new ArrayList <> ();
+  protected List <PlatonicMaes> maeses = new ArrayList <> ();
 //  protected ArrayList <PZMaesBundle> all_mbundles = new ArrayList <> ();
 
   protected CursorHerd cherd;
@@ -111,7 +111,7 @@ public class PZApplet  extends PZMaesBundle
   public class Cursoresque  extends Alignifer
                             implements PZLimnable, ZESpatialPhagy
   { //public Vect wall_pos;
-    public ArrayList <SinuVect> vs_lrg, vs_sml;
+    public List <SinuVect> vs_lrg, vs_sml;
     public ZoftThing <ZeColor> iro;
     public PlatonicMaes cur_maes;
 
@@ -192,7 +192,7 @@ public class PZApplet  extends PZMaesBundle
 
 
   public class CursorHerd  extends PZLimnyThing implements ZESpatialPhagy
-  { public HashMap <String, Cursoresque> cursor_by_wand = new HashMap <> ();
+  { public Map <String, Cursoresque> cursor_by_wand = new HashMap <> ();
 
     public boolean PassTheBuckUpPhageHierarchy ()
       { return true; }   // so that all ZESpatial* events end up in ZESpatial()

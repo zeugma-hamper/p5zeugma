@@ -43,7 +43,7 @@ repositories {
 // that location to be configurable.
 
 dependencies {
-    api "org.treadleandloam:zeugma-core:0.0.13-SNAPSHOT"
+    api "org.treadleandloam:zeugma-core:0.0.14-SNAPSHOT"
 
     api files ("$projectDir/../processing4/core/library/core.jar",
                "$projectDir/../processing4/core/library/gluegen-rt.jar",

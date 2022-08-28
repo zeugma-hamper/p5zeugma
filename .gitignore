@@ -34,3 +34,7 @@
 
 # IntelliJ
 out/
+
+# etc/
+udda
+build

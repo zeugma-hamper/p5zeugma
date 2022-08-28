@@ -14,7 +14,10 @@ import processing.opengl.PGraphicsOpenGL;
 
 import java.awt.*;
 
+import java.util.List;
 import java.util.ArrayList;
+
+import java.util.Map;
 import java.util.HashMap;
 
 import java.util.function.BiConsumer;
@@ -38,12 +41,11 @@ public class PZMaesBundle  extends PApplet
 
   public long last_limned_ratchet = -1;
 
-  public ArrayList <BiConsumer <PlatonicMaes, PZMaesBundle>>
-    maes_geom_change_voyeurs;
+  public List <BiConsumer <PlatonicMaes, PZMaesBundle>> maes_geom_change_voyeurs;
 
   public static boolean permit_window_resize = false;
 
-  public static HashMap <String, String> init_wintitle_by_maesname
+  public static Map <String, String> init_wintitle_by_maesname
     = new HashMap <> ();
 
   public boolean shunt_raw_key_events_to_der_leiter = false;
@@ -52,10 +54,9 @@ public class PZMaesBundle  extends PApplet
   public final static int default_win_wid = 960;
   public final static int default_win_hei = 540;
 
-  public static ArrayList <PZMaesBundle> all_maes_bundles
-    = new ArrayList <> ();
+  public static List <PZMaesBundle> all_maes_bundles = new ArrayList <> ();
 
-  public static HashMap <PGraphicsOpenGL, PlatonicMaes> maes_by_gfx_handle
+  public static Map <PGraphicsOpenGL, PlatonicMaes> maes_by_gfx_handle
     = new HashMap <> ();
 
   public class DialectCatcher
@@ -297,7 +298,7 @@ public class PZMaesBundle  extends PApplet
     }
 
 
-  public void DrawAllLayers (PGraphicsOpenGL ogl, ArrayList <LimnyThing> lrs)
+  public void DrawAllLayers (PGraphicsOpenGL ogl, List <LimnyThing> lrs)
     { if (der_leiter != null  &&  ! der_leiter.well_and_truly_ready)
         return;
 
