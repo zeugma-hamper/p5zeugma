@@ -57,6 +57,9 @@ public class PZApplet  extends PZMaesBundle
       PlatonicMaes m = dummy_maes;
       m.pixwid = m.as_if_pixwid = m.requested_pixwid = 160;
       m.pixhei = m.as_if_pixhei = m.requested_pixhei = 90;
+      m . InstallBackgroundColor (new SinuColor (new ZeColor (0.15f, 1.0f),
+                                                 0.25,
+                                                 new ZeColor (0.5f, 1.0f)));
     }
 
 
