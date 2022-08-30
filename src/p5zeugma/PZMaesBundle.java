@@ -45,6 +45,8 @@ public class PZMaesBundle  extends PApplet
 
   public static boolean permit_window_resize = false;
 
+  public static boolean use_dummy_window_for_pzapplet = false;
+
   public static Map <String, String> init_wintitle_by_maesname
     = new HashMap <> ();
 
@@ -277,6 +279,13 @@ public class PZMaesBundle  extends PApplet
     { permit_window_resize = pwr; }
 
 
+  public static boolean ShouldUseDummyWindowForPZApplet ()
+    { return use_dummy_window_for_pzapplet; }
+
+  public static void SetShouldUseDummyWindowForPZApplet (boolean udw)
+    { use_dummy_window_for_pzapplet = udw; }
+
+
   public static boolean ShouldNeutralizeESCKeyArmageddon ()
     { return neutralize_esc_key_armageddon; }
 
@@ -342,7 +351,8 @@ public class PZMaesBundle  extends PApplet
 
 
   public void settings ()
-    { if (display_id  <  1)
+    { if (display_id  <  1
+          ||  (this == der_leiter  &&  use_dummy_window_for_pzapplet))
         { int win_wid = default_win_wid;
           int win_hei = default_win_hei;
           if (its_maes != null

@@ -44,9 +44,20 @@ public class PZApplet  extends PZMaesBundle
   protected Matrix44 raw_to_room_direc_mat;
 
   protected List <PlatonicMaes> maeses = new ArrayList <> ();
-//  protected ArrayList <PZMaesBundle> all_mbundles = new ArrayList <> ();
 
   protected CursorHerd cherd;
+
+  protected static PlatonicMaes dummy_maes;
+
+  static
+    { dummy_maes
+        = new PlatonicMaes (new Vect (-1000000.0, 2000000.0, -80000000.0),
+                            Vect.negxaxis, Vect.yaxis,
+                            0.01, 0.01);
+      PlatonicMaes m = dummy_maes;
+      m.pixwid = m.as_if_pixwid = m.requested_pixwid = 160;
+      m.pixhei = m.as_if_pixhei = m.requested_pixhei = 90;
+    }
 
 
   public class UninvitedHost
@@ -477,21 +488,29 @@ println(q + "th maes is thus: " + ma);
 
       osc_slurper = new OscP5 (uniho, 54345);
 
-      for (int q = 0  ;  q < maeses . size ()  ;  ++q)
-        { int dspl = (display_id > 0)  ?  (q + 1)  :  -(q + 1);
+      int cnt = maeses . size ()
+        +  (use_dummy_window_for_pzapplet ? 1 : 0);
+
+      for (int q = 0  ;  q < cnt  ;  ++q)
+        { int maes_ind = q  -  (use_dummy_window_for_pzapplet ? 1 : 0);
           PZMaesBundle mb;
-          if (q == 0)  // special handling, natŭrlich, for the alpha MBundle
-            { mb = this;
-              der_leiter = this;
+          if (q == 0)  // special handling, natŭrlich, for our alpha MBundle
+            { //mb = this;
+              //der_leiter = this;
+              // we need this to be in place earlier in life's trajectory,
+              // so moving it to our constructor (below)...
             }
           else
-            { mb = new PZMaesBundle (this, dspl);
-              mb . InternalizeMaes (maeses . get (q));
+            { int dspl = q + (use_dummy_window_for_pzapplet ? 0 : 1);
+              dspl *= (display_id > 0)  ?  1  :  -1;
+System.out.println("********** **** *** ** *  DISPLAY_ID --> " + dspl);
+              mb = new PZMaesBundle (this, dspl);
+              mb . InternalizeMaes (maeses . get (maes_ind));
             }
-//          all_mbundles . add (mb);
         }
 
-      surface . setResizable (permit_window_resize);
+      surface . setResizable (! use_dummy_window_for_pzapplet
+                              &&  permit_window_resize);
       String wttl = init_wintitle_by_maesname . get (its_maes . Name ());
       if (wttl != null)
         surface . setTitle (wttl);
@@ -512,6 +531,7 @@ println(q + "th maes is thus: " + ma);
                     ("Ye dassn't make more than one instance o' PZApplet...");
       display_id = 0;
       sole_instance = this;
+      der_leiter = this;
 
       global_looper = new Loopervisor ();
 
@@ -524,6 +544,8 @@ println(q + "th maes is thus: " + ma);
       HooverCoordTransforms ();
       HooverMaeses ();
 
-      InternalizeMaes (maeses . get (0));
+      InternalizeMaes (use_dummy_window_for_pzapplet
+                       ?  dummy_maes
+                       :  maeses . get (0));
     }
 }
