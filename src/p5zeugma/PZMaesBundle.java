@@ -194,6 +194,7 @@ public class PZMaesBundle  extends PApplet
       its_cammy = PlatonicMaes.CameraFromMaes (ma);
 
       its_backplate . AlignToMaes (ma);
+      its_backplate . SetName ("backplate");
       its_backplate . LocGrapplerZoftVect ()
         . BecomeLike (ma . LocZoft ());
       its_maes . AppendLayer (its_backplate);
