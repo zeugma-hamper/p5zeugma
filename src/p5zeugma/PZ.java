@@ -111,6 +111,10 @@ public class PZ
     }
 
 
+  public void vertex (PGraphicsOpenGL g, Vect p)
+    { g . vertex ((float)p.x, (float)p.y, (float)p.z); }
+
+
   public static void point (PGraphicsOpenGL g, Vect p)
     { g . point ((float)p.x, (float)p.y, (float)p.z); }
 

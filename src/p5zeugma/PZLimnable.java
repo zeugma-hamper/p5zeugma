@@ -64,6 +64,10 @@ public interface PZLimnable extends Limnable, IContainMultitudes
     }
 
 
+  default void PZvertex (PGraphicsOpenGL g, Vect p)
+    { g . vertex ((float)p.x, (float)p.y, (float)p.z); }
+
+
   default void PZpoint (PGraphicsOpenGL g, Vect p)
     { g . point ((float)p.x, (float)p.y, (float)p.z); }
 
