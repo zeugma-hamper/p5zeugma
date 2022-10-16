@@ -443,12 +443,31 @@ println(q + "th maes is thus: " + ma);
   public List <PlatonicMaes> AllMaeses ()
     { return maeses; }
 
+  public static List <PlatonicMaes> Static_AllMaeses ()
+    { if (sole_instance == null)
+        return null;
+      return sole_instance . AllMaeses ();
+    }
+
   public PlatonicMaes MaesByName (String nm)
     { if (nm != null)
         for (PlatonicMaes ma  :  maeses)
           if (ma . Name () . equals (nm))
             return ma;
       return null;
+    }
+
+  public static PlatonicMaes Static_MaesByName (String nm)
+    { if (nm == null  ||  sole_instance == null)
+        return null;
+      return sole_instance . MaesByName (nm);
+    }
+
+  public static PlatonicMaes.MaesAndHit Static_ClosestMaesAndHit (Vect frm,
+                                                                  Vect aim)
+    { if (sole_instance == null)
+        return null;
+      return PlatonicMaes.ClosestAmong (sole_instance . AllMaeses (), frm, aim);
     }
 
 
