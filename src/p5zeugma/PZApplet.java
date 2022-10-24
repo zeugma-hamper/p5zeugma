@@ -468,9 +468,25 @@ println(q + "th maes is thus: " + ma);
 
   public static PlatonicMaes.MaesAndHit Static_ClosestMaesAndHit (Vect frm,
                                                                   Vect aim)
-    { if (sole_instance == null)
-        return null;
-      return PlatonicMaes.ClosestAmong (sole_instance . AllMaeses (), frm, aim);
+    { return (sole_instance == null)  ?  null
+        :  PlatonicMaes.ClosestAmong (sole_instance . AllMaeses (), frm, aim);
+    }
+
+  public static PlatonicMaes.MaesAndHit
+   Static_ClosestMaesAndHit (Vect frm, Vect aim, boolean restrict_to_maes_extent)
+    { return (sole_instance == null)  ?  null
+        :  PlatonicMaes.ClosestAmong (sole_instance . AllMaeses (), frm, aim,
+                                      restrict_to_maes_extent);
+    }
+
+  public static PlatonicMaes.MaesAndHit
+   Static_ClosestMaesAndHit (Vect frm, Vect aim,
+                             boolean restrict_to_maes_extent,
+                             boolean restrict_to_orig_geom)
+    { return (sole_instance == null)  ?  null
+        :  PlatonicMaes.ClosestAmong (sole_instance . AllMaeses (), frm, aim,
+                                        restrict_to_maes_extent,
+                                        restrict_to_orig_geom);
     }
 
 
