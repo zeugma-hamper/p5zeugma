@@ -37,6 +37,8 @@ public class PZApplet  extends PZMaesBundle
 
   UninvitedHost uniho;
 
+  boolean allow_cursors_to_exceed_maeses;
+
   protected SpatialAqueduct spaque;
   protected YowlAqueduct yowque;
 
@@ -177,7 +179,8 @@ public class PZApplet  extends PZMaesBundle
 
     public long ZESpatialMove (ZESpatialMoveEvent e)
       { PlatonicMaes.MaesAndHit mah
-          = PlatonicMaes.ClosestAmong (maeses, e.loc, e.aim);
+          = PlatonicMaes.ClosestAmong (maeses, e.loc, e.aim,
+                                       ! allow_cursors_to_exceed_maeses);
         if (mah != null)
           { LocZoft () . Set (mah.hit);
             if (cur_maes  !=  mah.maes)
@@ -473,6 +476,13 @@ println(q + "th maes is thus: " + ma);
 
   public CursorHerd ItsCursorHerd ()
     { return cherd; }
+
+
+  public void AllowCursorsToExceedMaesExtents ()
+    { allow_cursors_to_exceed_maeses = true; }
+
+  public void DisallowCursorsFromExceedingMaesExtents ()
+    { allow_cursors_to_exceed_maeses = false; }
 
 
   public SpatialAqueduct SpatialEventAqueduct ()
