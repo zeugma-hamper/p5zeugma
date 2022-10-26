@@ -29,6 +29,7 @@ public class PZMaesBundle  extends PApplet
   public PZAlignifer its_backplate;
   public PZApplet der_leiter;
   public DialectCatcher vital_interpreter;
+  public IntrusivePooka business_minder;
 
   public Matrix44 view_mat;
   public Matrix44 proj_mat;
@@ -41,6 +42,8 @@ public class PZMaesBundle  extends PApplet
 
   public long last_limned_ratchet = -1;
 
+  public static int new_win_wid, new_win_hei;
+  public boolean time_to_change_resize_diapers;
   public List <BiConsumer <PlatonicMaes, PZMaesBundle>> maes_geom_change_voyeurs;
 
   public static boolean permit_window_resize = false;
@@ -154,6 +157,22 @@ public class PZMaesBundle  extends PApplet
 //
 
 
+  public class IntrusivePooka  extends Zeubject
+  { //
+    public long Inhale (long ratch, double thyme)
+      { if (time_to_change_resize_diapers)
+          { boolean feign_pixel_size
+              = (its_maes.as_if_pixwid > 0  &&  its_maes.as_if_pixhei > 0);
+            ReactToCanvasResize (feign_pixel_size);
+            time_to_change_resize_diapers = false;
+          }
+        return 0;
+      }
+  }
+//
+/// laying class IntrusivePooka to rest
+//
+
   public PZMaesBundle (PZApplet boese_leiter, int dspl_no)
     { super ();
       its_maes = null;
@@ -161,6 +180,10 @@ public class PZMaesBundle  extends PApplet
       its_backplate = new PZAlignifer();
       der_leiter = boese_leiter;
       vital_interpreter = new DialectCatcher ();
+
+      business_minder = new IntrusivePooka ();
+      IronLung.AppendBreatheeToOmniLung (business_minder);
+      time_to_change_resize_diapers = false;
 
       view_mat = new Matrix44 ();
       proj_mat = new Matrix44 ();
@@ -469,10 +492,13 @@ public class PZMaesBundle  extends PApplet
 
       double orig_aspra = m.wid.val / m.hei.val;
       double prev_pix_aspra = m.cur_wid / m.cur_hei;
-      double pix_aspra = (double)this.width / (double)this.height;
+//      double pix_aspra = (double)this.width / (double)this.height;
+      double pix_aspra = (double)new_win_wid / (double)new_win_hei;
 
-      m.pixwid = this.width;
-      m.pixhei = this.height;
+      // m.pixwid = this.width;
+      // m.pixhei = this.height;
+      m.pixwid = new_win_wid;
+      m.pixhei = new_win_hei;
       PlatonicMaes.RefreshCameraFromMaesAndPixelWH (its_cammy, its_maes);
 
       if (pix_aspra != prev_pix_aspra)
@@ -548,7 +574,12 @@ public class PZMaesBundle  extends PApplet
         }
 
       if (this.width != m.pixwid  ||  this.height != m.pixhei)
-        ReactToCanvasResize (feign_pixel_size);
+        { // ReactToCanvasResize (feign_pixel_size);
+          // maybe don't tune up the engine while still over the Atlantic...
+          new_win_hei = this.width;
+          new_win_hei = this.height;
+          time_to_change_resize_diapers = true;
+        }
 
       // the hoo-hah below bookending the "_ActuallyDraw()" line
       // allows programs to specify an "as-if" pixel size that's
