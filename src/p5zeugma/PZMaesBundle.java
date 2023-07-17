@@ -573,11 +573,15 @@ public class PZMaesBundle  extends PApplet
           m.cur_as_if_phei = m.as_if_pixhei;
         }
 
-      if (this.width != m.pixwid  ||  this.height != m.pixhei)
+      if (! time_to_change_resize_diapers
+          &&  (this.width != m.pixwid  ||  this.height != m.pixhei)
+          &&  (this.width > 0  &&  this.height > 0))  // er...
         { // ReactToCanvasResize (feign_pixel_size);
           // maybe don't tune up the engine while still over the Atlantic...
-          new_win_hei = this.width;
+          new_win_wid = this.width;
           new_win_hei = this.height;
+System.out.println("for maes " + m.Name() + ", new size (" + this.width
+  + ", " + this.height + ")");
           time_to_change_resize_diapers = true;
         }
 
